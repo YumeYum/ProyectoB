@@ -22,7 +22,8 @@ namespace WebApplication9.Controllers
         public ActionResult Index_Contacto(int? page, string search, int? nn, string sortBy)
         {
 
-            ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "Name_desc" : "";
+            ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
+            ViewBag.SortApellido = sortBy == "apellido" ? "apellido_desc" : "apellido";
 
             List<contactos> listaContactos = new List<contactos>();
             ViewBag.SearchL = new List<SelectListItem>()
@@ -63,10 +64,17 @@ namespace WebApplication9.Controllers
 
                 switch (sortBy)
                 {
-                    case "Name_desc":
+                    case "name_desc":
                         listaContactos = listaContactos.OrderByDescending(x => x.nombres).ToList();
                         break;
+                    case "apellido_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.apellidos).ToList();
+                        break;
+                    case "apellido":
+                        listaContactos = listaContactos.OrderBy(x => x.apellidos).ToList();
+                        break;
                     default:
+                        listaContactos = listaContactos.OrderBy(x => x.nombres).ToList();
                         break;
                 }
 
@@ -75,7 +83,7 @@ namespace WebApplication9.Controllers
 
 
 
-                return View(listaContactos.OrderBy(x=>x.nombres).ToList<contactos>().ToPagedList(page ?? 1, nn ?? 10));
+                return View(listaContactos.ToList<contactos>().ToPagedList(page ?? 1, nn ?? 10));
             }
         
 

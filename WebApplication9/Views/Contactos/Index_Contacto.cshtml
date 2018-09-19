@@ -50,10 +50,10 @@
                     @Html.DisplayNameFor(model => model.First().rut)
                 </th>
                 <th>
-                    @Html.ActionLink("Nombre","index_contacto", new { sortBy = ViewBag.SortName})
+                    @Html.ActionLink("Nombres","index_contacto", new { sortBy = ViewBag.SortName, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().apellidos)
+                    @Html.ActionLink("Apellidos", "index_contacto", new { sortBy = ViewBag.SortApellido, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.First().tcel)
@@ -110,7 +110,7 @@
 
     </table>
 <div class="col">
-    @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] }))
+    @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
 
 
