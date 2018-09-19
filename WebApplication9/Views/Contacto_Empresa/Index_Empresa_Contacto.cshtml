@@ -1,0 +1,113 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.contacto_empresa>
+
+@{
+    ViewBag.Title = "Contacto Empresa";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de contactos de empresa</h2>
+
+<p>
+    <div id="my-dialogEmpresaC"></div>
+
+    @*Html.ActionLink("Crear nuevo Contacto Empresa", "Create_Empresa_Contacto")*@
+    </p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.Label("Nombre Empresa")
+                </th>
+                <th>
+                    @Html.Label("Nombre Contacto")
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().cargo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().telefono_fijo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().telefono_celular)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().empresa.rut)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().contactos.rut)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpresaName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_inicio_rel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_termino_rel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cargo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.telefono_fijo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.telefono_celular)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.empresa.rut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.contactos.rut)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
+                @Html.ActionLink("Detalles", "Details_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
+                @Html.ActionLink("Eliminar", "Delete_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
+            </td>
+        </tr>
+    }
+
+    </table>
+<div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index_Empresa_Contacto",
+        new { page, pageSize = Model.PageSize }))
+</div>
+    @section scripts {
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogEmpresaC').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+
+                $('.modolo').click(function () {
+                    $('#my-dialogEmpresaC').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+        </script>
+
+    }

@@ -1,0 +1,105 @@
+﻿@model WebApplication9.Models.actividad
+
+@{
+    ViewBag.Title = "Crear_ActividadF";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+<div class="col">
+    <h2>Crear Actividad</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.id_oportunidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-sm-12">
+                        @Html.DropDownListFor(model => model.id_oportunidad, new SelectList(Model.oList, "id", "id"), "Seleccione Oportunidad", new { required = "required", style = "width:218px;" })
+                        @Html.ValidationMessageFor(model => model.id_oportunidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.id_contacto, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-sm-12">
+                        @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:218px;" })
+                        @Html.ValidationMessageFor(model => model.id_contacto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fecha_inicio, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
+                    <div class="col-sm-12">
+                        @Html.ValidationMessageFor(model => model.fecha_inicio, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "Datepicker", @Value = Model.fecha_inicio.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
+                    <div class="col-sm-12">
+                        @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.titulo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-sm-12">
+                        @Html.EditorFor(model => model.titulo, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.titulo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-sm-12">
+                        @Html.EditorFor(model => model.descripcion, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-12">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+
+    @section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.Datepicker').datepicker({
+                dateFormat: "dd-mm-yy",
+                showStatus: true,
+                showWeeks: true,
+                currentText: 'Now',
+                autoSize: true,
+                gotoCurrent: true,
+                showAnim: 'blind',
+                highlightWeek: true
+            });
+        });
+    </script>
+    }
+    <div>
+        @Html.ActionLink("Volver al índice", "Index_Actividades")
+    </div>
+</div>

@@ -1,0 +1,83 @@
+﻿@model WebApplication9.Models.oportunidades
+
+<h3>¿Está seguro de eliminar este registro?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_creacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_creacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_vencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_vencimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cupos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cupos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tema)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tema)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contacto_empresa.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contacto_empresa.id_contacto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario.id_contacto)
+        </dd>
+
+    </dl>
+    @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+            @Html.ActionLink("Volver al índice", "Index_Oportunidades")
+        </div>
+    }
+
+</div>
+<script>
+    $("#my-dialog2").dialog('option', 'title', 'Eliminar Oportunidad');
+    $("#my-dialogOps").dialog('option', 'title', 'Eliminar Oportunidad');
+
+</script>

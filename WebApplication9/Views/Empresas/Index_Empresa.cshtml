@@ -1,0 +1,160 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.empresa>
+@{
+    ViewBag.Title = "índice de Empresas";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+<head>
+
+</head>
+<p>
+    <style>
+        .descr {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+            .descr:hover {
+                text-overflow: clip;
+                white-space: normal;
+                word-break: normal;
+            }
+    </style>
+    <div id="my-dialogEmpresa"></div>
+</p>
+
+@using (Html.BeginForm("/Index_Empresa", "Empresas", FormMethod.Get))
+{   <div class="row">
+        <div class="col-sm-4">
+            <p>
+                @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
+                @Html.TextBox("search") <input type="submit" value="Buscar" />
+                @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
+                @Html.ActionLink("Mostrar Todos", "Index_Contactos")
+            </p>
+        </div>
+        </div>
+
+}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().rut)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().razon_social)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().rubro)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().calle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().numero)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().resto_direccion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().comuna)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().ctg_empleados)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().convenio)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().zona)
+                    </th>
+                    <th>
+                        @Html.Label("Cupos Ocupados")
+                    </th>
+                    <th>
+                        @Html.Label("Cupos Disponibles")
+                    </th>
+                    <th>
+                        @Html.Label("#Oportunidades")
+                    </th>
+
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.rut)
+                    </td>
+                    <td class="descr">
+                        @Html.DisplayFor(modelItem => item.razon_social)
+                    </td>
+                    <td class="descr">
+                        @Html.DisplayFor(modelItem => item.rubro)
+                    </td>
+                    <td class="descr">
+                        @Html.DisplayFor(modelItem => item.calle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.numero)
+                    </td>
+                    <td class="descr">
+                        @Html.DisplayFor(modelItem => item.resto_direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.comuna)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ctg_empleados)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.convenio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.zona)
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => item.OposN)</td>
+                    <td>
+                        <div class="text-nowrap">
+                            @Html.ActionLink("Editar", "Edit_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
+                            @Html.ActionLink("Detalles", "Details_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
+                            @Html.ActionLink("Eliminar", "Delete_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            }
+
+        </table>
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }))
+        </div>
+        @section scripts {
+            <script type="text/javascript">
+                $(function () {
+                    $('#my-dialogEmpresa').dialog({
+                        autoOpen: false,
+                        width: 'auto',
+                        resizable: false,
+                        modal: true,
+                    });
+
+                    $('.modolo').click(function () {
+                        $('#my-dialogEmpresa').load(this.href, function () {
+                            $(this).dialog('open');
+                        });
+                        return false;
+                    });
+                });
+            </script>
+
+        }

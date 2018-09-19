@@ -1,0 +1,70 @@
+﻿@model WebApplication9.Models.actividad
+
+@using (Html.BeginForm())
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.Datepicker').datepicker({
+                dateFormat: "dd-mm-yy",
+                showStatus: true,
+                showWeeks: true,
+                currentText: 'Now',
+                autoSize: true,
+                gotoCurrent: true,
+                showAnim: 'blind',
+                highlightWeek: true
+            });
+        });
+    </script>
+
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>actividad</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.Label("Fecha de cumplimiento")
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required" })
+                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.creada_por)
+        @Html.HiddenFor(model => model.descripcion)
+        @Html.HiddenFor(model => model.estado)
+        @Html.HiddenFor(model => model.fecha_inicio)
+        @Html.HiddenFor(model => model.tipo_actividad)
+        @Html.HiddenFor(model => model.titulo)
+        @Html.HiddenFor(model => model.id_contacto)
+        @Html.HiddenFor(model => model.id_oportunidad)
+
+
+
+
+
+
+
+        @*<div class="form-group">
+        @Html.Label("Cumplida por:")
+        <div class="col-md-10">
+            @Html.DropDownList("Usuario", Model.UsuarioList, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model., "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<div>
+    @Html.ActionLink("Volver al índice", "/Index_Oportunidades", "Oportunidades")
+</div>

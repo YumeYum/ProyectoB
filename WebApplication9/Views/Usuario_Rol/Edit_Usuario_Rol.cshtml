@@ -1,0 +1,77 @@
+﻿@model WebApplication9.Models.usuario_rol
+    <style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+     .control-label {
+        font-weight: bold;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.id_usuario, "Usuario", htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-10">
+                @Html.DropDownList("id_usuario", Model.usuarioListI, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_usuario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.id_rol, "Rol", htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-10">
+                @Html.DropDownList("id_rol", Model.rolesListI, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_rol, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.fecha_inicio_rel, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.fecha_inicio_rel, new { @class = "Datepicker", @Value = Model.fecha_inicio_rel.ToString("dd-MM-yyyy") })
+                @Html.ValidationMessageFor(model => model.fecha_inicio_rel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.fecha_termino_rel, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.fecha_termino_rel, new { @class = "Datepicker", @Value = Model.fecha_termino_rel?.ToString("dd-MM-yyyy") })
+                @Html.ValidationMessageFor(model => model.fecha_termino_rel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $("#my-dialog2").dialog('option', 'title', 'Editar Rol de Usuario');
+    $("#my-dialogUrols").dialog('option', 'title', 'Editar Rol de Usuario');
+
+        $(document).ready(function () {
+            $('.Datepicker').datepicker({
+                dateFormat: "dd-mm-yy",
+                showStatus: true,
+                showWeeks: true,
+                currentText: 'Now',
+                autoSize: true,
+                gotoCurrent: true,
+                showAnim: 'blind',
+                highlightWeek: true
+            });
+        });
+</script>
+
+<div>
+    @Html.ActionLink("Volver al índice", "Index_URoles")
+</div>

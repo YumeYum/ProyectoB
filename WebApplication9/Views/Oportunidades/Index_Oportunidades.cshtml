@@ -1,0 +1,183 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.oportunidades>
+
+@{
+    ViewBag.Title = "Oportunidades";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+
+<div class="col">
+
+    <div id="my-dialogOps"></div>
+    <h2>Oportunidades</h2>
+
+    <p>
+        @Html.ActionLink("Crear", "Crear_OportunidadP", null, new { @class = "modolo btn btn-primary btn-sm m-1" })
+    </p>
+    @using (Html.BeginForm("/Index_Oportunidades", "Oportunidades", FormMethod.Get))
+    {    <p>
+        @Html.TextBox("search") <input type="submit" value="Buscar" />
+
+
+        @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
+             @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"))
+
+
+
+
+
+
+    </p>
+    }
+
+    @using (Html.BeginForm("/Index_Oportunidades", "Oportunidades"))
+    {
+        <input type="submit" class="btn btn-info btn-sm" value="Lograda" name="Lograda" />
+        <input type="submit" class="btn btn-info btn-sm" value="Perdida" name="Perdida" />
+        <input type="submit" class="btn btn-info btn-sm" value="Asignar a" name="Asignar" />
+        @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Contacto")
+        <table class="table table-striped" id="myTable">
+
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        @Html.DisplayName("ID")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Nombre de Contacto  de Empresa")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Nombre Empresa")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Contacto Asignado")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Fecha de Creación")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Fecha de Vencimiento")
+                    </th>
+
+                    <th>
+                        @Html.DisplayName("Estado")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Tema")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Cupos")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Probabilidad")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Gestiones")
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="10">No se encontraron filas</td>
+                    </tr>
+                }
+                else
+
+                {
+
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+
+
+                        <tr>
+
+                            <td>
+                                @Html.HiddenFor(model => model[i].id)
+                                @Html.CheckBoxFor(model => model[i].isSelected)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].contacto_empresa.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].contacto_empresa.empresa.razon_social)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].usuario.contactos.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].fecha_creacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].fecha_vencimiento)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].estado)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].tema)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].cupos)
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                                <td>
+                                        @Html.ActionLink("Editar", "Edit_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
+                                        @Html.ActionLink("Detalles", "Detalle_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
+                                        @Html.ActionLink("Eliminar", "Delete_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
+                            </td>
+
+                        </tr>
+
+                    }
+
+
+                }
+            </tbody>
+
+        </table>
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("Index_Oportunidades", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], estado = Request.QueryString["estado"] }))
+        </div>
+        <div class="col">
+            @Html.ActionLink("Mostrar Todos", "Index_Oportunidades")
+        </div>
+
+
+    }
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+        $(function () {
+            $('#my-dialogOps').dialog({
+                autoOpen: false,
+                width: 'auto',
+                height: 'auto',
+                resizable: false,
+                modal: true
+            });
+
+            $('.modolo').click(function () {
+                $('#my-dialogOps').load(this.href, function () {
+                    $(this).dialog('open');
+                });
+                return false;
+            });
+        });
+
+</script>
+}
+
+

@@ -1,0 +1,65 @@
+﻿@model WebApplication9.Models.usuario_rol
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+<h3>¿Está seguro que quiere eliminar este registro?</h3>
+<div>
+    <h4>Usuario Rol</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_inicio_rel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_inicio_rel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_termino_rel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_termino_rel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.roles.rol)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.roles.rol)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario.id_contacto)
+        </dd>
+
+    </dl>
+    @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+            @Html.ActionLink("Volver al índice", "Index_URoles")
+        </div>
+    }
+</div>
+<script>
+    $("#my-dialog2").dialog('option', 'title', 'Eliminar Usuario-Rol');
+    $("#my-dialogUrols").dialog('option', 'title', 'Eliminar Usuario-Rol');
+
+</script>

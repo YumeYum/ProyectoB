@@ -1,0 +1,141 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.contactos>
+
+
+
+
+
+
+
+   
+
+    @{
+        ViewBag.Title = "Lista de Usuarios";
+        Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+        if (Session["userID"] == null)
+
+        {
+            Response.Redirect("~/Proyectob/Index");
+        }
+    }
+    <div id="my-dialogContactos"></div>
+
+@Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo btn-primary btn-sm" })
+
+@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
+{    <p>
+        @Html.TextBox("search") <input type="submit" value="Buscar" />
+
+         Mostrando
+         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+         Registros
+
+
+    </p>
+    <div class="col">
+        @Html.ActionLink("Mostrar Todos", "Index_Contacto")
+    </div>
+}
+
+    <table class="table table-striped">
+        <thead>
+
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().rut)
+                </th>
+                <th>
+                    @Html.ActionLink("Nombre","index_contacto", new { sortBy = ViewBag.SortName})
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().apellidos)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().tcel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().comentario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().curriculum)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+
+                <th>
+                    @Html.DisplayFor(modelItem => item.id)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rut)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tcel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.comentario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.curriculum)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" }) 
+                    @Html.ActionLink("Detalles", "Details_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                </td>
+
+            </tr>
+        }
+
+    </table>
+<div class="col">
+    @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] }))
+
+
+
+
+
+
+
+</div>
+    @section scripts {
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogContactos').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+
+                $('.modolo').click(function () {
+                    $('#my-dialogContactos').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+        </script>
+
+    }

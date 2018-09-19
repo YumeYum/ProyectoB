@@ -1,0 +1,101 @@
+﻿@model WebApplication9.Models.contactos
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+     .control-label {
+        font-weight: bold;
+    }
+    </style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <h3>¿Está seguro que quiere eliminar este registro?</h3>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.rut)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.rut)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.nombres)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.nombres)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.apellidos)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.apellidos)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.tcel)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.tcel)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.comentario)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.comentario)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.curriculum)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.curriculum)
+            </dd>
+
+
+        </dl>
+        @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+                @Html.ActionLink("Volver al índice", "/Index_Contacto")
+            </div>
+        }
+    </div>
+    <script>
+        $("#my-dialog2").dialog('option', 'title', 'Eliminar Contacto');
+        $("#my-dialogContactos").dialog('option', 'title', 'Eliminar Contacto');
+
+    </script>
+</body>
+</html>

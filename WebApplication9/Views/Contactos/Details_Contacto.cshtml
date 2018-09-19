@@ -1,0 +1,98 @@
+﻿@model WebApplication9.Models.contactos
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+
+<div>
+    <div id="my-dialogp"></div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.rut)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rut)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nombres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombres)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.apellidos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellidos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tcel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tcel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.comentario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.comentario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.curriculum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.curriculum)
+        </dd>
+
+    </dl>
+</div>
+
+    <script type="text/javascript">
+            $(function () {
+                $('#my-dialogp').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+
+                $('.modolop').click(function () {
+                    $('#my-dialog').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+        });
+        $("#my-dialog2").dialog('option', 'title', 'Detalles');
+
+    </script>
+
+<p>
+    @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = Model.id }, new { @class = "modolop btn-primary btn-sm" }) |
+    @Html.ActionLink("Volver al índice", "/Index_Contacto")
+</p>

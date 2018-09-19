@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebApplication9.Models.roles>
+
+@{
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index Roles</title>
+</head>
+<body>
+  
+    <div id="my-dialogRols"></div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.rol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.descripcion)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <th>
+                    @Html.DisplayFor(modelItem => item.id)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.descripcion)
+                </td>
+                
+                <td>
+                    @Html.ActionLink("Editar", "EditRoles",null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    @Html.ActionLink("Eliminar", "DeleteRoles", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    @section scripts {
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogRols').dialog({
+                    autoOpen: false,
+                    width: 400,
+                    resizable: false,
+                    modal: true
+                });
+
+                $('.modolo').click(function () {
+                    $('#my-dialogRols').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+        </script>
+        }
+</body>
+</html>

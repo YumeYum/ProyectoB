@@ -1,0 +1,318 @@
+﻿@model WebApplication9.Models.empresa
+
+<style>
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+<div id="my-dialog2"></div>
+
+
+<div class="col">
+    <b>@Html.Label("Rut:")</b> @Html.DisplayFor(model => model.rut) &nbsp; <b>@Html.Label("Razon Social:")</b>@Html.DisplayFor(model => model.razon_social)<br>
+    <b>@Html.Label("Rubro:")</b> @Html.DisplayFor(model => model.rubro) &nbsp; <b>@Html.Label("Comuna:")</b>@Html.DisplayFor(model => model.comuna)<br>
+
+
+
+</div>
+    @*@Html.ActionLink("Agregar Contacto", "Edit_Contacto", "Contactos", new { id = Model.id }, new { @class = "modolo2 btn-info btn-sm" })*@
+
+    <form id="myForm" action="javascript:send();" method="post">
+    <input type="submit" value="Agregar Contacto" class="btn btn-info" id="btnAjax">
+    @Html.DropDownList("id_contacto", new SelectList(Model.listaContactos, "id", "FullName"))
+    @Html.Hidden("id")
+        </form>
+
+    <div class="tab">
+        <button class="tablinks active" onclick="openCity(event, 'Contactos')">Contactos</button>
+        <button class="tablinks" onclick="openCity(event, 'Oportunidades')">Oportunidades</button>
+        <button class="tablinks" onclick="openCity(event, 'Actividades')">Actividades</button>
+    </div>
+
+    <div id="Contactos" class="tabcontent" style="display:block">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.Label("Nombre")
+                </th>
+                <th>
+                    @Html.Label("Apellidos")
+                </th>
+                <th>
+                    @Html.Label("Rut")
+                </th>
+                <th>
+                    @Html.Label("Cargo")
+                </th>
+                <th>
+                    @Html.Label("Nombre Empresa")
+                </th>
+                <th>
+                    @Html.Label("Teléfono Celular")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.contactosM)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.contactos.nombres)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.contactos.apellidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.contactos.rut)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cargo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.empresa.razon_social)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.contactos.tcel)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit_Contacto", "Contactos", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Detalles", "Details_Contacto", "Contactos", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Eliminar", "Delete_Contacto", "Contactos", new { id = item.id }, new { @class = "modolo2" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div id="Oportunidades" class="tabcontent">
+        <table class="table">
+            <tr>
+
+                <th>
+                    @Html.DisplayName("Contacto Asignado")
+                </th>
+                <th>
+                    @Html.DisplayName("Fecha de Creación")
+                </th>
+                <th>
+                    @Html.DisplayName("Fecha de Vencimiento")
+                </th>
+
+                <th>
+                    @Html.DisplayName("Estado")
+                </th>
+                <th>
+                    @Html.DisplayName("Tema")
+                </th>
+                <th>
+                    @Html.DisplayName("Cupos")
+                </th>
+                <th>
+                    @Html.DisplayName("Probabilidad")
+                </th>
+                <th>
+                    @Html.DisplayName("Gestiones")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Opos)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.usuario.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_creacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_vencimiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.estado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tema)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cupos)
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Detalles", "Detalle_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Eliminar", "Delete_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" })
+                    </td>
+
+
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div id="Actividades" class="tabcontent">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.Label("Fecha de Inicio")
+                </th>
+                <th>
+                    @Html.Label("Fecha de Vencimiento")
+                </th>
+                <th>
+                    @Html.Label("Titulo")
+                </th>
+                <th>
+                    @Html.Label("Asignada a")
+                </th>
+                <th>
+                    @Html.Label("Creada por")
+                </th>
+                <th>
+                    @Html.Label("Estado")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Activs)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_inicio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_vencimiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.titulo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.usuario.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.creada_por)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.estado)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Detalles", "Details_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" }) |
+                        @Html.ActionLink("Eliminar", "Delete_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" })
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#my-dialog2').dialog({
+                autoOpen: false,
+                width: 'auto',
+                height: 'auto',
+                resizable: false,
+                modal: true
+            });
+
+            $('.modolo2').click(function () {
+                $('#my-dialog2').load(this.href, function () {
+                    $(this).dialog('open');
+                });
+                return false;
+            });
+        });
+
+        function openCity(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+
+        $("#my-dialogEmpresa").dialog('option', 'title', 'Detalles de Empresa');
+
+
+        function send() {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Empresas/Details_Empresa",
+                data: JSON.stringify({ id_contacto: $("#id_contacto").val(), id: $("#id").val() }),
+                dataType: "json",
+                success: function (result) {
+
+                    $("#my-dialogEmpresa").load(result.Url, function () {
+                        $(this).dialog('open');
+                    });
+
+                
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse.responseText);
+                }
+
+            });
+
+        }
+
+
+    </script>

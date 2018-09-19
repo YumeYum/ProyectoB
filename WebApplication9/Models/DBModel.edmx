@@ -1,0 +1,670 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="proyectob_dbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="actividad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_oportunidad" Type="int" Nullable="false" />
+          <Property Name="id_contacto" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio" Type="date" Nullable="false" />
+          <Property Name="fecha_vencimiento" Type="date" Nullable="false" />
+          <Property Name="titulo" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="255" />
+          <Property Name="creada_por" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="tipo_actividad" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contacto_empresa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_empresa" Type="int" Nullable="false" />
+          <Property Name="id_contacto" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="date" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="date" />
+          <Property Name="cargo" Type="varchar" MaxLength="255" />
+          <Property Name="telefono_fijo" Type="int" Nullable="false" />
+          <Property Name="telefono_celular" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="contactos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rut" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="nombres" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="tcel" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="comentario" Type="varchar" MaxLength="255" />
+          <Property Name="curriculum" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="empresa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rut" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="razon_social" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="rubro" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="calle" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="numero" Type="int" />
+          <Property Name="resto_direccion" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="comuna" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ctg_empleados" Type="varchar" MaxLength="255" />
+          <Property Name="convenio" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="zona" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="oportunidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_contacto_empresa" Type="int" Nullable="false" />
+          <Property Name="id_contacto_asignado" Type="int" Nullable="false" />
+          <Property Name="fecha_creacion" Type="date" Nullable="false" />
+          <Property Name="fecha_vencimiento" Type="date" Nullable="false" />
+          <Property Name="cupos" Type="int" Nullable="false" />
+          <Property Name="tema" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rol" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="descripcion" Type="text" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_contacto" Type="int" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="date" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="date" />
+        </EntityType>
+        <EntityType Name="usuario_rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="id_rol" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="date" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="date" />
+        </EntityType>
+        <Association Name="actividad_ibfk_4">
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="1" />
+          <End Role="actividad" Type="Self.actividad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="oportunidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="actividad">
+              <PropertyRef Name="id_oportunidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="actividad_ibfk_5">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="actividad" Type="Self.actividad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="actividad">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="contacto_empresa_ibfk_1">
+          <End Role="empresa" Type="Self.empresa" Multiplicity="1" />
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empresa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacto_empresa">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="contacto_empresa_ibfk_2">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacto_empresa">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="oportunidades_ibfk_3">
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="1" />
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contacto_empresa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="oportunidades">
+              <PropertyRef Name="id_contacto_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="oportunidades_ibfk_4">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="oportunidades">
+              <PropertyRef Name="id_contacto_asignado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_ibfk_1">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_rol_ibfk_2">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="usuario_rol" Type="Self.usuario_rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_rol">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_rol_ibfk_3">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="usuario_rol" Type="Self.usuario_rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_rol">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="proyectob_dbModelStoreContainer">
+          <EntitySet Name="actividad" EntityType="Self.actividad" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="contacto_empresa" EntityType="Self.contacto_empresa" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="contactos" EntityType="Self.contactos" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="empresa" EntityType="Self.empresa" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="oportunidades" EntityType="Self.oportunidades" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="proyectob_db" store:Type="Tables" />
+          <EntitySet Name="usuario_rol" EntityType="Self.usuario_rol" Schema="proyectob_db" store:Type="Tables" />
+          <AssociationSet Name="actividad_ibfk_4" Association="Self.actividad_ibfk_4">
+            <End Role="oportunidades" EntitySet="oportunidades" />
+            <End Role="actividad" EntitySet="actividad" />
+          </AssociationSet>
+          <AssociationSet Name="actividad_ibfk_5" Association="Self.actividad_ibfk_5">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="actividad" EntitySet="actividad" />
+          </AssociationSet>
+          <AssociationSet Name="contacto_empresa_ibfk_1" Association="Self.contacto_empresa_ibfk_1">
+            <End Role="empresa" EntitySet="empresa" />
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+          </AssociationSet>
+          <AssociationSet Name="contacto_empresa_ibfk_2" Association="Self.contacto_empresa_ibfk_2">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+          </AssociationSet>
+          <AssociationSet Name="oportunidades_ibfk_3" Association="Self.oportunidades_ibfk_3">
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+            <End Role="oportunidades" EntitySet="oportunidades" />
+          </AssociationSet>
+          <AssociationSet Name="oportunidades_ibfk_4" Association="Self.oportunidades_ibfk_4">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="oportunidades" EntitySet="oportunidades" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_ibfk_1" Association="Self.usuario_ibfk_1">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_rol_ibfk_2" Association="Self.usuario_rol_ibfk_2">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="usuario_rol" EntitySet="usuario_rol" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_rol_ibfk_3" Association="Self.usuario_rol_ibfk_3">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="usuario_rol" EntitySet="usuario_rol" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="proyectob_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="actividad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_oportunidad" Type="Int32" Nullable="false" />
+          <Property Name="id_contacto" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_vencimiento" Type="DateTime" Nullable="false" />
+          <Property Name="titulo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="creada_por" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo_actividad" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="oportunidades" Relationship="Self.actividad_ibfk_4" FromRole="actividad" ToRole="oportunidades" />
+          <NavigationProperty Name="usuario" Relationship="Self.actividad_ibfk_5" FromRole="actividad" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="contacto_empresa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_empresa" Type="Int32" Nullable="false" />
+          <Property Name="id_contacto" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="DateTime" />
+          <Property Name="cargo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="telefono_fijo" Type="Int32" Nullable="false" />
+          <Property Name="telefono_celular" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="empresa" Relationship="Self.contacto_empresa_ibfk_1" FromRole="contacto_empresa" ToRole="empresa" />
+          <NavigationProperty Name="contactos" Relationship="Self.contacto_empresa_ibfk_2" FromRole="contacto_empresa" ToRole="contactos" />
+          <NavigationProperty Name="oportunidades" Relationship="Self.oportunidades_ibfk_3" FromRole="contacto_empresa" ToRole="oportunidades" />
+        </EntityType>
+        <EntityType Name="contactos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rut" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombres" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tcel" Type="Int32" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="comentario" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="curriculum" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="contacto_empresa" Relationship="Self.contacto_empresa_ibfk_2" FromRole="contactos" ToRole="contacto_empresa" />
+          <NavigationProperty Name="usuario" Relationship="Self.usuario_ibfk_1" FromRole="contactos" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="empresa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rut" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="razon_social" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rubro" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="calle" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numero" Type="Int32" />
+          <Property Name="resto_direccion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="comuna" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ctg_empleados" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="convenio" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="zona" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="contacto_empresa" Relationship="Self.contacto_empresa_ibfk_1" FromRole="empresa" ToRole="contacto_empresa" />
+        </EntityType>
+        <EntityType Name="oportunidades">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_contacto_empresa" Type="Int32" Nullable="false" />
+          <Property Name="id_contacto_asignado" Type="Int32" Nullable="false" />
+          <Property Name="fecha_creacion" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_vencimiento" Type="DateTime" Nullable="false" />
+          <Property Name="cupos" Type="Int32" Nullable="false" />
+          <Property Name="tema" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="actividad" Relationship="Self.actividad_ibfk_4" FromRole="oportunidades" ToRole="actividad" />
+          <NavigationProperty Name="contacto_empresa" Relationship="Self.oportunidades_ibfk_3" FromRole="oportunidades" ToRole="contacto_empresa" />
+          <NavigationProperty Name="usuario" Relationship="Self.oportunidades_ibfk_4" FromRole="oportunidades" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rol" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="usuario_rol" Relationship="Self.usuario_rol_ibfk_3" FromRole="roles" ToRole="usuario_rol" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_contacto" Type="Int32" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="DateTime" />
+          <NavigationProperty Name="actividad" Relationship="Self.actividad_ibfk_5" FromRole="usuario" ToRole="actividad" />
+          <NavigationProperty Name="contactos" Relationship="Self.usuario_ibfk_1" FromRole="usuario" ToRole="contactos" />
+          <NavigationProperty Name="oportunidades" Relationship="Self.oportunidades_ibfk_4" FromRole="usuario" ToRole="oportunidades" />
+          <NavigationProperty Name="usuario_rol" Relationship="Self.usuario_rol_ibfk_2" FromRole="usuario" ToRole="usuario_rol" />
+        </EntityType>
+        <EntityType Name="usuario_rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="id_rol" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio_rel" Type="DateTime" Nullable="false" />
+          <Property Name="fecha_termino_rel" Type="DateTime" />
+          <NavigationProperty Name="roles" Relationship="Self.usuario_rol_ibfk_3" FromRole="usuario_rol" ToRole="roles" />
+          <NavigationProperty Name="usuario" Relationship="Self.usuario_rol_ibfk_2" FromRole="usuario_rol" ToRole="usuario" />
+        </EntityType>
+        <Association Name="actividad_ibfk_4">
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="1" />
+          <End Role="actividad" Type="Self.actividad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="oportunidades">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="actividad">
+              <PropertyRef Name="id_oportunidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="actividad_ibfk_5">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="actividad" Type="Self.actividad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="actividad">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="contacto_empresa_ibfk_1">
+          <End Role="empresa" Type="Self.empresa" Multiplicity="1" />
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empresa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacto_empresa">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="contacto_empresa_ibfk_2">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contacto_empresa">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="oportunidades_ibfk_3">
+          <End Role="contacto_empresa" Type="Self.contacto_empresa" Multiplicity="1" />
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contacto_empresa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="oportunidades">
+              <PropertyRef Name="id_contacto_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_ibfk_1">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="id_contacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="oportunidades_ibfk_4">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="oportunidades" Type="Self.oportunidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="oportunidades">
+              <PropertyRef Name="id_contacto_asignado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_rol_ibfk_3">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="usuario_rol" Type="Self.usuario_rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_rol">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usuario_rol_ibfk_2">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="usuario_rol" Type="Self.usuario_rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_rol">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="proyectob_dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="actividad" EntityType="Self.actividad" />
+          <EntitySet Name="contacto_empresa" EntityType="Self.contacto_empresa" />
+          <EntitySet Name="contactos" EntityType="Self.contactos" />
+          <EntitySet Name="empresa" EntityType="Self.empresa" />
+          <EntitySet Name="oportunidades" EntityType="Self.oportunidades" />
+          <EntitySet Name="roles" EntityType="Self.roles" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" />
+          <EntitySet Name="usuario_rol" EntityType="Self.usuario_rol" />
+          <AssociationSet Name="actividad_ibfk_4" Association="Self.actividad_ibfk_4">
+            <End Role="oportunidades" EntitySet="oportunidades" />
+            <End Role="actividad" EntitySet="actividad" />
+          </AssociationSet>
+          <AssociationSet Name="actividad_ibfk_5" Association="Self.actividad_ibfk_5">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="actividad" EntitySet="actividad" />
+          </AssociationSet>
+          <AssociationSet Name="contacto_empresa_ibfk_1" Association="Self.contacto_empresa_ibfk_1">
+            <End Role="empresa" EntitySet="empresa" />
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+          </AssociationSet>
+          <AssociationSet Name="contacto_empresa_ibfk_2" Association="Self.contacto_empresa_ibfk_2">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+          </AssociationSet>
+          <AssociationSet Name="oportunidades_ibfk_3" Association="Self.oportunidades_ibfk_3">
+            <End Role="contacto_empresa" EntitySet="contacto_empresa" />
+            <End Role="oportunidades" EntitySet="oportunidades" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_ibfk_1" Association="Self.usuario_ibfk_1">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+          <AssociationSet Name="oportunidades_ibfk_4" Association="Self.oportunidades_ibfk_4">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="oportunidades" EntitySet="oportunidades" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_rol_ibfk_3" Association="Self.usuario_rol_ibfk_3">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="usuario_rol" EntitySet="usuario_rol" />
+          </AssociationSet>
+          <AssociationSet Name="usuario_rol_ibfk_2" Association="Self.usuario_rol_ibfk_2">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="usuario_rol" EntitySet="usuario_rol" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="proyectob_dbModelStoreContainer" CdmEntityContainer="proyectob_dbEntities">
+          <EntitySetMapping Name="actividad">
+            <EntityTypeMapping TypeName="proyectob_dbModel.actividad">
+              <MappingFragment StoreEntitySet="actividad">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_oportunidad" ColumnName="id_oportunidad" />
+                <ScalarProperty Name="id_contacto" ColumnName="id_contacto" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="creada_por" ColumnName="creada_por" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="tipo_actividad" ColumnName="tipo_actividad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contacto_empresa">
+            <EntityTypeMapping TypeName="proyectob_dbModel.contacto_empresa">
+              <MappingFragment StoreEntitySet="contacto_empresa">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_empresa" ColumnName="id_empresa" />
+                <ScalarProperty Name="id_contacto" ColumnName="id_contacto" />
+                <ScalarProperty Name="fecha_inicio_rel" ColumnName="fecha_inicio_rel" />
+                <ScalarProperty Name="fecha_termino_rel" ColumnName="fecha_termino_rel" />
+                <ScalarProperty Name="cargo" ColumnName="cargo" />
+                <ScalarProperty Name="telefono_fijo" ColumnName="telefono_fijo" />
+                <ScalarProperty Name="telefono_celular" ColumnName="telefono_celular" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contactos">
+            <EntityTypeMapping TypeName="proyectob_dbModel.contactos">
+              <MappingFragment StoreEntitySet="contactos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rut" ColumnName="rut" />
+                <ScalarProperty Name="nombres" ColumnName="nombres" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="tcel" ColumnName="tcel" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="comentario" ColumnName="comentario" />
+                <ScalarProperty Name="curriculum" ColumnName="curriculum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empresa">
+            <EntityTypeMapping TypeName="proyectob_dbModel.empresa">
+              <MappingFragment StoreEntitySet="empresa">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rut" ColumnName="rut" />
+                <ScalarProperty Name="razon_social" ColumnName="razon_social" />
+                <ScalarProperty Name="rubro" ColumnName="rubro" />
+                <ScalarProperty Name="calle" ColumnName="calle" />
+                <ScalarProperty Name="numero" ColumnName="numero" />
+                <ScalarProperty Name="resto_direccion" ColumnName="resto_direccion" />
+                <ScalarProperty Name="comuna" ColumnName="comuna" />
+                <ScalarProperty Name="ctg_empleados" ColumnName="ctg_empleados" />
+                <ScalarProperty Name="convenio" ColumnName="convenio" />
+                <ScalarProperty Name="zona" ColumnName="zona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="oportunidades">
+            <EntityTypeMapping TypeName="proyectob_dbModel.oportunidades">
+              <MappingFragment StoreEntitySet="oportunidades">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_contacto_empresa" ColumnName="id_contacto_empresa" />
+                <ScalarProperty Name="id_contacto_asignado" ColumnName="id_contacto_asignado" />
+                <ScalarProperty Name="fecha_creacion" ColumnName="fecha_creacion" />
+                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
+                <ScalarProperty Name="cupos" ColumnName="cupos" />
+                <ScalarProperty Name="tema" ColumnName="tema" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="proyectob_dbModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario">
+            <EntityTypeMapping TypeName="proyectob_dbModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_contacto" ColumnName="id_contacto" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_inicio_rel" ColumnName="fecha_inicio_rel" />
+                <ScalarProperty Name="fecha_termino_rel" ColumnName="fecha_termino_rel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario_rol">
+            <EntityTypeMapping TypeName="proyectob_dbModel.usuario_rol">
+              <MappingFragment StoreEntitySet="usuario_rol">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="fecha_inicio_rel" ColumnName="fecha_inicio_rel" />
+                <ScalarProperty Name="fecha_termino_rel" ColumnName="fecha_termino_rel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

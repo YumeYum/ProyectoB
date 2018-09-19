@@ -1,0 +1,112 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.usuario>
+
+
+@{
+    ViewBag.Title = "Lista de Usuarios";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+    if (Session["userID"]==null)
+
+    {
+        Response.Redirect("~/Proyectob/Index");
+    }
+}
+<div id="my-dialogUsers"></div>
+@Html.ActionLink("Crear Usuario", "CreateP_Usuario", "Usuarios", null, new { @class = "modolo btn-primary btn-sm" })
+@using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
+{
+
+}
+@using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
+{    <p>
+        @Html.TextBox("search") <input type="submit" value="Buscar" />
+        @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
+
+         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange= "this.form.submit()" })
+
+         @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"))
+
+
+
+
+    </p>
+    <div class="col">
+        @Html.ActionLink("Mostrar Todos", "Index_usuarios")
+    </div>
+}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().id)
+                </th>
+                <th>
+                    @Html.Label("Nombre Completo")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().estado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.estado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_inicio_rel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fecha_termino_rel)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Editar", "Edit_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" }) 
+                        @Html.ActionLink("Detalles", "Details2_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" }) 
+                        @Html.ActionLink("Eliminar", "Delete_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+</table>
+<div class="col">
+    @Html.PagedListPager(Model, page => Url.Action("Index_usuarios", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], search2 = Request.QueryString["search2"], nn = Request.QueryString["nn"], activ = Request.QueryString["activ"] }))
+</div>
+    @section scripts {
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogUsers').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    resizable: false,
+                    modal: true,
+                });
+
+                $('.modolo').click(function () {
+                    $('#my-dialogUsers').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+        </script>
+
+        }
+

@@ -1,0 +1,98 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<WebApplication9.Models.usuario_rol>
+
+@{
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+    ViewBag.Title = "Lista de Usuarios Roles";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div id="my-dialogUrols"></div>
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().id)
+                </th>
+                <th>
+                    @Html.Label("Nombre de Usuario")
+                </th>
+                <th>
+                    @Html.Label("Rol")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <th>
+                    @Html.DisplayFor(modelItem => item.id)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.usuario.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roles.rol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_inicio_rel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_termino_rel)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Editar", "Edit_usuario_rol", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    @Html.ActionLink("Detalles", "Details_Uroles", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete_URol", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="col">
+
+            @Html.PagedListPager(Model, page => Url.Action("Index_URoles",
+        new { page, pageSize = Model.PageSize }))
+    </div>
+    @section scripts {
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogUrols').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+
+                $('.modolo').click(function () {
+                    $('#my-dialogUrols').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+        </script>
+
+    }
+</body>
+</html>

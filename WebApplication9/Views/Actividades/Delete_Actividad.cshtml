@@ -1,0 +1,95 @@
+﻿@model WebApplication9.Models.actividad
+
+<h3>¿Está seguro que desea eliminar este registro?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_inicio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_inicio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_vencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_vencimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.titulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.creada_por)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.creada_por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo_actividad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipo_actividad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.oportunidades.tema)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.oportunidades.tema)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario.id_contacto)
+        </dd>
+
+    </dl>
+    @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Volver al índice", "Index_Actividades")
+        </div>
+    }
+</div>
+<script>
+    $("#my-dialog2").dialog('option', 'title', 'Eliminar Actividad');
+    $("#my-dialogActs").dialog('option', 'title', 'Eliminar Actividad');
+</script>
