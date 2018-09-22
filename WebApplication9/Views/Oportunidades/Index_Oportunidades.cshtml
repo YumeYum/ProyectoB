@@ -20,8 +20,7 @@
         @Html.TextBox("search") <input type="submit" value="Buscar" />
 
 
-        @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
-             @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"))
+             @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
 
 
 
@@ -43,38 +42,33 @@
                 <tr>
                     <th></th>
                     <th>
-                        @Html.DisplayName("ID")
+                        @Html.ActionLink("Contacto Empresa", "index_oportunidades", new { sortBy = ViewBag.SortCempresa, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Nombre de Contacto  de Empresa")
+                        @Html.ActionLink("Nombre Empresa", "index_oportunidades", new { sortBy = ViewBag.SortNempresa, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Nombre Empresa")
+                        @Html.ActionLink("Contacto Asignado", "index_oportunidades", new { sortBy = ViewBag.SortCasignado, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Contacto Asignado")
+                        @Html.ActionLink("Fecha de Creación", "index_oportunidades", new { sortBy = ViewBag.SortFechaC, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Fecha de Creación")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Fecha de Vencimiento")
+                        @Html.ActionLink("Fecha de Vencimiento", "index_oportunidades", new { sortBy = ViewBag.SortFechaV, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
 
                     <th>
-                        @Html.DisplayName("Estado")
+                        @Html.ActionLink("Estado", "index_oportunidades", new { sortBy = ViewBag.SortEstado, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Tema")
+                        @Html.ActionLink("Tema", "index_oportunidades", new { sortBy = ViewBag.SortTema, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th>
-                        @Html.DisplayName("Cupos")
+                        @Html.ActionLink("Cupos", "index_oportunidades", new { sortBy = ViewBag.SortCupos, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
+
                     <th>
-                        @Html.DisplayName("Probabilidad")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Gestiones")
+                        @Html.ActionLink("Gestiones", "index_oportunidades", new { sortBy = ViewBag.SortGestiones, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["nn"], page = Request.QueryString["page"] })
                     </th>
                     <th></th>
                 </tr>
@@ -100,9 +94,6 @@
                             <td>
                                 @Html.HiddenFor(model => model[i].id)
                                 @Html.CheckBoxFor(model => model[i].isSelected)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model[i].id)
                             </td>
                             <td>
                                 @Html.DisplayFor(model => model[i].contacto_empresa.FullName)

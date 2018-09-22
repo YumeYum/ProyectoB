@@ -18,51 +18,39 @@
 {
 
 }
-@using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
-{    <p>
-        @Html.TextBox("search") <input type="submit" value="Buscar" />
-        @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
 
-         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange= "this.form.submit()" })
-
-         @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"))
-
-
-
-
-    </p>
-    <div class="col">
-        @Html.ActionLink("Mostrar Todos", "Index_usuarios")
-    </div>
-}
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped" id="medetai">
+        <thead class="thead-light">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().id)
+                    @Html.ActionLink("Nombre Completo", "index_usuarios", new { sortBy = ViewBag.SortNC, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"] })
                 </th>
                 <th>
-                    @Html.Label("Nombre Completo")
+                    @Html.ActionLink("Estado", "index_usuarios", new { sortBy = ViewBag.SortEstado, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().estado)
+                    @Html.ActionLink("Fecha Inicio", "index_usuarios", new { sortBy = ViewBag.SortFechaI, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                    @Html.ActionLink("Fecha Término", "index_usuarios", new { sortBy = ViewBag.SortFechaT, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"] })
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
-                </th>
-                <th></th>
+                @using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
+                {
+                    <th>
+                        @Html.TextBox("search", "", new { @style = "width:150px;" })
+                        <input type="submit" value="Buscar" />
+                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+
+                        @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
+
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.id)
-                    </th>
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
@@ -75,22 +63,25 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.fecha_termino_rel)
                     </td>
-
-                    <td>
-                        @Html.ActionLink("Editar", "Edit_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" }) 
-                        @Html.ActionLink("Detalles", "Details2_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" }) 
-                        @Html.ActionLink("Eliminar", "Delete_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
-                    </td>
+                    <td>@Html.ActionLink("Editar", "Edit_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
+                    @Html.ActionLink("Detalles", "Details2_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })</td>
 
                 </tr>
             }
         </tbody>
 </table>
 <div class="col">
-    @Html.PagedListPager(Model, page => Url.Action("Index_usuarios", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], search2 = Request.QueryString["search2"], nn = Request.QueryString["nn"], activ = Request.QueryString["activ"] }))
+    @Html.PagedListPager(Model, page => Url.Action("Index_usuarios", new { page, search = Request.QueryString["search"], search2 = Request.QueryString["search2"], nn = Request.QueryString["nn"], activ = Request.QueryString["activ"], sortBy = Request.QueryString["sortBy"] }))
 </div>
     @section scripts {
+
+
         <script type="text/javascript">
+            $(document).ready(function () {
+                $("#medetai").freezeHeader({});
+            })
+
             $(function () {
                 $('#my-dialogUsers').dialog({
                     autoOpen: false,

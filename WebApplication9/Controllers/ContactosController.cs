@@ -23,7 +23,12 @@ namespace WebApplication9.Controllers
         {
 
             ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
+            ViewBag.SortRut = sortBy == "rut" ? "rut_desc" : "rut";
             ViewBag.SortApellido = sortBy == "apellido" ? "apellido_desc" : "apellido";
+            ViewBag.SortCel = sortBy == "celular" ? "celular_desc" : "celular";
+            ViewBag.SortEmail = sortBy == "email" ? "email_desc" : "email";
+            ViewBag.SortComentario = sortBy == "comentario" ? "comentario_desc" : "comentario";
+
 
             List<contactos> listaContactos = new List<contactos>();
             ViewBag.SearchL = new List<SelectListItem>()
@@ -64,6 +69,12 @@ namespace WebApplication9.Controllers
 
                 switch (sortBy)
                 {
+                    case "rut_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.rut).ToList();
+                        break;
+                    case "rut":
+                        listaContactos = listaContactos.OrderBy(x => x.rut).ToList();
+                        break;
                     case "name_desc":
                         listaContactos = listaContactos.OrderByDescending(x => x.nombres).ToList();
                         break;
@@ -72,6 +83,24 @@ namespace WebApplication9.Controllers
                         break;
                     case "apellido":
                         listaContactos = listaContactos.OrderBy(x => x.apellidos).ToList();
+                        break;
+                    case "celular_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.tcel).ToList();
+                        break;
+                    case "celular":
+                        listaContactos = listaContactos.OrderBy(x => x.tcel).ToList();
+                        break;
+                    case "email_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.email).ToList();
+                        break;
+                    case "email":
+                        listaContactos = listaContactos.OrderBy(x => x.email).ToList();
+                        break;
+                    case "comentario_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.comentario).ToList();
+                        break;
+                    case "comentario":
+                        listaContactos = listaContactos.OrderBy(x => x.comentario).ToList();
                         break;
                     default:
                         listaContactos = listaContactos.OrderBy(x => x.nombres).ToList();

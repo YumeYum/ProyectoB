@@ -14,7 +14,7 @@ namespace WebApplication9.Controllers
     public class OportunidadesController : Controller
     {
         // GET: Oportunidades
-        public ActionResult Index_Oportunidades(string searchBy, string search, int? page, int? estado)
+        public ActionResult Index_Oportunidades(string search, int? page, int? estado, string sortBy, int? nn)
         {
 
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
@@ -30,47 +30,33 @@ namespace WebApplication9.Controllers
                     new SelectListItem() {Text="Logradas", Value="2"},
                     new SelectListItem() {Text="Perdidas", Value="3"}
                   };
-                ViewBag.SearchL = new List<SelectListItem>()
+                ViewBag.SortNempresa = string.IsNullOrEmpty(sortBy) ? "Nempresa_desc" : "";
+                ViewBag.SortCempresa = sortBy == "Cempresa" ? "Cempresa_desc" : "Cempresa";
+                ViewBag.SortCasignado = sortBy == "Casignado" ? "Casignado_desc" : "Casignado";
+                ViewBag.SortFechaC = sortBy == "FechaC" ? "FechaC_desc" : "FechaC";
+                ViewBag.SortFechaV = sortBy == "FechaV" ? "FechaV_desc" : "FechaV";
+                ViewBag.SortEstado = sortBy == "Estado" ? "Estado_desc" : "Estado";
+                ViewBag.SortCupos = sortBy == "Cupos" ? "Cupos_desc" : "Cupos";
+                ViewBag.SortTema = sortBy == "Tema" ? "Tema_desc" : "Tema";
+                ViewBag.SortGestiones = sortBy == "Gestiones" ? "Gestiones" : "Gestiones";
 
-                  {
-                    new SelectListItem() {Text="Todos los Campos", Value="todos"},
-                    new SelectListItem() {Text="Empresa", Value="Empresa"},
-                    new SelectListItem() {Text="Contacto", Value="Contacto"},
-                    new SelectListItem() {Text="Oportunidades Activas", Value="activa"},
-                    new SelectListItem() {Text="Tema", Value="Tema"}
-                  };
-                switch (searchBy)
-                {
-                    case "todos":
+
+
+
+
                         if (search == String.Empty || search == null)
                         {
-                            listaOps = dbModel.oportunidades.OrderBy(x => x.contacto_empresa.empresa.razon_social).Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                            break;
+                            listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos)
+                        .Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
                         }
                         else
                         {
-                            listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search) || x.contacto_empresa.contactos.nombres.Contains(search) || x.contacto_empresa.contactos.apellidos.Contains(search) || x.usuario.contactos.nombres.Contains(search)||x.usuario.contactos.apellidos.Contains(search)|| x.tema.Contains(search))
+                            listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search) || x.contacto_empresa.contactos.nombres.Contains(search) 
+                            || x.contacto_empresa.contactos.apellidos.Contains(search) || x.usuario.contactos.nombres.Contains(search)||x.usuario.contactos.apellidos.Contains(search)
+                            || x.tema.Contains(search))
                                 .Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                            break;
                         }
-                    case "":
-                        listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        break;
-                    case "Contacto":
-                        listaOps = dbModel.oportunidades.Where(x => x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)).Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        break;
-                    case "Empresa":
-                        listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search)).Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        break;
-                    case "Tema":
-                        listaOps = dbModel.oportunidades.Where(x => x.tema.StartsWith(search)).Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        break;
-                    default:
-                        listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        break;
 
-                       
-                }
                 switch (estado)
                 {
                     case 1:
@@ -86,8 +72,60 @@ namespace WebApplication9.Controllers
                     default:
                         break;
                 }
+                switch (sortBy)
+                {
+                    case "Cempresa_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.contacto_empresa.contactos.nombres).ThenBy(x => x.contacto_empresa.contactos.apellidos).ToList();
+                        break;
+                    case "Cempresa":
+                        listaOps = listaOps.OrderBy(x => x.contacto_empresa.contactos.nombres).ThenBy(x => x.contacto_empresa.contactos.apellidos).ToList();
+                        break;
+                    case "Nempresa_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.contacto_empresa.empresa.razon_social).ToList();
+                        break;
+                    case "Casignado_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        break;
+                    case "Casignado":
+                        listaOps = listaOps.OrderBy(x => x.usuario.contactos.nombres).ThenBy(x => x.usuario.contactos.apellidos).ToList();
+                        break;
+                    case "FechaC_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.fecha_creacion).ToList();
+                        break;
+                    case "FechaC":
+                        listaOps = listaOps.OrderBy(x => x.fecha_creacion).ToList();
+                        break;
+                    case "FechaV_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.fecha_vencimiento).ToList();
+                        break;
+                    case "FechaV":
+                        listaOps = listaOps.OrderBy(x => x.fecha_vencimiento).ToList();
+                        break;
+                    case "Tema_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.tema).ToList();
+                        break;
+                    case "Tema":
+                        listaOps = listaOps.OrderBy(x => x.tema).ToList();
+                        break;
+                    case "Estado_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.estado).ToList();
+                        break;
+                    case "Estado":
+                        listaOps = listaOps.OrderBy(x => x.estado).ToList();
+                        break;
+                    case "Cupos_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.cupos).ToList();
+                        break;
+                    case "Cupos":
+                        listaOps = listaOps.OrderBy(x => x.cupos).ToList();
+                        break;
+                    default:
+                        listaOps = listaOps.OrderBy(x => x.contacto_empresa.empresa.razon_social).ToList();
+                        break;
+                }
 
-                return View(listaOps.OrderBy(x=>x.contacto_empresa.empresa.razon_social).ToPagedList(page ?? 1, 10));
+
+                return View(listaOps.ToPagedList(page ?? 1, nn ?? 10));
             }
 
 
@@ -262,7 +300,7 @@ namespace WebApplication9.Controllers
         }
 
         [HttpPost]
-        public ActionResult Crear_OportunidadP(oportunidades oModel)
+        public ActionResult Crear_OportunidadP(oportunidades oModel, int? id_empresa)
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
@@ -451,6 +489,34 @@ namespace WebApplication9.Controllers
 
                 dbModel.contactos.Add(CEC.contacto);
                 dbModel.contacto_empresa.Add(CEC.cEmpresa);
+
+                dbModel.SaveChanges();
+            }
+            return RedirectToAction("/Index_Oportunidades");
+        }
+        public ActionResult Agregar_Contacto(int? id_empresa)
+        {
+
+
+            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
+            {
+                TempData["id_empresa"] = id_empresa;
+                contactos contacto = new contactos();
+                return PartialView(contacto);
+
+            }
+        }
+        [HttpPost]
+        public ActionResult Agregar_Contacto(contactos contacto)
+        {
+
+
+            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
+            {
+                contacto_empresa Cempresa = new contacto_empresa();
+                //Cempresa.id_empresa = TempData["id_empresa"];
+                dbModel.contactos.Add(contacto);
+                //dbModel.contacto_empresa.Add(contacto);
 
                 dbModel.SaveChanges();
             }

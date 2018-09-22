@@ -30,26 +30,25 @@ namespace WebApplication9.Controllers
 
             return View(new empresa());
         }
-        public ActionResult Index_Empresa(int? page, string searchBy, string search)
+        public ActionResult Index_Empresa(int? page, string search)
         {
             List<empresa> listaEmpresas = new List<empresa>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                ViewBag.SearchL = new List<SelectListItem>()
-
-                  {
-                    new SelectListItem() {Text="Razon Social", Value="razon_social"},
-                  };
-                switch (searchBy)
+                if (search!= null && search!= string.Empty)
                 {
-                    case "razon_social":
-                        listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search)).ToList();
-                        break;
-                       default:
-                        listaEmpresas = dbModel.empresa.Include(x => x.contacto_empresa.Select(z => z.oportunidades)).OrderBy(x => x.razon_social).ToList<empresa>();
-                        break;
+                    listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search)||x.comuna.Contains(search)||x.convenio.Contains(search)||x.numero.ToString().Contains(search)||x.resto_direccion.Contains(search)||x.rubro.Contains(search)||x.rut.Contains(search)||x.zona.Contains(search)).ToList();
+                }
+
+                else
+                {
+                     listaEmpresas = dbModel.empresa.Include(x => x.contacto_empresa.Select(z => z.oportunidades)).OrderBy(x => x.razon_social).ToList<empresa>();
 
                 }
+
+
+
+
                 foreach (var item in listaEmpresas.ToList())
                 {
                     int count = dbModel.oportunidades.Where(x => x.contacto_empresa.id_empresa == item.id).Count();

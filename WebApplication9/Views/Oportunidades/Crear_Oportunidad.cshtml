@@ -47,18 +47,19 @@
 
             <div class="form-horizontal">
                 <h4>Crear Oportunidad</h4>
-                <a href="#" id="Ccontacto">Agregar Contacto</a>
-                @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
-                @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })
-                @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm   " })
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-row">
-                    <div class="form-group">
-                        <div class="col">
-                            <b>@Html.Label("Empresa")</b><br />
-                            @Html.DropDownList("Empresas", new SelectList(Model.EmpresaModel, "id", "razon_social"), "Seleccione Contacto de Empresa", new { @id = "ddlstate", style = "width:250px;", @onchange = "javascript:GetCEmpresa(this.value);", required="required" })
-                        </div>
+                <input id="clickMe" type="button" value="Agregar Contacto (Falta terminar)" onclick="Agregar_Contacto();" />
+                    <input type="hidden" id="id_empresa" name="id_empresa">
+                    @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
+                    @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })
+                    @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm   " })
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="col">
+                                <b>@Html.Label("Empresa")</b><br />
+                                @Html.DropDownList("Empresas", new SelectList(Model.EmpresaModel, "id", "razon_social"), "Seleccione Contacto de Empresa", new { @id = "ddlstate", style = "width:250px;", @onchange = "javascript:GetCEmpresa(this.value);", required = "required" })
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -70,47 +71,47 @@
                             </div>
                         </div>
                     </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        @Html.Label("Usuario Asignado", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.id_contacto_asignado, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:250px;" })
-                            @Html.ValidationMessageFor(model => model.id_contacto_asignado, "", new { @class = "text-danger" })
+                    <div class="form-row">
+                        <div class="form-group">
+                            @Html.Label("Usuario Asignado", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.id_contacto_asignado, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:250px;" })
+                                @Html.ValidationMessageFor(model => model.id_contacto_asignado, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.tema, htmlAttributes: new { @class = "control-label col-sm-6" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.tema, new SelectList(Model.Temas, "Value", "Text"), "Seleccione Tema", new { @class = "form-control", required = "required", style = "width:218px;" })
+                                @Html.ValidationMessageFor(model => model.tema, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
+                            <div class="col-md-10">
+                                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker form-control", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:200px;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.cupos, htmlAttributes: new { @class = "control-label col-sm-6" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.cupos, new { htmlAttributes = new { @class = "form-control", required = "required", min = "0", max = "100" } })
+                                @Html.ValidationMessageFor(model => model.cupos, "", new { @class = "text-danger" })
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.tema, htmlAttributes: new { @class = "control-label col-sm-6" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.tema, new SelectList(Model.Temas, "Value", "Text"), "Seleccione Tema", new { @class = "form-control", required = "required", style = "width:218px;" })
-                            @Html.ValidationMessageFor(model => model.tema, "", new { @class = "text-danger" })
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Crear" class="btn btn-primary" />
                         </div>
                     </div>
-
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
-                        <div class="col-md-10">
-                            @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
-                            @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker form-control", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:200px;" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.cupos, htmlAttributes: new { @class = "control-label col-sm-6" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.cupos, new { htmlAttributes = new { @class = "form-control", required = "required", min = "0", max = "100" } })
-                            @Html.ValidationMessageFor(model => model.cupos, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Crear" class="btn btn-primary" />
-                    </div>
-                </div>
-            </div>
+</div>
         }
         @section scripts{
         <script type="text/javascript">
@@ -309,6 +310,9 @@
                 $("#ddlstate").combobox({
                     select: function (event, ui) {
                         GetCEmpresa(this.value);
+                        selectedValue = this.value;
+                        $("#id_empresa").val(this.value);
+
                     }
                 });
 
@@ -320,32 +324,26 @@
                 });
 
             });
-     
-            $("#Ccontacto").on("click", function () {
 
-                var selectedVal = $("#ddlCEmpresa").val();
-                var url = "Contactos/CreateP_Contacto" + selectedVal;
+            function Agregar_Contacto(){
+                $('#my-dialogCO').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    height: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+                var url = "/oportunidades/agregar_contacto?id_empresa=" + selectedValue;
 
-                var dialog = $("#my-dialogCO");
-                if ($("#my-dialogCO").length == 0) {
-                    dialog = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
+                $('#my-dialogCO').load(url, function () {
+
+                    $(this).dialog('open');
                 }
-                dialog.load(
-                    url,
-                    {}, // omit this param object to issue a GET request instead a POST request, otherwise you may provide post parameters within the object
-                    function (responseText, textStatus, XMLHttpRequest) {
-                        dialog.dialog({
-                            close: function (event, ui) {
-                                dialog.remove();
-                            },
-                            modal: true,
-                             width: 460
-                        });
-                    }
                 );
-            }); 
+                return false;
 
-
+            };
+            
 
             $("#my-dialogCO").dialog('option', 'title', 'Editar Usuario');
 

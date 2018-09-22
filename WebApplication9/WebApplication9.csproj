@@ -141,6 +141,13 @@
     <Content Include="Content\css\jquery-ui.css" />
     <Content Include="Content\imagenes\proyectob.jpg" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Scripts\jquery.freezeheader.js" />
+    <Content Include="Content\scss\_custom.css">
+      <DependentUpon>_custom.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\_custom.min.css">
+      <DependentUpon>_custom.css</DependentUpon>
+    </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Scripts\bootstrap.bundle.js" />
@@ -158,6 +165,10 @@
     <Content Include="Content\css\bootstrap-grid.min.css.map" />
     <Content Include="Content\css\bootstrap-grid.css.map" />
     <Content Include="Content\scss\_custom.scss" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Content\Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Content\css\images\ui-icons_444444_256x240.png" />
     <Content Include="Content\css\images\ui-icons_555555_256x240.png" />
@@ -339,6 +350,7 @@
     <None Include="Properties\PublishProfiles\ProyectoB9 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WebApplication920180901043426 - Web Deploy.pubxml" />
     <Content Include="Views\Oportunidades\Crear_ContactoEmpresaContactoP.cshtml" />
+    <Content Include="Views\Oportunidades\Agregar_Contacto.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

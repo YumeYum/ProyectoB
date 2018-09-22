@@ -8,7 +8,8 @@ namespace WebApplication9
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Content/Scripts/jquery-3.0.0.js"));
+                        "~/Content/Scripts/jquery-3.0.0.js",
+                        "~/Content/Scripts/jquery.freezeheader.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
             "~/Content/Scripts/jquery-ui.js"));

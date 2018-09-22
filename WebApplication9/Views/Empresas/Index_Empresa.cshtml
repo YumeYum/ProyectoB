@@ -31,8 +31,6 @@
             <p>
                 @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
                 @Html.TextBox("search") <input type="submit" value="Buscar" />
-                @Html.DropDownList("searchBy", new SelectList(ViewBag.SearchL, "Value", "Text"))
-                @Html.ActionLink("Mostrar Todos", "Index_Contactos")
             </p>
         </div>
         </div>

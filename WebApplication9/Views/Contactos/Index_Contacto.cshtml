@@ -19,98 +19,207 @@
             Response.Redirect("~/Proyectob/Index");
         }
     }
+
     <div id="my-dialogContactos"></div>
-
-@Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo btn-primary btn-sm" })
-
-@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
-{    <p>
-        @Html.TextBox("search") <input type="submit" value="Buscar" />
-
-         Mostrando
-         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-         Registros
+<style>
 
 
-    </p>
-    <div class="col">
-        @Html.ActionLink("Mostrar Todos", "Index_Contacto")
-    </div>
-}
+    /* ----------->>> GridView <<<----------*/
+    .gridView {
+        width: 100%;
+        clear: both;
+        margin: 10px 0;
+        border: medium none !important;
+        border-collapse: collapse;
+    }
 
-    <table class="table table-striped">
-        <thead>
+        .gridView tr td {
+            vertical-align: top;
+        }
+
+        .gridView thead tr, .footer {
+            font: bold 11px Arial;
+            vertical-align: middle;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        /* --->>> HeaderStyle (cabe軋lho) <<<---*/
+        .gridView thead tr {
+            color: #333;
+            background: #fff url(../images/bg-header-grid.png) bottom repeat-x;
+            vertical-align: middle;
+            height: 25px;
+        }
+
+            .gridView thead tr th {
+                border-top: 1px solid #E2E6E6;
+                border-bottom: 3px solid #E5E5E5;
+                vertical-align: middle;
+            }
+
+            .gridView thead tr a {
+                font: bold 11px Arial, Verdana;
+                color: #333;
+                padding: 0 0 0 10px;
+                text-decoration: underline;
+                background: url(../images/Icones/ico-ordem.gif) left no-repeat;
+                vertical-align: middle;
+            }
+
+                .gridView thead tr a:hover {
+                    color: #06c;
+                    background: url(../images/Icones/ico-ordem-hover.gif) left no-repeat;
+                }
+
+    /* ---->>> FooterStyle (rodap・ <<<------*/
+    .footer {
+        height: 20px;
+        width: auto;
+        margin: 0 auto;
+        text-align: center;
+        padding: 5px;
+    }
+        /*PagerStyle*/
+        .footer a, .footer span {
+            color: #555;
+            padding: 2px 6px 2px 6px;
+            border: 1px solid #bcbcbc;
+            background: #F1F1F1 url(../images/bg-pg.png) bottom repeat-x;
+            text-decoration: none;
+        }
+
+            .footer a:hover {
+                color: #C40B17;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #890812;
+            }
+
+        .footer span {
+            color: #fff;
+            background: #D7403F url(../images/bg-pg-focus.png) bottom repeat-x;
+            border: 1px solid #890812;
+        }
+
+
+    /* ------------>>> Grid <<<--------------*/
+    .grid, .gridAlternada, .gridDestacada {
+        font: 11px Arial,Verdana;
+        text-align: left;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+        .grid:hover, .gridAlternada:hover, .gridDestacada:hover {
+            color: #000;
+            background: #D4E5F6 url(../images/bg-dia.png) 0 0 repeat-x;
+        }
+
+    .grid {
+        background-color: #fff;
+    }
+    /*RowStyle*/
+    .gridAlternada {
+        background-color: #eee;
+    }
+    /*AlternatingRowStyle*/
+    .gridDestacada {
+        background-color: #FFE082;
+        color: #333;
+    }
+        /*SelectedRowStyle / EditRowStyle*/
+
+
+        /* -------->>> Link Grid's <<<-----------*/
+        .grid a, .gridAlternada a, .gridDestacada a {
+            color: #384249;
+            text-decoration: none;
+        }
+
+            .grid a:hover, .gridAlternada a:hover, .gridDestacada a:hover {
+                color: #000;
+                text-decoration: underline;
+            }
+   
+
+</style>
+
+    <table class="table table-striped" id="medetai">
+        <thead class="thead-light">
 
             <tr>
 
                 <th>
-                    @Html.DisplayNameFor(model => model.First().id)
+                    @Html.ActionLink("Rut", "index_contacto", new { sortBy = ViewBag.SortRut, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().rut)
+                    @Html.ActionLink("Nombres","index_contacto", new { sortBy = ViewBag.SortName, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.ActionLink("Nombres","index_contacto", new { sortBy = ViewBag.SortName, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                    @Html.ActionLink("Apellidos", "index_contacto", new { sortBy = ViewBag.SortApellido, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.ActionLink("Apellidos", "index_contacto", new { sortBy = ViewBag.SortApellido, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                    @Html.ActionLink("Celular", "index_contacto", new { sortBy = ViewBag.SortCel, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().tcel)
+                    @Html.ActionLink("Email", "index_contacto", new { sortBy = ViewBag.SortEmail, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().comentario)
+                    @Html.ActionLink("Comentario", "index_contacto", new { sortBy = ViewBag.SortComentario, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.First().curriculum)
                 </th>
-                <th></th>
+                <th>@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
+                { 
+                        @Html.TextBox("search","", new { style = "width:100px;" })
+                        <input type="submit" value="Buscar" />
+                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+                }
+                    </th>
             </tr>
         </thead>
+            @Html.ActionLink("Nuevo Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo btn-primary btn-sm" })
 
-        @foreach (var item in Model)
+        <tbody>
+            @foreach (var item in Model)
             {
-            <tr>
+                <tr>
 
-                <th>
-                    @Html.DisplayFor(modelItem => item.id)
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => item.rut)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.nombres)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.apellidos)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.tcel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.comentario)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.curriculum)
-                </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" }) 
-                    @Html.ActionLink("Detalles", "Details_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                    @Html.ActionLink("Eliminar", "Delete_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.rut)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombres)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.apellidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tcel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.comentario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.curriculum)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                        @Html.ActionLink("Detalles", "Details_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                        @Html.ActionLink("Eliminar", "Delete_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    </td>
 
-            </tr>
-        }
-
+                </tr>
+            }
+        </tbody>
     </table>
 <div class="col">
-    @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
+    @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
 
 
@@ -121,6 +230,10 @@
 </div>
     @section scripts {
         <script type="text/javascript">
+            $(document).ready(function () {
+                $("#medetai").freezeHeader({  });
+            })
+
             $(function () {
                 $('#my-dialogContactos').dialog({
                     autoOpen: false,
@@ -135,6 +248,10 @@
                     });
                     return false;
                 });
+            });
+            $(document).ready(function () {
+                $('#dtBasicExample').DataTable();
+                $('.dataTables_length').addClass('bs-select');
             });
         </script>
 

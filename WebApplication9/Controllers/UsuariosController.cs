@@ -22,8 +22,11 @@ namespace WebApplication9.Controllers
         }
 
         //[Authorize(Roles = "Administrator")]
-        public ActionResult Index_Usuarios(int? page,string searchBy, string search, string search2, ModelBindingContext bindingContext, int? nn, int? activ)
+        //nn = Número de registros
+        public ActionResult Index_Usuarios(int? page, string search, string search2, ModelBindingContext bindingContext, int? nn, int? activ, string sortBy)
         {
+
+
             List<usuario> listaContactos = new List<usuario>();
             ViewBag.SearchL = new List<SelectListItem>()
 
@@ -55,39 +58,30 @@ namespace WebApplication9.Controllers
 
 
                   };
+
+            ViewBag.SortNC = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
+            ViewBag.SortEstado = sortBy == "estado" ? "estado_desc" : "estado";
+            ViewBag.SortFechaI = sortBy == "fecha_inicio" ? "fecha_inicio_desc" : "fecha_inicio";
+            ViewBag.SortFechaT = sortBy == "fecha_termino" ? "fecha_termino_desc" : "fecha_termino";
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                switch (searchBy)
-                {
-                    case "todos":
+
                         if (search == String.Empty || search == null)
                         {
 
                             listaContactos = dbModel.usuario.Include(x => x.contactos).ToList();
-                            break;
+                            
                             //return Redirect("Index_Usuarios?nn="+ nn );
 
                         }
                         else
                         {
                             listaContactos = dbModel.usuario.Where(x => x.estado.Contains(search) || x.contactos.nombres.Contains(search) || x.contactos.apellidos.Contains(search)).Include(x => x.contactos).ToList();
-                            break;
+                           
 
                         }
 
-                    case "estado":
-                        if (search2 == "todos")
-                        {
-                            listaContactos = dbModel.usuario.Include(x => x.contactos).ToList();
-                            break;
-                        }
-                        listaContactos = dbModel.usuario.Where(x=>x.estado.StartsWith(search2)).Include(x => x.contactos).ToList();
-                        break;
-                    default:
-                        listaContactos = dbModel.usuario.Include(x=>x.contactos).ToList();
-                        break;
-
-                }
+                
                 switch (activ)
                 {
                     case 1:
@@ -100,7 +94,36 @@ namespace WebApplication9.Controllers
                     default:
                         break;
                 }
-                return View(listaContactos.OrderBy(x=>x.contactos.nombres).ToList<usuario>().ToPagedList(page ?? 1, nn ?? 10));
+                switch (sortBy)
+                {
+                    case "name_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).ToList();
+                        break;
+                    case "estado_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.estado).ToList();
+                        break;
+                    case "estado":
+                        listaContactos = listaContactos.OrderBy(x => x.estado).ToList();
+                        break;
+                    case "fecha_inicio_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fecha_inicio":
+                        listaContactos = listaContactos.OrderBy(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fecha_termino_desc":
+                        listaContactos = listaContactos.OrderByDescending(x => x.fecha_termino_rel).ToList();
+                        break;
+                    case "fecha_termino":
+                        listaContactos = listaContactos.OrderBy(x => x.fecha_termino_rel).ToList();
+                        break;
+                    default:
+                        listaContactos = listaContactos.OrderBy(x => x.contactos.nombres).ThenBy(x=>x.contactos.apellidos).ToList();
+                        break;
+                }
+
+
+                return View(listaContactos.ToList<usuario>().ToPagedList(page ?? 1, nn ?? 10));
             }
         }
 
