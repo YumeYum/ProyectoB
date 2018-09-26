@@ -7,44 +7,57 @@
     Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
 }
 
-<h2>Lista de contactos de empresa</h2>
 
-<p>
-    <div id="my-dialogEmpresaC"></div>
 
-    @*Html.ActionLink("Crear nuevo Contacto Empresa", "Create_Empresa_Contacto")*@
-    </p>
-    <table class="table table-striped">
-        <thead>
+@*Html.ActionLink("Crear nuevo Contacto Empresa", "Create_Empresa_Contacto")*@
+
+
+@using (Html.BeginForm("/index_empresa_contacto", "Contacto_Empresa", FormMethod.Get))
+{
+    <div class="col-sm-4 float-right">
+        <p>
+            @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
+            @Html.TextBox("search") <input type="submit" value="Buscar" />
+            @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+        </p>
+    </div>
+
+
+}
+
+<div id="my-dialogEmpresaC"></div>
+
+    <table class="table table-striped" id="medetai">
+        <thead class="thead-light">
             <tr>
 
                 <th>
-                    @Html.Label("Nombre Empresa")
+                    @Html.ActionLink("Nombre Empresa", "index_empresa_contacto", new { sortBy = ViewBag.SortNEmpresa, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.Label("Nombre Contacto")
+                    @Html.ActionLink("Nombre Contacto", "index_empresa_contacto", new { sortBy = ViewBag.SortNContacto, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
 
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                    @Html.ActionLink("Fecha Inicio", "index_empresa_contacto", new { sortBy = ViewBag.SortFechaI, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
+                    @Html.ActionLink("Fecha Termino", "index_empresa_contacto", new { sortBy = ViewBag.SortFechaT, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().cargo)
+                    @Html.ActionLink("Cargo", "index_empresa_contacto", new { sortBy = ViewBag.SortCargo, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().telefono_fijo)
+                    @Html.ActionLink("Teléfono Fijo", "index_empresa_contacto", new { sortBy = ViewBag.SortTfijo, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().telefono_celular)
+                    @Html.ActionLink("Celular", "index_empresa_contacto", new { sortBy = ViewBag.SortTcelular, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().empresa.rut)
+                    @Html.ActionLink("Rut Empresa", "index_empresa_contacto", new { sortBy = ViewBag.SortRutEmpresa, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().contactos.rut)
+                    @Html.ActionLink("Rut Contacto", "index_empresa_contacto", new { sortBy = ViewBag.SortRutContacto, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th></th>
             </tr>
@@ -79,17 +92,25 @@
                 @Html.DisplayFor(modelItem => item.contactos.rut)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
-                @Html.ActionLink("Detalles", "Details_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
-                @Html.ActionLink("Eliminar", "Delete_Contacto_Empresa", new { id=item.id }, new { @class = "modolo btn-primary btn-sm" })
+                <div class="dropdown">
+                    <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                        Opciones
+                    </button>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("Editar", "Edit_Contacto_Empresa", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                        @Html.ActionLink("Detalles", "Details_Contacto_Empresa", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                        @Html.ActionLink("Eliminar", "Delete_Contacto_Empresa", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                    </div>
+                </div>
             </td>
         </tr>
     }
 
     </table>
 <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("Index_Empresa_Contacto",
-        new { page, pageSize = Model.PageSize }))
+    @Html.PagedListPager(Model, page => Url.Action("index_empresa_contacto", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
+
+
 </div>
     @section scripts {
         <script type="text/javascript">

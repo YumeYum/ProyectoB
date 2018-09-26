@@ -42,22 +42,6 @@
                     @Html.ValidationMessageFor(model => model.id_usuario, "", new { @class = "text-danger" })
 
                 </div>
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.fecha_inicio_rel, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-2">
-                        @Html.TextBoxFor(model => model.fecha_inicio_rel, new { @class = "Datepicker", @Value = Model.fecha_inicio_rel.ToString("dd-MM-yyyy"), required = "required" })
-                        @Html.ValidationMessageFor(model => model.fecha_inicio_rel, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.fecha_termino_rel, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-2">
-                        @Html.TextBoxFor(model => model.fecha_termino_rel, new { @class = "Datepicker", @Value = Model.fecha_termino_rel.ToString("dd-MM-yyyy"), required = "required" })
-                        @Html.ValidationMessageFor(model => model.fecha_termino_rel, "", new { @class = "text-danger" })
-                    </div>
-                </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Crear Usuario Rol" class="btn btn-default" />

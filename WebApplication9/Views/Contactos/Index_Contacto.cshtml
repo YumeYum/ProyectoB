@@ -144,7 +144,7 @@
    
 
 </style>
-
+@*Medetai is the id for the headerfreeze*@
     <table class="table table-striped" id="medetai">
         <thead class="thead-light">
 
@@ -176,12 +176,11 @@
                         @Html.TextBox("search","", new { style = "width:100px;" })
                         <input type="submit" value="Buscar" />
                         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+                        @Html.ActionLink("Nuevo Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo btn-primary btn-sm" })
                 }
                     </th>
             </tr>
         </thead>
-            @Html.ActionLink("Nuevo Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo btn-primary btn-sm" })
-
         <tbody>
             @foreach (var item in Model)
             {
@@ -208,10 +207,20 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.curriculum)
                     </td>
+
                     <td>
-                        @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                        @Html.ActionLink("Detalles", "Details_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                        @Html.ActionLink("Eliminar", "Delete_Contacto", null, new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                                Opciones
+                            </button>
+                            <div class="dropdown-menu">
+                                @Html.ActionLink("Editar", "Edit_Contacto", null, new { id = item.id }, new { @class = "modolo dropdown-item " })
+                                @Html.ActionLink("Detalles", "Details_Contacto", null, new { id = item.id }, new { @class = "modolo dropdown-item " })
+                                @Html.ActionLink("Eliminar", "Delete_Contacto", null, new { id = item.id }, new { @class = "modolo dropdown-item " })
+                            </div>
+                        </div>
+
+
                     </td>
 
                 </tr>
@@ -230,10 +239,6 @@
 </div>
     @section scripts {
         <script type="text/javascript">
-            $(document).ready(function () {
-                $("#medetai").freezeHeader({  });
-            })
-
             $(function () {
                 $('#my-dialogContactos').dialog({
                     autoOpen: false,

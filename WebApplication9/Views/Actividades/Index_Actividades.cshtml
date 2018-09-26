@@ -26,35 +26,47 @@
     <p>
         @Html.ActionLink("Crear Actividad", "Crear_Actividad", null, new { @class = "modolo btn-primary btn-sm" })
     </p>
-    <table class="table table-striped">
-        <thead>
+    @using (Html.BeginForm("/index_actividades", "actividades", FormMethod.Get))
+    {
+        <div class="col-sm-4">
+            <p>
+                @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
+                @Html.TextBox("search") <input type="submit" value="Buscar" />
+                @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+            </p>
+        </div>
+
+
+    }
+    <table class="table table-striped" id="medetai">
+        <thead class="thead-light">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_inicio)
+                    @Html.ActionLink("Fecha Inicio", "index_actividades", new { sortBy = ViewBag.SortFechaI, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_vencimiento)
+                    @Html.ActionLink("Fecha Vencimiento", "index_actividades", new { sortBy = ViewBag.SortFechaV, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().titulo)
+                    @Html.ActionLink("Título", "index_actividades", new { sortBy = ViewBag.SortTitulo, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().descripcion)
+                    @Html.ActionLink("Descripción", "index_actividades", new { sortBy = ViewBag.SortDescr, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().creada_por)
+                    @Html.ActionLink("Creada por", "index_actividades", new { sortBy = ViewBag.SortCreadaPor, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().estado)
+                    @Html.ActionLink("Estado", "index_actividades", new { sortBy = ViewBag.SortEstado, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().tipo_actividad)
+                    @Html.ActionLink("Tipo Actividad", "index_actividades", new { sortBy = ViewBag.SortTipoAct, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().oportunidades.tema)
+                    @Html.ActionLink("Tema Oportunidad", "index_actividades", new { sortBy = ViewBag.SortTema, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().usuario.id_contacto)
+                    @Html.ActionLink("Contacto", "index_actividades", new { sortBy = ViewBag.SortContacto, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th></th>
             </tr>
@@ -87,14 +99,19 @@
                     @Html.DisplayFor(modelItem => item.oportunidades.tema)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.usuario.id_contacto)
+                    @Html.DisplayFor(modelItem => item.usuario.contactos.FullName)
                 </td>
                 <td>
-                    <div class="d-inline">
-                        @Html.ActionLink("Editar", "Edit_Actividad", new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm" })
-                        @Html.ActionLink("Detalles", "Details_Actividad", new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm" })
-                        @Html.ActionLink("Eliminar", "Delete_Actividad", new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm" })
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                            Opciones
+                        </button>
+                        <div class="dropdown-menu">
+                                @Html.ActionLink("Editar", "Edit_Actividad", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                                @Html.ActionLink("Detalles", "Details_Actividad", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                                @Html.ActionLink("Eliminar", "Delete_Actividad", new { id = item.id }, new { @class = "modolo dropdown-item" })
                     </div>
+                     </div>
                 </td>
             </tr>
         }

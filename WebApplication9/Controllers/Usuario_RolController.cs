@@ -19,13 +19,74 @@ namespace WebApplication9.Controllers
             return View();
         }
 
-        public ActionResult Index_URoles(int? page)
+        public ActionResult Index_URoles(int? page, string search, int? nn, string sortBy)
         {
             List<usuario_rol> ListaURol = new List<usuario_rol>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
 
-                return View(dbModel.usuario_rol.Include(x=>x.usuario.contactos).Include(x=>x.roles).ToList<usuario_rol>().ToPagedList(page ?? 1, 10));
+                ViewBag.NumeroR = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
+
+
+
+                  };
+
+                    if (search != String.Empty && search != null)
+                    {
+                        ListaURol = dbModel.usuario_rol.Where(x=>x.roles.rol.Contains(search)|| x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)).Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
+                    }
+                    else
+                    {
+                        ListaURol = dbModel.usuario_rol.Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
+
+                    }
+                ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
+                ViewBag.SortRol = sortBy == "rol" ? "rol_desc" : "rol";
+                ViewBag.SortFechaI = sortBy == "fechaI" ? "fechaI_desc" : "fechaI";
+                ViewBag.SortFechaT = sortBy == "fechaT" ? "fechaT_desc" : "fechaT";
+
+                switch (sortBy)
+                {
+                    case "name_desc":
+                        ListaURol = ListaURol.OrderByDescending(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        break;
+                    case "rol_desc":
+                        ListaURol = ListaURol.OrderByDescending(x => x.roles.rol).ToList();
+                        break;
+                    case "rol":
+                        ListaURol = ListaURol.OrderBy(x => x.roles.rol).ToList();
+                        break;
+                    case "fechaI_desc":
+                        ListaURol = ListaURol.OrderByDescending(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fechaI":
+                        ListaURol = ListaURol.OrderBy(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fechaT_desc":
+                        ListaURol = ListaURol.OrderByDescending(x => x.fecha_termino_rel).ToList();
+                        break;
+                    case "fechaT":
+                        ListaURol = ListaURol.OrderBy(x => x.fecha_termino_rel).ToList();
+                        break;
+                    default:
+                        ListaURol = ListaURol.OrderBy(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        break;
+
+                }
+
+                return View(ListaURol.ToList<usuario_rol>().ToPagedList(page ?? 1, nn ?? 10));
             }
 
 
@@ -105,7 +166,7 @@ namespace WebApplication9.Controllers
                 dbModel.usuario_rol.Add(urolModel);
                 dbModel.SaveChanges();
             }
-            return RedirectToAction("/Index_URoles");
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         [HttpPost]
@@ -118,7 +179,7 @@ namespace WebApplication9.Controllers
                 dbModel.usuario_rol.Add(urolModel);
                 dbModel.SaveChanges();
             }
-            return RedirectToAction("/Index_URoles");
+            return Redirect(Request.UrlReferrer.ToString());
         }
         public ActionResult Edit_Usuario_Rol(int id)
         {

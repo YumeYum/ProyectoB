@@ -19,21 +19,76 @@ namespace WebApplication9.Controllers
             return View();
         }
 
-        public ActionResult Index_Roles()
+        public ActionResult Index_Roles(int? page, int? nn, string search, string sortBy)
         {
+            ViewBag.NumeroR = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
+
+
+
+                  };
+
             List<roles> listaRoles = new List<roles>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+                if (search != String.Empty && search != null)
+                {
+                    listaRoles = dbModel.roles.Where(x => x.descripcion.Contains(search) || x.rol.Contains(search)).ToList();
+                }
+                else
+                {
+                    listaRoles = dbModel.roles.OrderBy(x => x.rol).ToList();
 
-                listaRoles = dbModel.roles.ToList<roles>();
+                }
+
 
             }
-            return View(listaRoles);
+            ViewBag.SortRol = string.IsNullOrEmpty(sortBy) ? "rol_desc" : "";
+            ViewBag.SortDescr = sortBy == "descr" ? "descr_desc" : "descr";
+
+
+            switch (sortBy)
+            {
+                case "rol_desc":
+                    listaRoles = listaRoles.OrderByDescending(x => x.rol).ToList();
+                    break;
+                case "descr_desc":
+                    listaRoles = listaRoles.OrderByDescending(x => x.descripcion).ToList();
+                    break;
+                case "descr":
+                    listaRoles = listaRoles.OrderBy(x => x.descripcion).ToList();
+                    break;
+                default:
+                    listaRoles = listaRoles.OrderBy(x => x.rol).ToList();
+                    break;
+            }
+
+
+
+
+            return View(listaRoles.ToList<roles>().ToPagedList(page?? 1, nn ?? 10));
+
 
         }
         public ActionResult Create_Roles()
         {
             return View(new roles());
+        }
+
+        public ActionResult Create_RolesP()
+        {
+            return PartialView(new roles());
         }
 
         [HttpPost]
@@ -44,7 +99,17 @@ namespace WebApplication9.Controllers
                 dbModel.roles.Add(rolesModel);
                 dbModel.SaveChanges();
             }
-            return RedirectToAction("/Index_Roles");
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+        [HttpPost]
+        public ActionResult Create_RolesP(roles rolesModel)
+        {
+            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
+            {
+                dbModel.roles.Add(rolesModel);
+                dbModel.SaveChanges();
+            }
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         // GET: Proyectob/Delete/5

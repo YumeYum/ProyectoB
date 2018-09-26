@@ -5,11 +5,13 @@
     ViewBag.Title = "índice de Empresas";
     Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
 }
-<head>
 
-</head>
-<p>
     <style>
+
+        .table {
+  width: 100%;
+  table-layout: fixed;
+}
         .descr {
             max-width: 200px;
             white-space: nowrap;
@@ -21,123 +23,136 @@
                 white-space: normal;
                 word-break: normal;
             }
+
     </style>
     <div id="my-dialogEmpresa"></div>
-</p>
 
 @using (Html.BeginForm("/Index_Empresa", "Empresas", FormMethod.Get))
-{   <div class="row">
-        <div class="col-sm-4">
+{   
+        <div class="col-sm-4 float-right">
             <p>
                 @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
                 @Html.TextBox("search") <input type="submit" value="Buscar" />
+                @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
             </p>
         </div>
-        </div>
+       
 
 }
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().rut)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().razon_social)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().rubro)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().calle)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().numero)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().resto_direccion)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().comuna)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().ctg_empleados)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().convenio)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.First().zona)
-                    </th>
-                    <th>
-                        @Html.Label("Cupos Ocupados")
-                    </th>
-                    <th>
-                        @Html.Label("Cupos Disponibles")
-                    </th>
-                    <th>
-                        @Html.Label("#Oportunidades")
-                    </th>
+        <table class="table table-striped" id="medetai">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.ActionLink("Rut", "index_empresa", new { sortBy = ViewBag.SortRut, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Razón Social", "index_empresa", new { sortBy = ViewBag.SortRSocial, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Rubro", "index_empresa", new { sortBy = ViewBag.SortRubro, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Calle", "index_empresa", new { sortBy = ViewBag.SortCalle, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Número", "index_empresa", new { sortBy = ViewBag.SortNumero, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Resto Dirección", "index_empresa", new { sortBy = ViewBag.SortRDireccion, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Comuna", "index_empresa", new { sortBy = ViewBag.SortComuna, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("CTG Empleados", "index_empresa", new { sortBy = ViewBag.SortCTG, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Convenio", "index_empresa", new { sortBy = ViewBag.SortConvenio, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.ActionLink("Zona", "index_empresa", new { sortBy = ViewBag.SortZona, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th>
+                @Html.Label("Cupos Ocupados")
+            </th>
+            <th>
+                @Html.Label("Cupos Disponibles")
+            </th>
+            <th>
+                @Html.ActionLink("Oportunidades", "index_empresa", new { sortBy = ViewBag.SortOps, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+            </th>
+            <th></th>
+            <th></th>
 
-                    <th></th>
-                    <th></th>
 
-                </tr>
-            </thead>
-            @foreach (var item in Model)
+        </tr>
+    </thead>
+    @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.rut)
-                    </td>
-                    <td class="descr">
-                        @Html.DisplayFor(modelItem => item.razon_social)
-                    </td>
-                    <td class="descr">
-                        @Html.DisplayFor(modelItem => item.rubro)
-                    </td>
-                    <td class="descr">
-                        @Html.DisplayFor(modelItem => item.calle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.numero)
-                    </td>
-                    <td class="descr">
-                        @Html.DisplayFor(modelItem => item.resto_direccion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.comuna)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ctg_empleados)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.convenio)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.zona)
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td>@Html.DisplayFor(modelItem => item.OposN)</td>
-                    <td>
-                        <div class="text-nowrap">
-                            @Html.ActionLink("Editar", "Edit_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
-                            @Html.ActionLink("Detalles", "Details_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
-                            @Html.ActionLink("Eliminar", "Delete_Empresa", null, new { id = item.id }, new { @class = "modolo btn btn-primary btn-sm d-inline-block" })
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
-            }
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.rut)
+            </td>
+            <td class="descr">
+                @Html.DisplayFor(modelItem => item.razon_social)
+            </td>
+            <td class="descr">
+                @Html.DisplayFor(modelItem => item.rubro)
+            </td>
+            <td class="descr">
+                @Html.DisplayFor(modelItem => item.calle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numero)
+            </td>
+            <td class="descr">
+                @Html.DisplayFor(modelItem => item.resto_direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.comuna)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ctg_empleados)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.convenio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.zona)
+            </td>
+            <td></td>
+            <td></td>
+            <td>@Html.DisplayFor(modelItem => item.OposN)</td>
+            <td>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                        Opciones
+                    </button>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("Editar", "Edit_Empresa", null, new { id = item.id }, new { @class = "dropdown-item modolo" })
+                        @Html.ActionLink("Detalles", "Details_Empresa", null, new { id = item.id }, new { @class = "dropdown-item modolo" })
+                        @Html.ActionLink("Eliminar", "Delete_Empresa", null, new { id = item.id }, new { @class = "dropdown-item modolo" })
+                    </div>
+                </div> 
+            </td>
+            <td>
+            </td>
+        </tr>
 
-        </table>
+
+
+    }
+
+</table>
+
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }))
+            @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"] }))
         </div>
         @section scripts {
+
             <script type="text/javascript">
+
                 $(function () {
                     $('#my-dialogEmpresa').dialog({
                         autoOpen: false,

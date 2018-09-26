@@ -3,12 +3,18 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
- 
-    <title>@ViewBag.Title - Proyecto B</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
     @Styles.Render("~/Content/css")
+
+
+    <title>@ViewBag.Title - Proyecto B</title>
 
 </head>
 <body>
+    <div id="my-dialogC"></div>
+
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <a class="navbar-brand" href="/ProyectoB/Home">Proyecto B</a>
         <ul class="navbar-nav">
@@ -89,22 +95,65 @@
                 </div>
             </li>
 
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Crear
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item modoloC" href="/Actividades/Crear_Actividad">Crear Actividad</a>
+                    <a class="dropdown-item modoloC" href="/Usuarios/CreateP_Usuario">Crear Usuario</a>
+                    <a class="dropdown-item modoloC" href="/Contactos/CreateP_Contacto">Crear Contacto</a>
+                    <a class="dropdown-item modoloC" href="/Roles/Create_RolesP">Crear Roles</a>
+                    <a class="dropdown-item modoloC" href="/Usuario_Rol/Create_Usuario_RolP">Crear Usuario Rol</a>
+                    <a class="dropdown-item modoloC" href="/Empresas/Crear_Empresa">Crear Empresa</a>
+                    <a class="dropdown-item modoloC" href="/Contacto_Empresa/Crear_contacto_empresa">Crear Contacto Empresa</a>
+                    <a class="dropdown-item modoloC" href="/Oportunidades/Crear_OportunidadP">Crear Oportunidades</a>
 
+
+
+
+
+
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/ProyectoB/LogOut">Desconectarse</a>
             </li>
         </ul>
     </nav> 
         @RenderBody()
+
         <hr />
         <div class="footer">
             &copy; 2018 Proyecto B.
         </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryui")
+
 
     @RenderSection("scripts", required: false)
+    <script>
+        $(".dropdown-menu a").click(function () {
+            $(this).closest(".dropdown-menu").prev().dropdown("toggle");
+        });
+
+        $(document).ready(function () {
+            $("#medetai").freezeHeader({});
+        })
+        $('#my-dialogC').dialog({
+            autoOpen: false,
+            width: 'auto',
+            resizable: false,
+            modal: true,
+        });
+
+        $('.modoloC').click(function () {
+            $('#my-dialogC').load(this.href, function () {
+                $(this).dialog('open');
+            });
+            return false;
+        });
+
+
+    </script>
 </body>
 </html>

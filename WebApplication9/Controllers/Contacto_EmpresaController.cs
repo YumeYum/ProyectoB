@@ -19,13 +19,109 @@ namespace WebApplication9.Controllers
             return View();
         }
 
-        public ActionResult Index_Empresa_Contacto(int? page)
+        public ActionResult Index_Empresa_Contacto(int? page, string search, int? nn, string sortBy)
+
         {
+            ViewBag.NumeroR = new List<SelectListItem>()
+
+
+            {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
+
+
+
+                  };
             List<contacto_empresa> ListacEmpresa = new List<contacto_empresa>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+                if (search != String.Empty && search != null)
+                {
+                    ListacEmpresa = dbModel.contacto_empresa.Where(x => x.contactos.nombres.Contains(search) || x.contactos.apellidos.Contains(search) || x.empresa.razon_social.Contains(search) || x.cargo.Contains(search) || x.telefono_celular.ToString().Contains(search) || x.telefono_fijo.ToString().Contains(search)||x.contactos.rut.Contains(search)||x.empresa.rut.Contains(search)).Include(x => x.empresa).Include(x => x.contactos).ToList();
+                }
+                else
+                {
+                    ListacEmpresa = dbModel.contacto_empresa.Include(x => x.empresa).Include(x => x.contactos).ToList();
 
-                return View(dbModel.contacto_empresa.Include(x => x.empresa).Include(x => x.contactos).OrderBy(x=>x.contactos.nombres).ThenBy(x=>x.contactos.apellidos).ToList<contacto_empresa>().ToPagedList(page ?? 1, 10));
+                }
+
+                ViewBag.SortNEmpresa = string.IsNullOrEmpty(sortBy) ? "name_empresa_desc" : "";
+                ViewBag.SortNContacto = sortBy == "nombre_contacto" ? "nombre_contacto_desc" : "nombre_contacto";
+                ViewBag.SortFechaI = sortBy == "fechaI" ? "fechaI_desc" : "fechaI";
+                ViewBag.SortFechaT = sortBy == "fechaT" ? "fechaT_desc" : "fechaT";
+                ViewBag.SortCargo = sortBy == "cargo" ? "cargo_desc" : "cargo";
+                ViewBag.SortTFijo = sortBy == "tfijo" ? "tfijo_desc" : "tfijo";
+                ViewBag.SortTCelular = sortBy == "tcelular" ? "tcelular_desc" : "tcelular";
+                ViewBag.SortRutEmpresa = sortBy == "rut_empresa" ? "rut_empresa_desc" : "rut_empresa";
+                ViewBag.SortRutContacto = sortBy == "rut_contacto" ? "rut_contacto_desc" : "rut_contacto";
+
+                switch (sortBy)
+                {
+                    case "name_empresa_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.empresa.razon_social).ToList();
+                        break;
+                    case "nombre_contacto":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.contactos.nombres).ThenBy(x=>x.contactos.nombres).ToList();
+                        break;
+                    case "nombre_contacto_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.contactos.nombres).ThenBy(x => x.contactos.nombres).ToList();
+                        break;
+                    case "fechaI_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fechaI":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.fecha_inicio_rel).ToList();
+                        break;
+                    case "fechaT_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.fecha_termino_rel).ToList();
+                        break;
+                    case "fechaT":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.fecha_termino_rel).ToList();
+                        break;
+                    case "cargo_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.cargo).ToList();
+                        break;
+                    case "cargo":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.cargo).ToList();
+                        break;
+                    case "tfijo_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.telefono_fijo).ToList();
+                        break;
+                    case "tfijo":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.telefono_fijo).ToList();
+                        break;
+                    case "tcelular_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.telefono_celular).ToList();
+                        break;
+                    case "tcelular":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.telefono_celular).ToList();
+                        break;
+                    case "rut_empresa_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.empresa.rut).ToList();
+                        break;
+                    case "rut_empresa":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.empresa.rut).ToList();
+                        break;
+                    case "rut_contacto":
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.contactos.rut).ToList();
+                        break;
+                    case "rut_contacto_desc":
+                        ListacEmpresa = ListacEmpresa.OrderByDescending(x => x.contactos.rut).ToList();
+                        break;
+                    default:
+                        ListacEmpresa = ListacEmpresa.OrderBy(x => x.empresa.razon_social).ToList();
+                        break;
+                }
+
+                return View(ListacEmpresa.ToList<contacto_empresa>().ToPagedList(page ?? 1, nn ?? 10));
             }
 
             //return View(ListacEmpresa);

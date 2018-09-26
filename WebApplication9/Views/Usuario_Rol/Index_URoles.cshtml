@@ -17,36 +17,35 @@
 
     <div id="my-dialogUrols"></div>
 
-
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped" id="medetai">
+        <thead class="thead-light">
             <tr>
 
                 <th>
-                    @Html.DisplayNameFor(model => model.First().id)
+                    @Html.ActionLink("Nombre", "index_uroles", new { sortBy = ViewBag.SortName, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.Label("Nombre de Usuario")
+                    @Html.ActionLink("Rol", "index_uroles", new { sortBy = ViewBag.SortRol, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.Label("Rol")
+                    @Html.ActionLink("Fecha Inicio", "index_uroles", new { sortBy = ViewBag.SortFechaI, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_inicio_rel)
+                    @Html.ActionLink("Fecha Término", "index_uroles", new { sortBy = ViewBag.SortfechaT, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().fecha_termino_rel)
-                </th>
-                <th></th>
+                    @using (Html.BeginForm("/index_uroles", "usuario_rol", FormMethod.Get))
+                    {
+                    <th>
+                        @Html.TextBox("search", "", new { @style = "width:150px;" })
+                        <input type="submit" value="Buscar" />
+                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+                    </th>
+                    }
             </tr>
         </thead>
         @foreach (var item in Model)
         {
             <tr>
-
-                <th>
-                    @Html.DisplayFor(modelItem => item.id)
-                </th>
                 <td>
                     @Html.DisplayFor(modelItem => item.usuario.FullName)
                 </td>
@@ -61,18 +60,30 @@
                 </td>
 
                 <td>
-                    @Html.ActionLink("Editar", "Edit_usuario_rol", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                    @Html.ActionLink("Detalles", "Details_Uroles", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
-                    @Html.ActionLink("Eliminar", "Delete_URol", new { id = item.id }, new { @class = "modolo btn-primary btn-sm" })
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                            Opciones
+                        </button>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Editar", "Edit_usuario_rol", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                            @Html.ActionLink("Detalles", "Details_Uroles", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                            @Html.ActionLink("Eliminar", "Delete_URol", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                        </div>
+                    </div>
                 </td>
             </tr>
         }
 
     </table>
     <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index_URoles", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
-            @Html.PagedListPager(Model, page => Url.Action("Index_URoles",
-        new { page, pageSize = Model.PageSize }))
+
+
+
+
+
+
     </div>
     @section scripts {
         <script type="text/javascript">

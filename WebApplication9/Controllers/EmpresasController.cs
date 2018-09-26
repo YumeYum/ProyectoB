@@ -27,27 +27,55 @@ namespace WebApplication9.Controllers
 
         public ActionResult Crear_EmpresaF()
         {
-
             return View(new empresa());
         }
-        public ActionResult Index_Empresa(int? page, string search)
+        public ActionResult Index_Empresa(int? page, string search, int? nn, string sortBy)
         {
             List<empresa> listaEmpresas = new List<empresa>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                if (search!= null && search!= string.Empty)
+                ViewBag.NumeroR = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
+
+
+
+                  };
+                if (search != null && search != string.Empty)
                 {
-                    listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search)||x.comuna.Contains(search)||x.convenio.Contains(search)||x.numero.ToString().Contains(search)||x.resto_direccion.Contains(search)||x.rubro.Contains(search)||x.rut.Contains(search)||x.zona.Contains(search)).ToList();
+                    listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search) || x.comuna.Contains(search) || x.convenio.Contains(search) || x.numero.ToString().Contains(search) || x.resto_direccion.Contains(search) || x.rubro.Contains(search) || x.rut.Contains(search) || x.zona.Contains(search)).ToList();
                 }
 
                 else
                 {
-                     listaEmpresas = dbModel.empresa.Include(x => x.contacto_empresa.Select(z => z.oportunidades)).OrderBy(x => x.razon_social).ToList<empresa>();
+                    listaEmpresas = dbModel.empresa.Include(x => x.contacto_empresa.Select(z => z.oportunidades)).OrderBy(x => x.razon_social).ToList<empresa>();
 
                 }
 
 
-
+                ViewBag.SortRSocial = string.IsNullOrEmpty(sortBy) ? "razon_social_desc" : "";
+                ViewBag.SortRut = sortBy == "rut" ? "rut_desc" : "rut";
+                ViewBag.SortRubro = sortBy == "rubro" ? "rubro_desc" : "rubro";
+                ViewBag.SortCalle = sortBy == "calle" ? "calle_desc" : "calle";
+                ViewBag.SortNumero = sortBy == "numero" ? "numero_desc" : "numero";
+                ViewBag.SortRDireccion = sortBy == "rdireccion" ? "rdireccion_desc" : "rdireccion";
+                ViewBag.SortComuna = sortBy == "comuna" ? "comuna_desc" : "comuna";
+                ViewBag.SortCTG = sortBy == "ctg" ? "ctg_desc" : "ctg";
+                ViewBag.SortConvenio = sortBy == "convenio" ? "convenio_desc" : "convenio";
+                ViewBag.SortZona = sortBy == "zona" ? "zona_desc" : "zona";
+                ViewBag.SortCuposO = sortBy == "cupos_o" ? "cupos_o_desc" : "cupos_o";
+                ViewBag.SortCuposD = sortBy == "cupos_d" ? "cupos_d_desc" : "cupos_d";
+                ViewBag.SortOps = sortBy == "ops" ? "ops_desc" : "ops";
 
                 foreach (var item in listaEmpresas.ToList())
                 {
@@ -55,7 +83,83 @@ namespace WebApplication9.Controllers
                     item.OposN = count;
                 }
 
-                return View(listaEmpresas.ToPagedList(page ?? 1, 10));
+                switch (sortBy)
+                {
+                    case "razon_social_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.razon_social).ToList();
+                        break;
+                    case "rut":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.rut).ToList();
+                        break;
+                    case "rut_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.rut).ToList();
+                        break;
+                    case "rubro_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.rubro).ToList();
+                        break;
+                    case "rubro":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.rubro).ToList();
+                        break;
+                    case "calle_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.calle).ToList();
+                        break;
+                    case "calle":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.calle).ToList();
+                        break;
+                    case "numero":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.numero).ToList();
+                        break;
+                    case "numero_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.numero).ToList();
+                        break;
+                    case "rdireccion":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.resto_direccion).ToList();
+                        break;
+                    case "rdireccion_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.resto_direccion).ToList();
+                        break;
+                    case "comuna":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.comuna).ToList();
+                        break;
+                    case "comuna_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.comuna).ToList();
+                        break;
+                    case "ctg":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.ctg_empleados).ToList();
+                        break;
+                    case "ctg_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.ctg_empleados).ToList();
+                        break;
+                    case "convenio":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.convenio).ToList();
+                        break;
+                    case "convenio_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.convenio).ToList();
+                        break;
+                    case "zona":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.zona).ToList();
+                        break;
+                    case "zona_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.zona).ToList();
+                        break;
+                    case "ops":
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.OposN).ToList();
+                        break;
+                    case "ops_desc":
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.OposN).ToList();
+                        break;
+                    default:
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.razon_social).ToList();
+                        break;
+                }
+
+
+
+
+
+
+
+                return View(listaEmpresas.ToPagedList(page ?? 1, nn ?? 10));
             }
         }
 
@@ -64,7 +168,9 @@ namespace WebApplication9.Controllers
 
         [HttpPost]
         public ActionResult Crear_Empresa(empresa empresaModel)
+
         {
+
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 dbModel.empresa.Add(empresaModel);
@@ -178,10 +284,10 @@ namespace WebApplication9.Controllers
 
 
                     Empresa = dbModel.empresa.Where(x => x.id == id).FirstOrDefault();
-                    Empresa.listaContactos = dbModel.contactos.OrderBy(x=>x.nombres).ThenBy(x=>x.apellidos).ToList();
-                    Empresa.contactosM = dbModel.contacto_empresa.Where(x => x.id_empresa == id).Include(x=>x.contactos).Include(x=>x.empresa).Include(x=>x.oportunidades).ToList<contacto_empresa>();
-                    Empresa.Opos = dbModel.oportunidades.Include(x=>x.usuario.contactos).Where(x=>x.contacto_empresa.empresa.id == id ).ToList();
-                    Empresa.Activs = dbModel.actividad.Include(x=>x.usuario.contactos).Where(x => x.oportunidades.contacto_empresa.empresa.id == id).ToList();
+                    Empresa.listaContactos = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
+                    Empresa.contactosM = dbModel.contacto_empresa.Where(x => x.id_empresa == id).Include(x => x.contactos).Include(x => x.empresa).Include(x => x.oportunidades).ToList<contacto_empresa>();
+                    Empresa.Opos = dbModel.oportunidades.Include(x => x.usuario.contactos).Where(x => x.contacto_empresa.empresa.id == id).ToList();
+                    Empresa.Activs = dbModel.actividad.Include(x => x.usuario.contactos).Where(x => x.oportunidades.contacto_empresa.empresa.id == id).ToList();
 
                 }
 
@@ -198,12 +304,12 @@ namespace WebApplication9.Controllers
                 //Creando Contacto Empresa
                 contacto_empresa cE = new contacto_empresa();
                 cE.id_empresa = id;
-                cE.id_contacto =  id_contacto;
+                cE.id_contacto = id_contacto;
 
 
                 dbModel.contacto_empresa.Add(cE);
                 dbModel.SaveChanges();
-                return Json(new { Url = "/Empresas/Details_Empresa/"+id});
+                return Json(new { Url = "/Empresas/Details_Empresa/" + id });
             }
         }
     }

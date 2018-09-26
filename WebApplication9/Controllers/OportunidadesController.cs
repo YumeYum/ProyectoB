@@ -21,7 +21,29 @@ namespace WebApplication9.Controllers
             {
                 List<oportunidades> listaOps = new List<oportunidades>();
 
+                //Lista de Contactos a asignad
                 ViewBag.Hola = new SelectList(dbModel.usuario.OrderBy(x=>x.contactos.nombres).Include(x=>x.contactos).ToList(), "id", "FullName");
+
+                //Lista de páginas
+                ViewBag.NumeroR = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
+
+
+
+                  };
+
+                //Lista de estados de la oportunidad
                 ViewBag.Estados =  new List<SelectListItem>()
 
                   {
@@ -30,6 +52,8 @@ namespace WebApplication9.Controllers
                     new SelectListItem() {Text="Logradas", Value="2"},
                     new SelectListItem() {Text="Perdidas", Value="3"}
                   };
+
+                //SortBy
                 ViewBag.SortNempresa = string.IsNullOrEmpty(sortBy) ? "Nempresa_desc" : "";
                 ViewBag.SortCempresa = sortBy == "Cempresa" ? "Cempresa_desc" : "Cempresa";
                 ViewBag.SortCasignado = sortBy == "Casignado" ? "Casignado_desc" : "Casignado";
@@ -44,18 +68,18 @@ namespace WebApplication9.Controllers
 
 
 
-                        if (search == String.Empty || search == null)
-                        {
-                            listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos)
-                        .Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        }
-                        else
-                        {
-                            listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search) || x.contacto_empresa.contactos.nombres.Contains(search) 
-                            || x.contacto_empresa.contactos.apellidos.Contains(search) || x.usuario.contactos.nombres.Contains(search)||x.usuario.contactos.apellidos.Contains(search)
-                            || x.tema.Contains(search))
-                                .Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
-                        }
+                if (search == String.Empty || search == null)
+                {
+                    listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos)
+                .Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
+                }
+                else
+                {
+                    listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search) || x.contacto_empresa.contactos.nombres.Contains(search)
+                    || x.contacto_empresa.contactos.apellidos.Contains(search) || x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)
+                    || x.tema.Contains(search))
+                        .Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
+                }
 
                 switch (estado)
                 {
@@ -276,7 +300,7 @@ namespace WebApplication9.Controllers
                     oModel.estado = "activa";
                     dbModel.oportunidades.Add(oModel);
                     dbModel.SaveChanges();
-                    return RedirectToAction("/Index_Oportunidades");
+                    return Redirect(Request.UrlReferrer.ToString());
                 }
                 else
                 {
@@ -309,7 +333,7 @@ namespace WebApplication9.Controllers
                     oModel.estado = "Activa";
                     dbModel.oportunidades.Add(oModel);
                     dbModel.SaveChanges();
-                    return RedirectToAction("/Index_Oportunidades");
+                    return Redirect(Request.UrlReferrer.ToString());
 
                 }
 
@@ -350,7 +374,7 @@ namespace WebApplication9.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit_Oportunidad(oportunidades oModel)
+        public ActionResult Edit_ortunidad(oportunidades oModel)
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {

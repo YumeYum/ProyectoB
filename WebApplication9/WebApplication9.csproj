@@ -142,6 +142,7 @@
     <Content Include="Content\imagenes\proyectob.jpg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Scripts\jquery.freezeheader.js" />
+    <Content Include="Content\Scripts\umd\popper.min.js" />
     <Content Include="Content\scss\_custom.css">
       <DependentUpon>_custom.scss</DependentUpon>
     </Content>
@@ -191,7 +192,6 @@
     <Content Include="Content\Scripts\popper-utils.js" />
     <Content Include="Content\Scripts\popper-utils.min.js" />
     <Content Include="Content\Scripts\popper.js" />
-    <Content Include="Content\Scripts\popper.min.js" />
     <Content Include="Models\DBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DBModel.edmx</DependentUpon>
@@ -351,6 +351,7 @@
     <None Include="Properties\PublishProfiles\WebApplication920180901043426 - Web Deploy.pubxml" />
     <Content Include="Views\Oportunidades\Crear_ContactoEmpresaContactoP.cshtml" />
     <Content Include="Views\Oportunidades\Agregar_Contacto.cshtml" />
+    <Content Include="Views\Roles\Create_RolesP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

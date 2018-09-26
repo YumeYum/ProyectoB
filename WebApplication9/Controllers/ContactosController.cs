@@ -22,22 +22,11 @@ namespace WebApplication9.Controllers
         public ActionResult Index_Contacto(int? page, string search, int? nn, string sortBy)
         {
 
-            ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
-            ViewBag.SortRut = sortBy == "rut" ? "rut_desc" : "rut";
-            ViewBag.SortApellido = sortBy == "apellido" ? "apellido_desc" : "apellido";
-            ViewBag.SortCel = sortBy == "celular" ? "celular_desc" : "celular";
-            ViewBag.SortEmail = sortBy == "email" ? "email_desc" : "email";
-            ViewBag.SortComentario = sortBy == "comentario" ? "comentario_desc" : "comentario";
 
-
+           
             List<contactos> listaContactos = new List<contactos>();
-            ViewBag.SearchL = new List<SelectListItem>()
 
-
-                  {
-                    new SelectListItem() {Text="Todos los campos", Value="todos"},
-                    new SelectListItem() {Text="Nombre", Value="nombre"},
-                  };
+            //lista de número de páginas
             ViewBag.NumeroR = new List<SelectListItem>()
 
                   {
@@ -55,6 +44,8 @@ namespace WebApplication9.Controllers
 
 
                   };
+
+            // busqueda
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 if (search != String.Empty && search != null)
@@ -63,9 +54,18 @@ namespace WebApplication9.Controllers
                 }
                 else
                 {
-                    listaContactos = dbModel.contactos.OrderBy(x => x.nombres).ToList();
+                    listaContactos = dbModel.contactos.ToList();
 
                 }
+
+                //columna sortBy
+
+                ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
+                ViewBag.SortRut = sortBy == "rut" ? "rut_desc" : "rut";
+                ViewBag.SortApellido = sortBy == "apellido" ? "apellido_desc" : "apellido";
+                ViewBag.SortCel = sortBy == "celular" ? "celular_desc" : "celular";
+                ViewBag.SortEmail = sortBy == "email" ? "email_desc" : "email";
+                ViewBag.SortComentario = sortBy == "comentario" ? "comentario_desc" : "comentario";
 
                 switch (sortBy)
                 {

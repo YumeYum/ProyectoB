@@ -215,15 +215,17 @@ namespace WebApplication9.Controllers
                         urol.id_rol = item.id;
                         urol.id_usuario = usuarioModel.id;
                         urol.fecha_inicio_rel = System.DateTime.Now;
-                        urol.fecha_termino_rel = System.DateTime.Now;
-
+                        if (EstadoL == "inactivo")
+                        {
+                            urol.fecha_termino_rel = System.DateTime.Now;
+                        }
 
                         dbModel.usuario_rol.Add(urol);
 
                     }
 
                     dbModel.SaveChanges();
-                    return RedirectToAction("/Index_Usuarios");
+                    return Redirect(Request.UrlReferrer.ToString());
 
                 }
                 usuarioModel.rolesList = dbModel.roles.OrderBy(x=>x.rol).ToList();
@@ -233,7 +235,7 @@ namespace WebApplication9.Controllers
 
         }
         [HttpPost]
-        public ActionResult CreateP_Usuario(usuario usuarioModel)
+        public ActionResult CreateP_Usuario(usuario usuarioModel, string EstadoL)
         {
             ViewBag.EstadoL = new List<SelectListItem>()
 
@@ -246,7 +248,15 @@ namespace WebApplication9.Controllers
                 usuarioModel.contactoList = dbModel.contactos.OrderBy(x=>x.nombres).ThenBy(x=>x.apellidos).ToList();
 
                 if (ModelState.IsValid)
+         
                 {
+
+                    if (EstadoL == "inactivo")
+                    {
+                        usuarioModel.fecha_termino_rel = System.DateTime.Now;
+                        usuarioModel.estado = "inactivo";
+
+                    }
                     dbModel.usuario.Add(usuarioModel);
                     foreach (var item in usuarioModel.rolesList.Where(c => c.IsSelected))
                     {
@@ -257,13 +267,17 @@ namespace WebApplication9.Controllers
                         urol.fecha_inicio_rel = System.DateTime.Now;
                         urol.fecha_termino_rel = System.DateTime.Now;
 
+                        if (EstadoL == "inactivo")
+                        {
+                            urol.fecha_termino_rel = System.DateTime.Now;
+                        }
 
                         dbModel.usuario_rol.Add(urol);
 
                     }
 
                     dbModel.SaveChanges();
-                    return RedirectToAction("/Index_Usuarios");
+                    return Redirect(Request.UrlReferrer.ToString());
 
                 }
                 usuarioModel.rolesList = dbModel.roles.OrderBy(x=>x.rol).ToList();
@@ -301,6 +315,18 @@ namespace WebApplication9.Controllers
             {
                 dbModel.Entry(usuarioModel).State = System.Data.Entity.EntityState.Modified;
                 dbModel.SaveChanges();
+                if (usuarioModel.estado =="inactivo")
+                {
+                    List<usuario_rol> urol = new List<usuario_rol>();
+                    urol = dbModel.usuario_rol.Where(x => x.id_usuario == usuarioModel.id).ToList();
+
+                    foreach (var item in urol)
+                    {
+                        item.fecha_termino_rel = usuarioModel.fecha_termino_rel;
+                    }
+                    dbModel.SaveChanges();
+
+                }
 
             }
             return Redirect(Request.UrlReferrer.ToString());
@@ -326,14 +352,21 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 usuario usuarioModel = dbModel.usuario.Where(x => x.id == id).FirstOrDefault();
+                List<usuario_rol> urol = new List<usuario_rol>();
+
 
                 int test = usuarioModel.id_contacto;
                 try
                 {
+                    urol = dbModel.usuario_rol.Where(x => x.id_usuario == usuarioModel.id).ToList();
+
+                    foreach (var item in urol)
+                    {
+                        dbModel.usuario_rol.Remove(item);
+                    }
 
                     dbModel.usuario.Remove(usuarioModel);
                     dbModel.SaveChanges();
-
                     return Redirect(Request.UrlReferrer.ToString());
                 }
 

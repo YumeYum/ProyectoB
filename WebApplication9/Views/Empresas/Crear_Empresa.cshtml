@@ -87,9 +87,14 @@
         </div>
         <div class="form-row">
             <div class="form-group col-sm-6">
-                @Html.LabelFor(model => model.convenio, htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="form-group">
+                    <select class="form-control" id="sel1" name="convenio">
+                        <option>Sí</option>
+                        <option>No</option>
+
+                    </select>
+                </div> 
                 <div class="col">
-                    @Html.EditorFor(model => model.convenio, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                     @Html.ValidationMessageFor(model => model.convenio, "", new { @class = "text-danger" })
                 </div>
             </div>

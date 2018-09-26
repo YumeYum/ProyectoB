@@ -13,11 +13,6 @@
     }
 }
 <div id="my-dialogUsers"></div>
-@Html.ActionLink("Crear Usuario", "CreateP_Usuario", "Usuarios", null, new { @class = "modolo btn-primary btn-sm" })
-@using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
-{
-
-}
 
     <table class="table table-striped" id="medetai">
         <thead class="thead-light">
@@ -42,6 +37,10 @@
                         @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
 
                         @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
+                        @Html.ActionLink("Crear Usuario", "CreateP_Usuario", "Usuarios", null, new { @class = "modolo btn-primary btn-sm" })
+
+
+
 
                     </th>
                 }
@@ -63,9 +62,20 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.fecha_termino_rel)
                     </td>
-                    <td>@Html.ActionLink("Editar", "Edit_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
-                    @Html.ActionLink("Detalles", "Details2_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })
-                    @Html.ActionLink("Eliminar", "Delete_Usuario", null, new { id = item.id }, new { @class = "modolo  btn-primary btn-sm" })</td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                                Opciones
+                            </button>
+                            <div class="dropdown-menu">
+                                @Html.ActionLink("Editar", "Edit_Usuario", null, new { id = item.id }, new { @class = "modolo  dropdown-item" })
+                                @Html.ActionLink("Detalles", "Details2_Usuario", null, new { id = item.id }, new { @class = "modolo dropdown-item" })
+                                @Html.ActionLink("Eliminar", "Delete_Usuario", null, new { id = item.id }, new { @class = "modolo  dropdown-item" })
+                            </div>
+                        </div>
+
+
+                    </td>
 
                 </tr>
             }

@@ -20,16 +20,111 @@ namespace WebApplication9.Controllers
         {
             return View();
         }
-        public ActionResult Index_Actividades(int? page)
+        public ActionResult Index_Actividades(int? page,string search, int? nn, string sortBy)
         {
             List<actividad> listaActividad = new List<actividad>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+                ViewBag.NumeroR = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="10", Value="10"},
+                    new SelectListItem() {Text="20", Value="20"},
+                    new SelectListItem() {Text="40", Value="40"},
+                    new SelectListItem() {Text="60", Value="60"},
+                    new SelectListItem() {Text="100", Value="100"},
+                    new SelectListItem() {Text="200", Value="200"},
+                    new SelectListItem() {Text="500", Value="500"},
+                    new SelectListItem() {Text="1000", Value="1000"},
+                    new SelectListItem() {Text="2000", Value="2000"},
+                    new SelectListItem() {Text="5000", Value="5000"},
 
 
 
+                  };
 
-                return View(dbModel.actividad.Include(x=>x.oportunidades).Include(x=>x.usuario).ToList<actividad>().ToPagedList(page ?? 1, 10));
+                if (search != null && search != string.Empty)
+                {
+                    listaActividad = dbModel.actividad.Where(x => x.creada_por.Contains(search) || x.descripcion.Contains(search) || x.estado.Contains(search) || x.titulo.ToString().Contains(search) || x.tipo_actividad.Contains(search) || x.oportunidades.tema.Contains(search) || x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)).Include(x => x.oportunidades).Include(x => x.usuario.contactos).ToList();
+                }
+
+                else
+                {
+                    listaActividad = dbModel.actividad.Include(x => x.oportunidades).Include(x => x.usuario.contactos).ToList<actividad>();
+
+                }
+
+
+                ViewBag.SortCreadaPor = string.IsNullOrEmpty(sortBy) ? "creada_por_desc" : "";
+                ViewBag.SortFechaI = sortBy == "fechaI" ? "fechaI_desc" : "fechaI";
+                ViewBag.SortFechaV = sortBy == "fechaV" ? "fechaV_desc" : "fechaV";
+                ViewBag.SortTitulo = sortBy == "titulo" ? "titulo_desc" : "titulo";
+                ViewBag.SortDescr = sortBy == "descripcion" ? "descripcion_descr" : "descripcion";
+                ViewBag.SortCreadaPor = sortBy == "creada_por" ? "creada_por_desc" : "creada_por";
+                ViewBag.SortEstado = sortBy == "estado" ? "estado_desc" : "estado";
+                ViewBag.SorTipoAct = sortBy == "tipo_actividad" ? "tipo_actividad_desc" : "tipo_actividad";
+                ViewBag.SortTema = sortBy == "tema" ? "tema_desc"  : "tema";
+                ViewBag.SortContacto = sortBy == "contacto" ? "contacto_desc" : "contacto";
+                switch (sortBy)
+                {
+                    case "creada_por_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.creada_por).ToList();
+                        break;
+                    case "fechaI":
+                        listaActividad = listaActividad.OrderBy(x => x.fecha_inicio).ToList();
+                        break;
+                    case "fechaI_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.fecha_inicio).ToList();
+                        break;
+                    case "fechaV":
+                        listaActividad = listaActividad.OrderBy(x => x.fecha_vencimiento).ToList();
+                        break;
+                    case "fechaV_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.fecha_vencimiento).ToList();
+                        break;
+                    case "titulo":
+                        listaActividad = listaActividad.OrderBy(x => x.titulo).ToList();
+                        break;
+                    case "titulo_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.titulo).ToList();
+                        break;
+                    case "estado":
+                        listaActividad = listaActividad.OrderBy(x => x.estado).ToList();
+                        break;
+                    case "estado_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.estado).ToList();
+                        break;
+                    case "tipo_actividad":
+                        listaActividad = listaActividad.OrderBy(x => x.tipo_actividad).ToList();
+                        break;
+                    case "tipo_actividad_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.tipo_actividad).ToList();
+                        break;
+                    case "tema":
+                        listaActividad = listaActividad.OrderBy(x => x.oportunidades.tema).ToList();
+                        break;
+                    case "tema_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.oportunidades.tema).ToList();
+                        break;
+                    case "contacto":
+                        listaActividad = listaActividad.OrderBy(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        break;
+                    case "contacto_desc":
+                        listaActividad = listaActividad.OrderByDescending(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        break;
+                    case "descripcion":
+                        listaActividad = listaActividad.OrderBy(x => x.descripcion).ToList();
+                        break;
+                    case "descripcion_descr":
+                        listaActividad = listaActividad.OrderByDescending(x => x.descripcion).ToList();
+                        break;
+                    default:
+                        listaActividad = listaActividad.OrderBy(x => x.creada_por).ToList();
+                        break;
+                }
+
+
+                return View(listaActividad.ToList<actividad>().ToPagedList(page ?? 1, nn ?? 10));
             }
         }
 
@@ -256,6 +351,7 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+
                 dbModel.Entry(aModel).State = System.Data.Entity.EntityState.Modified;
                 dbModel.SaveChanges();
 

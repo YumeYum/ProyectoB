@@ -70,10 +70,10 @@ namespace WebApplication9.Models
 
         //para no usar viewbag en json
         [ScriptIgnore]
-        public virtual List<contactos> listaContactos { get; set;}
-
+        public virtual List<contactos> listaContactos { get; set; }
 
         public int OposN;
+
 
     }
 }

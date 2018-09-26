@@ -21,11 +21,7 @@
 
 
              @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
-
-
-
-
-
+             @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
 
     </p>
     }
@@ -36,9 +32,9 @@
         <input type="submit" class="btn btn-info btn-sm" value="Perdida" name="Perdida" />
         <input type="submit" class="btn btn-info btn-sm" value="Asignar a" name="Asignar" />
         @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Contacto")
-        <table class="table table-striped" id="myTable">
+        <table class="table table-striped" id="myTable medetai">
 
-            <thead>
+            <thead class="thead-light">
                 <tr>
                     <th></th>
                     <th>
@@ -68,7 +64,7 @@
                     </th>
 
                     <th>
-                        @Html.ActionLink("Gestiones", "index_oportunidades", new { sortBy = ViewBag.SortGestiones, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["nn"], page = Request.QueryString["page"] })
+                        @Html.ActionLink("Gestiones", "index_oportunidades", new { sortBy = ViewBag.SortGestiones, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
                     <th></th>
                 </tr>
@@ -120,12 +116,17 @@
                                 @Html.DisplayFor(model => model[i].cupos)
                             </td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                                <td>
-                                        @Html.ActionLink("Editar", "Edit_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
-                                        @Html.ActionLink("Detalles", "Detalle_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
-                                        @Html.ActionLink("Eliminar", "Delete_Oportunidad", null, new { id = Model[i].id }, new { @class = "modolo  btn-primary btn-sm" })
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                                        Opciones
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        @Html.ActionLink("Editar", "edit_oportunidad",null, new { id = Model[i].id }, new { @class = "modolo dropdown-item" })
+                                        @Html.ActionLink("Detalles", "detalle_oportunidad",null, new { id = Model[i].id }, new { @class = "modolo dropdown-item" })
+                                        @Html.ActionLink("Eliminar", "delete_oportunidad",null, new { id = Model[i].id }, new { @class = "modolo dropdown-item" })
+                                    </div>
+                                </div>
                             </td>
 
                         </tr>
@@ -138,7 +139,7 @@
 
         </table>
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("Index_Oportunidades", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], estado = Request.QueryString["estado"] }))
+            @Html.PagedListPager(Model, page => Url.Action("Index_Oportunidades", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], estado = Request.QueryString["estado"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"] }))
         </div>
         <div class="col">
             @Html.ActionLink("Mostrar Todos", "Index_Oportunidades")
