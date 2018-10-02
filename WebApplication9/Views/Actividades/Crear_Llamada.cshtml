@@ -1,14 +1,14 @@
 ﻿@model WebApplication9.Models.actividad
-
-@using (Html.BeginForm())
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formActividad" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Llamada</h4>
         <input type="radio" name="tipo" value="entrante"> Entrante<br>
         <input type="radio" name="tipo" value="saliente"> Saliente
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.id_oportunidad, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -18,9 +18,9 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.id_contacto, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Usuarios", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required" })
+                @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Usuario", new { required = "required" })
                 @Html.ValidationMessageFor(model => model.id_contacto, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -30,14 +30,14 @@
             @Html.LabelFor(model => model.fecha_inicio, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
             <div class="col-md-10">
                 @Html.ValidationMessageFor(model => model.fecha_inicio, "", new { @class = "text-danger" })
-                @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "Datepicker", @Value = Model.fecha_inicio.ToString("dd-MM-yyyy"), required = "required" })
+                @Html.TextBoxFor(model => model.fecha_inicio, new {@id="FechaI", @class = "Datepicker", @Value = Model.fecha_inicio.ToString("dd-MM-yyyy"), required = "required" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
             <div class="col-md-10">
                 @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
-                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required" })
+                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @id = "FechaT", @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required" })
             </div>
         </div>
 
@@ -66,6 +66,44 @@
     </div>
 }
 <script type="text/javascript">
+    $('#formActividad').on("submit", function (e) {
+        e.preventDefault();
+        var aModel = {
+            id_oportunidad: $('#id_oportunidad').val().trim(),
+            id_contacto: $('#id_contacto').val(),
+            fecha_inicio: $('#FechaI').val(),
+            fecha_vencimiento: $('#FechaT').val(),
+            titulo: $('#titulo').val(),
+            descripcion: $('#descripcion').val(),
+        };
+        var $form = $("#formActividad");
+        $.validator.unobtrusive.parse($form);
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Actividades/Crear_Actividad",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize() + "&tipo_actividad=Llamada",
+                success: function (response) {
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
     $(document).ready(function () {
         $('.Datepicker').datepicker({
             dateFormat: "dd-mm-yy",
@@ -77,7 +115,21 @@
             showAnim: 'blind',
             highlightWeek: true
         });
+        $('#FechaI').change(function () {
+            var TxtBox = document.getElementById("FechaT");
+
+            TxtBox.value = $(this).val();
+            var string = $(this).val()
+        });
+
+
     });
+    $(function () {
+        $.validator.methods.date = function (value, element) {
+            return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+        }
+    });
+    $("#my-dialog2").dialog('option', 'title', 'Llamada');
 </script> 
 <div>
     @Html.ActionLink("Back to List", "Index")

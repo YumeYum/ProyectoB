@@ -142,6 +142,7 @@
     <Content Include="Content\imagenes\proyectob.jpg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Scripts\jquery.freezeheader.js" />
+    <Content Include="Content\Scripts\moment.js" />
     <Content Include="Content\Scripts\umd\popper.min.js" />
     <Content Include="Content\scss\_custom.css">
       <DependentUpon>_custom.scss</DependentUpon>

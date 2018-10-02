@@ -4,10 +4,10 @@
     <div id="my-dialog2"></div>
 
     <p>
-        @Html.ActionLink("Tarea", "Crear_Actividad", "Actividades", null, new { @class = "modolo2 btn btn-primary btn-large" })
-        @Html.ActionLink("Llamada", "Crear_Llamada", "Actividades", null, new { @class = "modolo2 btn btn-primary btn-large" })
-        @Html.ActionLink("Mail", "Crear_Mail", "Actividades", null, new { @class = "modolo2 btn btn-primary btn-large" })
-        @Html.ActionLink("Reunión", "Crear_Reunion", "Actividades", null, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Tarea", "Crear_Actividad", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Llamada", "Crear_Llamada", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Mail", "Crear_Mail", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Reunión", "Crear_Reunion", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
         @Html.DropDownList("listaL", new SelectList(ViewBag.ListaL, "Value", "Text"), "Seleccione Estado", new { @id = "ddlEstado", @style = "width:200px;", @onchange = "javascript:GetEstados(this.value);" })
 
         @Html.Hidden("id_oportunidad",(string)@ViewBag.idOp, new {@id= "id_oportunidad"})

@@ -6,8 +6,6 @@
 }
 
 <h2>Detalles  Actividad</h2>
-<div id="my-dialog"></div>
-
 
 <div>
     <hr />
@@ -88,21 +86,6 @@
 </div>
 
 <script type="text/javascript">
-            $(function () {
-                $('#my-dialog').dialog({
-                    autoOpen: false,
-                    width: 'auto',
-                    resizable: false,
-                    modal: true
-                });
-
-                $('.modolo').click(function () {
-                    $('#my-dialog').load(this.href, function () {
-                        $(this).dialog('open');
-                    });
-                    return false;
-                });
-    });
     $("#my-dialog2").dialog('option', 'title', 'Detalle Actividad');
     $("#my-dialogActs").dialog('option', 'title', 'Detalle Actividad');
 </script>

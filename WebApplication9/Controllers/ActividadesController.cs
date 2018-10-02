@@ -128,14 +128,20 @@ namespace WebApplication9.Controllers
             }
         }
 
-        public ActionResult Crear_Actividad()
+        public ActionResult Crear_Actividad(int? id_op)
         {
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x=>x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").OrderBy(x=>x.contactos.nombres).ThenBy(x=>x.contactos.apellidos).Include(x=>x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
+
+                model.id_oportunidad = id_op ?? default(int);
+
+
+
+
                 return PartialView(model);
             }
 
@@ -148,44 +154,53 @@ namespace WebApplication9.Controllers
             {
                 model.oList = db.oportunidades.ToList();
                 //model.empresaList = db.empresa.ToList();
-                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x=>x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).Include(x=>x.contactos).ToList();
 
                 return PartialView(model);
             }
 
         }
-        public ActionResult Crear_Llamada()
+        public ActionResult Crear_Llamada(int? id_op)
         {
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
+
+                model.id_oportunidad = id_op ?? default(int);
+
 
                 return PartialView(model);
             }
         }
-        public ActionResult Crear_Mail()
+        public ActionResult Crear_Mail(int? id_op)
         {
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x => x.estado == "activo").OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
+
+                model.id_oportunidad = id_op ?? default(int);
+
 
                 return PartialView(model);
             }
         }
-        public ActionResult Crear_Reunion()
+        public ActionResult Crear_Reunion(int? id_op)
         {
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x => x.estado == "activo").OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
+
+                model.id_oportunidad = id_op ?? default(int);
+
 
                 return PartialView(model);
             }
@@ -218,12 +233,11 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 aModel.creada_por = creada;
-                aModel.tipo_actividad = "tarea";
                 aModel.estado = "activa";
                 dbModel.actividad.Add(aModel);
                 dbModel.SaveChanges();
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult Crear_ActividadF(actividad aModel)
@@ -249,49 +263,6 @@ namespace WebApplication9.Controllers
             }
             return View("Crear_ActividadF", aModel);
         }
-        [HttpPost]
-        public ActionResult Crear_Llamada(actividad actividadModel)
-        {
-            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
-            {
-                actividadModel.creada_por = creada;
-                actividadModel.tipo_actividad = "llamada";
-                actividadModel.estado = "activa";
-                dbModel.actividad.Add(actividadModel);
-                dbModel.SaveChanges();
-            }
-            return Redirect(Request.UrlReferrer.ToString());
-        }
-
-
-
-        [HttpPost]
-        public ActionResult Crear_Mail(actividad actividadModel)
-        {
-            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
-            {
-                actividadModel.creada_por = creada;
-                actividadModel.tipo_actividad = "mail";
-                actividadModel.estado = "activa";
-                dbModel.actividad.Add(actividadModel);
-                dbModel.SaveChanges();
-            }
-            return Redirect(Request.UrlReferrer.ToString());
-        }
-
-        [HttpPost]
-        public ActionResult Crear_Reunion(actividad actividadModel)
-        {
-            using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
-            {
-                actividadModel.creada_por = creada;
-                actividadModel.tipo_actividad = "reunión";
-                actividadModel.estado = "activa";
-                dbModel.actividad.Add(actividadModel);
-                dbModel.SaveChanges();
-            }
-            return Redirect(Request.UrlReferrer.ToString());
-        }
 
         [HttpPost]
         public ActionResult Finalizar_Actividad(actividad actividadModel)
@@ -303,7 +274,7 @@ namespace WebApplication9.Controllers
                 //uOwner = actividadModel.id_usuario_owner;
                 //fechaC = actividadModel.fecha_inicio;
                 //actividadModel = dbModel.actividad.Where(x => x.id == actividadModel.id).FirstOrDefault();
-                actividadModel.estado = "cumplida";
+                actividadModel.estado = "Finalizada";
                 //actividadModel.id_usuario_owner = uOwner;
                 //actividadModel.fecha_inicio = fechaC;
                 dbModel.Entry(actividadModel).State = System.Data.Entity.EntityState.Modified;

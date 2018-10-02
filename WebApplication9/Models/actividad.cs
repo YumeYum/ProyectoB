@@ -82,6 +82,15 @@ namespace WebApplication9.Models
 
         public List<SelectListItem> opList { get; internal set; }
 
+        //Lista de estados
+        public List<string> estadoL = new List<string> { "Activa", "Cancelada","Finalizada" };
+
+        //lista del tipo de actividad
+        public List<string> tipo_actividadL = new List<string> { "Tarea", "Llamada", "Mail","Reunión" };
+
+
+
+
 
     }
 }

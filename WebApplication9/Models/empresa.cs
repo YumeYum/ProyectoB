@@ -72,7 +72,11 @@ namespace WebApplication9.Models
         [ScriptIgnore]
         public virtual List<contactos> listaContactos { get; set; }
 
+        //Numero de oportunidades
         public int OposN;
+
+        //Lista de convenio
+        public List<string> convenioL = new List<string> { "Sí", "No" };
 
 
     }

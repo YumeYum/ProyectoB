@@ -140,6 +140,7 @@
     }
 
 
-    @Html.PagedListPager(Model, page => Url.Action("Index_usuarios",
-        new { page, pageSize = Model.PageSize }))
+    @Html.PagedListPager(Model, page => Url.Action("index_actividades", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
+
+
 </div>

@@ -1,12 +1,13 @@
 ﻿@model WebApplication9.Models.actividad
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
 
-@using (Html.BeginForm()) 
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formActividad" }))
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>actividad</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.id_oportunidad, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -16,7 +17,7 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("Usuarios")
+            <b> @Html.Label("Usuarios",new { @class = "control-label col-md-2" })</b>
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Usuario", new { required = "required" })
                 @Html.ValidationMessageFor(model => model.id_contacto, "", new { @class = "text-danger" })
@@ -63,6 +64,44 @@
 }
 
 <script type="text/javascript">
+    $('#formActividad').on("submit", function (e) {
+        e.preventDefault();
+        var aModel = {
+            id_oportunidad: $('#id_oportunidad').val().trim(),
+            id_contacto: $('#id_contacto').val(),
+            fecha_inicio: $('#FechaI').val(),
+            fecha_vencimiento: $('#FechaT').val(),
+            titulo: $('#titulo').val(),
+            descripcion: $('#descripcion').val(),
+        };
+        var $form = $("#formActividad");
+        $.validator.unobtrusive.parse($form);
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Actividades/Crear_Actividad",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize()+"&tipo_actividad=Tarea",
+                success: function (response) {
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
     $(document).ready(function () {
         $('.Datepicker').datepicker({
             dateFormat: "dd-mm-yy",
@@ -81,7 +120,18 @@
             TxtBox.value = $(this).val();
             var string = $(this).val()
         });
+
+
     });
+
+    $(function () {
+        $.validator.methods.date = function (value, element) {
+            return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+        }
+    });
+
+    $("#my-dialog2").dialog('option', 'title', 'Actividad');
+    $("#my-dialogActs").dialog('option', 'title', 'Actividad');
 </script> 
 
 <div>
