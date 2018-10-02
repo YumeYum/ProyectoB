@@ -133,7 +133,7 @@ namespace WebApplication9.Controllers
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Include(x=>x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x=>x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
                 return PartialView(model);
@@ -148,7 +148,7 @@ namespace WebApplication9.Controllers
             {
                 model.oList = db.oportunidades.ToList();
                 //model.empresaList = db.empresa.ToList();
-                model.usuarioList = db.usuario.Include(x=>x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x=>x.contactos).ToList();
 
                 return PartialView(model);
             }
@@ -159,7 +159,7 @@ namespace WebApplication9.Controllers
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado=="activo").Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
 
@@ -171,7 +171,7 @@ namespace WebApplication9.Controllers
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
 
@@ -183,7 +183,7 @@ namespace WebApplication9.Controllers
             actividad model = new actividad();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.usuarioList = db.usuario.Include(x => x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).ToList();
                 //model.empresaList = db.empresa.ToList();
                 model.oList = db.oportunidades.ToList();
 
@@ -230,13 +230,24 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+
                 aModel.creada_por = creada;
                 aModel.tipo_actividad = "tarea";
                 aModel.estado = "activa";
+
                 dbModel.actividad.Add(aModel);
                 dbModel.SaveChanges();
+                aModel = new actividad();
+                aModel.oList = dbModel.oportunidades.ToList();
+                //model.empresaList = db.empresa.ToList();
+                aModel.usuarioList = dbModel.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).ToList();
+
+                ModelState.Clear();
+
+
+                ViewBag.TheResult = true;
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return View("Crear_ActividadF", aModel);
         }
         [HttpPost]
         public ActionResult Crear_Llamada(actividad actividadModel)

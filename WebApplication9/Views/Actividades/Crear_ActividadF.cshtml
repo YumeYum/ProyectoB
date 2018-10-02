@@ -13,6 +13,12 @@
         font-weight: bold;
     }
 </style>
+@if (ViewBag.TheResult == true)
+{
+    <div class="alert alert-success">
+        <strong>Registro guardado con éxito.</strong>
+    </div>
+}
 <div class="col">
     <h2>Crear Actividad</h2>
 
@@ -32,9 +38,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.id_contacto, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Label("Usuarios", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-sm-12">
-                        @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:218px;" })
+                        @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Usuario", new { required = "required", style = "width:218px;" })
                         @Html.ValidationMessageFor(model => model.id_contacto, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -46,14 +52,14 @@
                     @Html.LabelFor(model => model.fecha_inicio, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
                     <div class="col-sm-12">
                         @Html.ValidationMessageFor(model => model.fecha_inicio, "", new { @class = "text-danger" })
-                        @Html.TextBoxFor(model => model.fecha_inicio, new { @class = "Datepicker", @Value = Model.fecha_inicio.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
+                        @Html.TextBoxFor(model => model.fecha_inicio, new {@id="FechaI", @class = "Datepicker", @Value = Model.fecha_inicio.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-md-2 text-nowrap" })
                     <div class="col-sm-12">
                         @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
-                        @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
+                        @Html.TextBoxFor(model => model.fecha_vencimiento, new { @id = "FechaT", @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:218px;" })
                     </div>
                 </div>
             </div>
@@ -95,7 +101,18 @@
                 gotoCurrent: true,
                 showAnim: 'blind',
                 highlightWeek: true
+
+            }
+
+            );
+ 
+            $('#FechaI').change(function () {
+                var TxtBox = document.getElementById("FechaT");
+
+                TxtBox.value = $(this).val();
+                var string = $(this).val()
             });
+          
         });
     </script>
     }

@@ -174,7 +174,12 @@ namespace WebApplication9.Controllers
                 {
                     dbModel.contactos.Add(contactosModel);
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    ModelState.Clear();
+
+                    contactosModel = new contactos();
+                    ViewBag.TheResult = true;
+
+                    return View("Create_Contacto");
 
                 }
                 return View("Create_Contacto", contactosModel);
@@ -190,7 +195,7 @@ namespace WebApplication9.Controllers
                 dbModel.contactos.Add(contactosModel);
                 dbModel.SaveChanges();
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit_Contacto(int id)

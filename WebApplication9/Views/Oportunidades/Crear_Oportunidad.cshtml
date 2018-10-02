@@ -39,6 +39,12 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
+    @if (ViewBag.TheResult == true)
+    {
+        <div class="alert alert-success">
+            <strong>Registro guardado con éxito.</strong>
+        </div>
+    }
     <div class="col">
         <div id="my-dialogCO"></div>
         @using (Html.BeginForm())

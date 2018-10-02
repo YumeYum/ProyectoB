@@ -29,7 +29,7 @@ namespace WebApplication9.Controllers
         {
             return View(new empresa());
         }
-        public ActionResult Index_Empresa(int? page, string search, int? nn, string sortBy)
+        public ActionResult Index_Empresa(int? page, string search, int? nn, string sortBy, string convenio, int? opsn)
         {
             List<empresa> listaEmpresas = new List<empresa>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
@@ -51,6 +51,17 @@ namespace WebApplication9.Controllers
 
 
                   };
+                ViewBag.Convenio = new List<SelectListItem>()
+
+                  {
+                    new SelectListItem() {Text="Convenios: Todos", Value= "0"},
+                    new SelectListItem() {Text="Sí", Value="1"},
+                    new SelectListItem() {Text="No", Value="2"},
+
+
+                  };
+
+
                 if (search != null && search != string.Empty)
                 {
                     listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search) || x.comuna.Contains(search) || x.convenio.Contains(search) || x.numero.ToString().Contains(search) || x.resto_direccion.Contains(search) || x.rubro.Contains(search) || x.rut.Contains(search) || x.zona.Contains(search)).ToList();
@@ -81,6 +92,23 @@ namespace WebApplication9.Controllers
                 {
                     int count = dbModel.oportunidades.Where(x => x.contacto_empresa.id_empresa == item.id).Count();
                     item.OposN = count;
+                }
+                switch (convenio)
+                {
+                    case "1":
+                        listaEmpresas = listaEmpresas.Where(x => x.convenio == "Sí").ToList();
+                        break;
+                    case "2":
+                        listaEmpresas = listaEmpresas.Where(x => x.convenio == "No").ToList();
+                        break;
+                    default:
+                        listaEmpresas = listaEmpresas.ToList();
+                        break;
+                }
+
+                if (opsn>0)
+                {
+                    listaEmpresas = listaEmpresas.Where(x => x.OposN <= opsn && x.OposN>0).ToList();
                 }
 
                 switch (sortBy)
@@ -175,7 +203,7 @@ namespace WebApplication9.Controllers
             {
                 dbModel.empresa.Add(empresaModel);
                 dbModel.SaveChanges();
-                return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = true}, JsonRequestBehavior.AllowGet);
             }
             //return RedirectToAction("/Index_Empresa");
         }
@@ -188,7 +216,9 @@ namespace WebApplication9.Controllers
                 {
                     dbModel.empresa.Add(empresaModel);
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    ModelState.Clear();
+                    ViewBag.TheResult = true;
+                    return View("Crear_EmpresaF");
 
                 }
                 else

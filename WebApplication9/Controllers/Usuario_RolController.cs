@@ -161,12 +161,17 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                urolModel.rolesList = dbModel.roles.ToList();
-                urolModel.usuarioList = dbModel.usuario.ToList();
                 dbModel.usuario_rol.Add(urolModel);
                 dbModel.SaveChanges();
+                ModelState.Clear();
+
+
+                urolModel = new usuario_rol();
+                urolModel.rolesList = dbModel.roles.ToList();
+                urolModel.usuarioList = dbModel.usuario.Include(x => x.contactos).ToList();
+                ViewBag.TheResult = true;
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return View("Create_Usuario_rol", urolModel);
         }
 
         [HttpPost]

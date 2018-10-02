@@ -18,7 +18,6 @@ namespace WebApplication9.Controllers
         {
             return View();
         }
-
         public ActionResult Index_Roles(int? page, int? nn, string search, string sortBy)
         {
             ViewBag.NumeroR = new List<SelectListItem>()
@@ -98,8 +97,11 @@ namespace WebApplication9.Controllers
             {
                 dbModel.roles.Add(rolesModel);
                 dbModel.SaveChanges();
+                ModelState.Clear();
+                ViewBag.TheResult = true;
+
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return View("Create_Roles");
         }
         [HttpPost]
         public ActionResult Create_RolesP(roles rolesModel)

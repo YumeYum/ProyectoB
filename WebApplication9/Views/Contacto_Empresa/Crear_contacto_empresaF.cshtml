@@ -29,6 +29,12 @@
 </style>
 <script src="~/Content/Scripts/jquery.validate.js"></script>
 <script src="~/Content/Scripts/jquery.validate.unobtrusive.js"></script>
+@if (ViewBag.TheResult == true)
+{
+    <div class="alert alert-success">
+        <strong>Registro guardado con éxito.</strong>
+    </div>
+}
 <div class="col">
     <h2>Crear Contacto de Empresa</h2>
 </div>

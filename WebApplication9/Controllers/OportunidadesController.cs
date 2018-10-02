@@ -22,7 +22,7 @@ namespace WebApplication9.Controllers
                 List<oportunidades> listaOps = new List<oportunidades>();
 
                 //Lista de Contactos a asignad
-                ViewBag.Hola = new SelectList(dbModel.usuario.OrderBy(x=>x.contactos.nombres).Include(x=>x.contactos).ToList(), "id", "FullName");
+                ViewBag.Hola = new SelectList(dbModel.usuario.Where(x => x.estado == "activo").OrderBy(x=>x.contactos.nombres).Include(x=>x.contactos).ToList(), "id", "FullName");
 
                 //Lista de páginas
                 ViewBag.NumeroR = new List<SelectListItem>()
@@ -55,6 +55,7 @@ namespace WebApplication9.Controllers
 
                 //SortBy
                 ViewBag.SortNempresa = string.IsNullOrEmpty(sortBy) ? "Nempresa_desc" : "";
+                ViewBag.SortId = sortBy == "Id" ? "Id_desc" : "Id";
                 ViewBag.SortCempresa = sortBy == "Cempresa" ? "Cempresa_desc" : "Cempresa";
                 ViewBag.SortCasignado = sortBy == "Casignado" ? "Casignado_desc" : "Casignado";
                 ViewBag.SortFechaC = sortBy == "FechaC" ? "FechaC_desc" : "FechaC";
@@ -66,7 +67,7 @@ namespace WebApplication9.Controllers
 
 
 
-
+                //Busqueda
 
                 if (search == String.Empty || search == null)
                 {
@@ -81,6 +82,7 @@ namespace WebApplication9.Controllers
                         .Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
                 }
 
+                //filtro por estado
                 switch (estado)
                 {
                     case 1:
@@ -96,6 +98,8 @@ namespace WebApplication9.Controllers
                     default:
                         break;
                 }
+
+                //filtro por sortBy
                 switch (sortBy)
                 {
                     case "Cempresa_desc":
@@ -142,6 +146,12 @@ namespace WebApplication9.Controllers
                         break;
                     case "Cupos":
                         listaOps = listaOps.OrderBy(x => x.cupos).ToList();
+                        break;
+                    case "Id_desc":
+                        listaOps = listaOps.OrderByDescending(x => x.id).ToList();
+                        break;
+                    case "Id":
+                        listaOps = listaOps.OrderBy(x => x.id).ToList();
                         break;
                     default:
                         listaOps = listaOps.OrderBy(x => x.contacto_empresa.empresa.razon_social).ToList();
@@ -290,17 +300,21 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
 
-                oModel.EmpresaModel = new List<empresa>();
-                oModel.EmpresaModel = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
-                oModel.usuarioList = dbModel.usuario.Include(x => x.contactos).OrderBy(x=>x.contactos.nombres).ToList();
-                oModel.contacto_empresaList = dbModel.contacto_empresa.Include(x => x.contactos).Include(x => x.empresa).ToList();
 
                 if (ModelState.IsValid)
                 {
                     oModel.estado = "activa";
                     dbModel.oportunidades.Add(oModel);
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    ModelState.Clear();
+
+                    oModel = new oportunidades();
+                    oModel.EmpresaModel = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
+                    oModel.usuarioList = dbModel.usuario.Include(x => x.contactos).OrderBy(x => x.contactos.nombres).ToList();
+                    oModel.contacto_empresaList = dbModel.contacto_empresa.Include(x => x.contactos).Include(x => x.empresa).ToList();
+                    ViewBag.TheResult = true;
+
+                    return View("Crear_Oportunidad", oModel);
                 }
                 else
                 {
@@ -374,7 +388,7 @@ namespace WebApplication9.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit_ortunidad(oportunidades oModel)
+        public ActionResult Edit_Oportunidad(oportunidades oModel)
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {

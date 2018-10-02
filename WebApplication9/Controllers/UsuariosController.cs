@@ -197,7 +197,7 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
 
-                usuarioModel.contactoList = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x=>x.apellidos).ToList();
+
 
                 if (ModelState.IsValid)
                 {
@@ -225,10 +225,15 @@ namespace WebApplication9.Controllers
                     }
 
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    ModelState.Clear();
+
+                    usuarioModel = new usuario();
+                    usuarioModel.contactoList = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
+                    usuarioModel.rolesList = dbModel.roles.OrderBy(x => x.rol).ToList();
+                    ViewBag.TheResult = true;
+                    return View("Create_Usuario",usuarioModel);
 
                 }
-                usuarioModel.rolesList = dbModel.roles.OrderBy(x=>x.rol).ToList();
                 return View("Create_Usuario", usuarioModel);
 
             }

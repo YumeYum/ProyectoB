@@ -31,12 +31,15 @@
         <input type="submit" class="btn btn-info btn-sm" value="Lograda" name="Lograda" />
         <input type="submit" class="btn btn-info btn-sm" value="Perdida" name="Perdida" />
         <input type="submit" class="btn btn-info btn-sm" value="Asignar a" name="Asignar" />
-        @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Contacto")
+        @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Usuario")
         <table class="table table-striped" id="myTable medetai">
 
             <thead class="thead-light">
                 <tr>
                     <th></th>
+                    <th>@Html.ActionLink("ID", "index_oportunidades", new { sortBy = ViewBag.SortId, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
+</th>
+
                     <th>
                         @Html.ActionLink("Contacto Empresa", "index_oportunidades", new { sortBy = ViewBag.SortCempresa, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
                     </th>
@@ -90,6 +93,9 @@
                             <td>
                                 @Html.HiddenFor(model => model[i].id)
                                 @Html.CheckBoxFor(model => model[i].isSelected)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model[i].id)
                             </td>
                             <td>
                                 @Html.DisplayFor(model => model[i].contacto_empresa.FullName)

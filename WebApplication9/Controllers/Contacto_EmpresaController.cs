@@ -207,14 +207,20 @@ namespace WebApplication9.Controllers
                 {
                     dbModel.contacto_empresa.Add(contactoEmpresa);
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    ModelState.Clear();
+
+
+                    contactoEmpresa = new contacto_empresa();
+                    contactoEmpresa.empresaListI = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
+                    contactoEmpresa.contactoListI = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
+                    ViewBag.TheResult = true;
+                    return View(contactoEmpresa);
 
                 }
                 else
                 {
-                    contactoEmpresa.empresaListI = dbModel.empresa.OrderBy(x=>x.razon_social).ToList();
-                    contactoEmpresa.contactoListI = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x=>x.apellidos).ToList();
-                    return Redirect(Request.UrlReferrer.ToString());
+
+                    return View("Crear_contacto_empresaF", contactoEmpresa);
                 }
 
             }

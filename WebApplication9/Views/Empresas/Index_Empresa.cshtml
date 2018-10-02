@@ -25,18 +25,23 @@
             }
 
     </style>
+
     <div id="my-dialogEmpresa"></div>
 
 @using (Html.BeginForm("/Index_Empresa", "Empresas", FormMethod.Get))
-{   
-        <div class="col-sm-4 float-right">
-            <p>
-                @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
-                @Html.TextBox("search") <input type="submit" value="Buscar" />
-                @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-            </p>
-        </div>
-       
+{
+    <div class="col-sm-4 float-right">
+        <p>
+            @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
+            @Html.TextBox("search") <input type="submit" value="Buscar" />
+            @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+            @Html.DropDownList("convenio", new SelectList(ViewBag.Convenio, "Value", "Text"), new { @onchange = "this.form.submit()" })
+            <div class="col-sm-4 float-right">
+                <input type="number" class="form-control" id="on" placeholder="Oportunidades" name="opsn"  min="0">
+            </div>
+        </p>
+    </div>
+
 
 }
 
@@ -44,34 +49,34 @@
     <thead class="thead-light">
         <tr>
             <th>
-                @Html.ActionLink("Rut", "index_empresa", new { sortBy = ViewBag.SortRut, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Rut", "index_empresa", new { sortBy = ViewBag.SortRut, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Razón Social", "index_empresa", new { sortBy = ViewBag.SortRSocial, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Razón Social", "index_empresa", new { sortBy = ViewBag.SortRSocial, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Rubro", "index_empresa", new { sortBy = ViewBag.SortRubro, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Rubro", "index_empresa", new { sortBy = ViewBag.SortRubro, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Calle", "index_empresa", new { sortBy = ViewBag.SortCalle, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Calle", "index_empresa", new { sortBy = ViewBag.SortCalle, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Número", "index_empresa", new { sortBy = ViewBag.SortNumero, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Número", "index_empresa", new { sortBy = ViewBag.SortNumero, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Resto Dirección", "index_empresa", new { sortBy = ViewBag.SortRDireccion, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Resto Dirección", "index_empresa", new { sortBy = ViewBag.SortRDireccion, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Comuna", "index_empresa", new { sortBy = ViewBag.SortComuna, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Comuna", "index_empresa", new { sortBy = ViewBag.SortComuna, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("CTG Empleados", "index_empresa", new { sortBy = ViewBag.SortCTG, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("CTG Empleados", "index_empresa", new { sortBy = ViewBag.SortCTG, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Convenio", "index_empresa", new { sortBy = ViewBag.SortConvenio, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Convenio", "index_empresa", new { sortBy = ViewBag.SortConvenio, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Zona", "index_empresa", new { sortBy = ViewBag.SortZona, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Zona", "index_empresa", new { sortBy = ViewBag.SortZona, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
                 @Html.Label("Cupos Ocupados")
@@ -80,7 +85,7 @@
                 @Html.Label("Cupos Disponibles")
             </th>
             <th>
-                @Html.ActionLink("Oportunidades", "index_empresa", new { sortBy = ViewBag.SortOps, search = Request.QueryString["search"], nn = Request.QueryString["nn"] })
+                @Html.ActionLink("Oportunidades", "index_empresa", new { sortBy = ViewBag.SortOps, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th></th>
             <th></th>
@@ -147,7 +152,7 @@
 </table>
 
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"] }))
+            @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"] }))
         </div>
         @section scripts {
 

@@ -9,6 +9,12 @@
         font-weight: bold;
     }
 </style>
+@if (ViewBag.TheResult == true)
+{
+    <div class="alert alert-success">
+        <strong>Registro guardado con éxito.</strong>
+    </div>
+}
 <div class="col">
     <h2>Crear Empresa</h2>
 
