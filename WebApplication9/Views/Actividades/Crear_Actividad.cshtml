@@ -2,6 +2,8 @@
 <script src="~/Content/Scripts/jquery.validate.min.js"></script>
 <script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Content/Scripts/moment.js"></script>
+<script src="~/Content/Scripts/jquery-ui.js"></script>
+<div id="lala"></div>
 
 @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formActividad" }))
 {
@@ -64,6 +66,7 @@
 }
 
 <script type="text/javascript">
+
     $('#formActividad').on("submit", function (e) {
         e.preventDefault();
         var aModel = {
@@ -77,6 +80,7 @@
         var $form = $("#formActividad");
         $.validator.unobtrusive.parse($form);
 
+
         if ($form.valid()) {
             $.ajax({
                 type: "POST",
@@ -85,7 +89,15 @@
                 dataType: "json",
                 data: $form.serialize()+"&tipo_actividad=Tarea",
                 success: function (response) {
+
                     alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogOps').dialog('isOpen') == true) {
+                        var id_oportunidad = document.getElementById('id_oportunidad').value;
+                        $('#my-dialogOps').load('/Oportunidades/detalle_oportunidad/' + id_oportunidad, function () {
+                            $(this).dialog('open');
+                        });
+                    }
 
                     if ($('#my-dialog2').dialog('isOpen') == true) {
                         $('#my-dialog2').dialog('close');

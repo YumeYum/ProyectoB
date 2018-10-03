@@ -66,6 +66,7 @@ namespace WebApplication9.Models
         public List<oportunidades> oList;
         public List<usuario> usuarioList;
 
+        [Display(Name = "Tipo")]
         public string tipo_actividad { get; set; }
 
 

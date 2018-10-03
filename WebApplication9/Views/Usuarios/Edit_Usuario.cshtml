@@ -68,7 +68,7 @@
             <div class="form-group">
                 <b>  @Html.LabelFor(model => model.fecha_termino_rel, htmlAttributes: new { @class = "control-label col-md-12" })</b>
                 <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.fecha_termino_rel, new { @class= "Datepicker", @Value = Model.fecha_termino_rel?.ToString("dd-MM-yyyy"), required = "required" })
+                    @Html.TextBoxFor(model => model.fecha_termino_rel, new { @class= "Datepicker", @Value = Model.fecha_termino_rel?.ToString("dd-MM-yyyy") })
                     @Html.ValidationMessageFor(model => model.fecha_termino_rel, "", new { @class = "text-danger" })
                 </div>
             </div>

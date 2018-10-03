@@ -1,41 +1,39 @@
 ﻿@model WebApplication9.Models.actividad
-
-@using (Html.BeginForm())
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formFinalizar" }))
 {
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $('.Datepicker').datepicker({
-                dateFormat: "dd-mm-yy",
-                showStatus: true,
-                showWeeks: true,
-                currentText: 'Now',
-                autoSize: true,
-                gotoCurrent: true,
-                showAnim: 'blind',
-                highlightWeek: true
-            });
-        });
-    </script>
 
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>actividad</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.id)
 
         <div class="form-group">
-            @Html.Label("Fecha de cumplimiento")
+            <b>@Html.Label("Fecha de cumplimiento")</b>
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required" })
+                @Html.TextBoxFor(model => model.fecha_vencimiento, new {@id = "FechaV", @class = "Datepicker", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required" })
                 @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            <b>@Html.Label("Estado")</b>
+            <div class="col-md-10">
+                <select name="estado" id="estado">
+                    <option value="Cumplida">Cumplida</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+
+            </div>
+        </div>
+
+
+        @Html.HiddenFor(model => model.id)
         @Html.HiddenFor(model => model.creada_por)
         @Html.HiddenFor(model => model.descripcion)
-        @Html.HiddenFor(model => model.estado)
         @Html.HiddenFor(model => model.fecha_inicio)
         @Html.HiddenFor(model => model.tipo_actividad)
         @Html.HiddenFor(model => model.titulo)
@@ -68,3 +66,72 @@
 <div>
     @Html.ActionLink("Volver al índice", "/Index_Oportunidades", "Oportunidades")
 </div>
+<script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('.Datepicker').datepicker({
+                dateFormat: "dd-mm-yy",
+                showStatus: true,
+                showWeeks: true,
+                currentText: 'Now',
+                autoSize: true,
+                gotoCurrent: true,
+                showAnim: 'blind',
+                highlightWeek: true
+            });
+
+            $(function () {
+                $.validator.methods.date = function (value, element) {
+                    return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+                }
+            });
+
+    });
+
+
+    $('#formFinalizar').on("submit", function (e) {
+        e.preventDefault();
+        var aModel = {
+            id: $('#id').val(),
+            estado: $('#estado').val(),
+            fecha_vencimiento: $('#FechaV').val(),
+        };
+        var $form = $("#formFinalizar");
+        $.validator.unobtrusive.parse($form);
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Actividades/Finalizar_Actividad",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogOps').dialog('isOpen') == true) {
+                        var id_oportunidad = document.getElementById('id_oportunidad').value;
+                        $('#my-dialogOps').load('/Oportunidades/detalle_oportunidad/' + id_oportunidad, function () {
+                            $(this).dialog('open');
+                        });
+                    }
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
+
+   
+</script>

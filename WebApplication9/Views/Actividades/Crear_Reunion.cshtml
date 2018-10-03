@@ -63,6 +63,7 @@
     </div>
 }
 <script type="text/javascript">
+
     $('#formActividad').on("submit", function (e) {
         e.preventDefault();
         var aModel = {
@@ -73,6 +74,9 @@
             titulo: $('#titulo').val(),
             descripcion: $('#descripcion').val(),
         };
+
+
+
         var $form = $("#formActividad");
         $.validator.unobtrusive.parse($form);
 
@@ -85,6 +89,13 @@
                 data: $form.serialize() + "&tipo_actividad=Reunión",
                 success: function (response) {
                     alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogOps').dialog('isOpen') == true) {
+                        var id_oportunidad = document.getElementById('id_oportunidad').value;
+                        $('#my-dialogOps').load('/Oportunidades/detalle_oportunidad/' + id_oportunidad, function () {
+                            $(this).dialog('open');
+                        });
+                    }
 
                     if ($('#my-dialog2').dialog('isOpen') == true) {
                         $('#my-dialog2').dialog('close');
@@ -101,6 +112,7 @@
 
 
     });
+
     $(document).ready(function () {
         $('.Datepicker').datepicker({
             dateFormat: "dd-mm-yy",
@@ -113,6 +125,7 @@
             highlightWeek: true
         });
 
+        //cambio de las fechas dinámicamente
         $('#FechaI').change(function () {
             var TxtBox = document.getElementById("FechaT");
 
@@ -121,6 +134,7 @@
         });
     });
 
+    //validador de fecha
     $(function () {
         $.validator.methods.date = function (value, element) {
             return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();

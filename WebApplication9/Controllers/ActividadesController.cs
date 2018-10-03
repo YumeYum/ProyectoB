@@ -265,22 +265,21 @@ namespace WebApplication9.Controllers
         }
 
         [HttpPost]
-        public ActionResult Finalizar_Actividad(actividad actividadModel)
+        public ActionResult Finalizar_Actividad(actividad aModel)
         {
             //string uOwner;
             //DateTime fechaC;
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                //uOwner = actividadModel.id_usuario_owner;
-                //fechaC = actividadModel.fecha_inicio;
-                //actividadModel = dbModel.actividad.Where(x => x.id == actividadModel.id).FirstOrDefault();
-                actividadModel.estado = "Finalizada";
-                //actividadModel.id_usuario_owner = uOwner;
-                //actividadModel.fecha_inicio = fechaC;
+                actividad actividadModel = new actividad();
+                actividadModel = dbModel.actividad.Where(x => x.id == aModel.id).FirstOrDefault();
+                actividadModel.estado = aModel.estado;
+                actividadModel.fecha_vencimiento = aModel.fecha_vencimiento;
+
                 dbModel.Entry(actividadModel).State = System.Data.Entity.EntityState.Modified;
                 dbModel.SaveChanges();
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Details_Actividad(int id)
         {

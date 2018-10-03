@@ -38,7 +38,10 @@
 <head>
     <meta name="viewport" content="width=device-width" />
 </head>
+
 <body>
+    <div id="my-dialogCO"></div>
+
     @if (ViewBag.TheResult == true)
     {
         <div class="alert alert-success">
@@ -46,7 +49,6 @@
         </div>
     }
     <div class="col">
-        <div id="my-dialogCO"></div>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
@@ -57,7 +59,7 @@
                     <input type="hidden" id="id_empresa" name="id_empresa">
                     @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
                     @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })
-                    @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm   " })
+                    @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm" })
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-row">
@@ -216,7 +218,7 @@
                                 this._trigger("select", event, {
                                     item: ui.item.option
                                 });
-                                this._trigger("change");                            
+                                this._trigger("change");
                             },
 
                             autocompletechange: "_removeIfInvalid"
@@ -310,7 +312,7 @@
                     }
                 });
 
-                
+
                 $("#id_contacto_asignado").combobox();
                 $("#ddlCEmpresa").combobox();
                 $("#ddlstate").combobox({
@@ -331,7 +333,7 @@
 
             });
 
-            function Agregar_Contacto(){
+           @* function Agregar_Contacto(){
                 $('#my-dialogCO').dialog({
                     autoOpen: false,
                     width: 'auto',
@@ -348,8 +350,8 @@
                 );
                 return false;
 
-            };
-            
+            };*@
+
 
             $("#my-dialogCO").dialog('option', 'title', 'Editar Usuario');
 

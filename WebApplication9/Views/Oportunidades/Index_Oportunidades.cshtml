@@ -164,7 +164,13 @@
                 width: 'auto',
                 height: 'auto',
                 resizable: false,
-                modal: true
+                modal: true,
+                //función para cerrar cuando se clickea afuera
+                 open: function () {
+                    jQuery('.ui-widget-overlay').bind('click', function () {
+                        jQuery('#my-dialogOps').dialog('close');
+                    })
+                }
             });
 
             $('.modolo').click(function () {
@@ -174,6 +180,7 @@
                 return false;
             });
         });
+
 
 </script>
 }

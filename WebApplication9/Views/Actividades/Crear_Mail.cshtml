@@ -88,6 +88,13 @@
                 success: function (response) {
                     alert('Registro ingresado con éxito');
 
+                    if ($('#my-dialogOps').dialog('isOpen') == true) {
+                        var id_oportunidad = document.getElementById('id_oportunidad').value;
+                        $('#my-dialogOps').load('/Oportunidades/detalle_oportunidad/' + id_oportunidad, function () {
+                            $(this).dialog('open');
+                        });
+                    }
+
                     if ($('#my-dialog2').dialog('isOpen') == true) {
                         $('#my-dialog2').dialog('close');
                     }

@@ -27,7 +27,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.id_empresa, "Empresa", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-6">
-                @Html.DropDownListFor(model => model.id_empresa, new SelectList(Model.empresaListI, "id", "razon_social"), "Seleccione Empresa", new { required = "required" })
+                @Html.DropDownListFor(model => model.id_empresa, new SelectList(Model.empresaListI, "id", "razon_social"), "Seleccione Empresa", new { @id = "ddlEs", style = "width:250px;", required = "required" })
                 @Html.ValidationMessageFor(model => model.id_empresa, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -224,10 +224,10 @@
             }
         });
 
-        $("#id_empresa").combobox();
+        $("#ddlEs").combobox();
         $("#id_contacto").combobox();
         $("#toggle").on("click", function () {
-            $("#id_empresa").toggle();
+            $("#ddlEs").toggle();
             $("#id_contacto").toggle();
 
 
