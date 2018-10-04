@@ -28,11 +28,15 @@
                 </th>
                 <th>
                     @using (Html.BeginForm("/index_roles", "Roles", FormMethod.Get))
-                {
-                    @Html.TextBox("search", "", new { style = "width:100px;" })
-                    <input type="submit" value="Buscar" />
-                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-                }
+                    {
+                        <div class="form-group form-inline">
+                            @Html.TextBox("search", "", new { @style = "width:150px;", @class = "form-control" })
+                            <input type="submit" value="Buscar" class="btn btn-secondary " />
+                            @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @class = "form-control", @onchange = "this.form.submit()" })
+                            @Html.ActionLink("Mostrar todos", "Index_Roles")
+                        </div>
+
+                    }
             </th>
             </tr>
         </thead>

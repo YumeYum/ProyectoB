@@ -52,14 +52,6 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <div class="col-md-12">
-                @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
-                @Html.ActionLink("Crear Empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })<br />
-            </div>
-            <div class="col"></div>
-            <div class="col-md-12">
-            @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm   " })
-            </div>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 <div class="col">
@@ -121,6 +113,14 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Crear" class="btn btn-primary" />
+                    </div>
+                    <div class="col-md-12">
+                        @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-secondary btn-sm" })
+                        @Html.ActionLink("Crear Empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-secondary btn-sm" })<br />
+                    </div>
+                    <div class="col"></div>
+                    <div class="col-md-12">
+                        @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-secondary btn-sm   " })
                     </div>
                 </div>
             </div>

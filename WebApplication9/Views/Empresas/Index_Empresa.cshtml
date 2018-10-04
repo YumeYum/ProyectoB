@@ -30,18 +30,18 @@
 
 @using (Html.BeginForm("/Index_Empresa", "Empresas", FormMethod.Get))
 {
-    <div class="col-sm-4 float-right">
-        <p>
-            @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "modolo btn btn-primary btn-large m-1" })
-            @Html.TextBox("search") <input type="submit" value="Buscar" />
-            @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-            @Html.DropDownList("convenio", new SelectList(ViewBag.Convenio, "Value", "Text"), new { @onchange = "this.form.submit()" })
-            <div class="col-sm-4 float-right">
-                <input type="number" class="form-control" id="on" placeholder="Oportunidades" name="opsn"  min="0">
-            </div>
-        </p>
-    </div>
+    <div class="form-group row float-right form-inline">
+        <div class="col-md-12">
+            @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "form-control modolo btn btn-primary btn-md m-1" })
+            @Html.TextBox("search",null, new { @class="form-control" }) <input type="submit" value="Buscar" class="btn btn-secondary " />
+            @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @class = "form-control",@onchange = "this.form.submit()" })
+            @Html.DropDownList("convenio", new SelectList(ViewBag.Convenio, "Value", "Text"), new {@class="form-control", @onchange = "this.form.submit()" })
+            <input type="number" class="form-control" id="on" placeholder="Número de Oportunidades" name="opsn" min="0">
+            @Html.ActionLink("Mostrar todos", "Index_Empresa")
+        </div>
 
+
+    </div>
 
 }
 

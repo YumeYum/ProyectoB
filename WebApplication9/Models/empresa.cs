@@ -49,7 +49,6 @@ namespace WebApplication9.Models
         [Required(ErrorMessage = "Debe ingresar Comuna")]
         public string comuna { get; set; }
         [Display(Name = "CTG Empleados")]
-        [Required(ErrorMessage = "Debe ingresar ctg_empleados")]
         public string ctg_empleados { get; set; }
         [Display(Name = "Convenio")]
         [Required(ErrorMessage = "Debe ingresar Convenio")]

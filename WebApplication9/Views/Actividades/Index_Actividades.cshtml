@@ -27,12 +27,13 @@
     </p>
     @using (Html.BeginForm("/index_actividades", "actividades", FormMethod.Get))
     {
-        <div class="col-sm-4">
-            <p>
+        <div class="form-group form-inline">
+           
                 @Html.ActionLink("Crear Actividad", "Crear_Actividad", null, new { @class = "modolo btn-primary btn-sm" })
-                @Html.TextBox("search") <input type="submit" value="Buscar" />
-                @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-            </p>
+                @Html.TextBox("search",null, new { @class="form-control"}) <input type="submit" value="Buscar" class="btn btn-secondary" />
+                @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @class = "form-control", @onchange = "this.form.submit()" })
+                @Html.ActionLink("Mostrar todos", "Index_Actividades")
+
         </div>
 
 

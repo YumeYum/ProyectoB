@@ -32,13 +32,14 @@
                 @using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
                 {
                     <th>
-                        @Html.TextBox("search", "", new { @style = "width:150px;" })
-                        <input type="submit" value="Buscar" />
-                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
-
-                        @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
-                        @Html.ActionLink("Crear Usuario", "CreateP_Usuario", "Usuarios", null, new { @class = "modolo btn-primary btn-sm" })
-
+                        <div class="form-group form-inline">
+                        @Html.TextBox("search", "", new { @class="form-control",@style = "width:150px;" })
+                        <input type="submit" value="Buscar" class="btn btn-secondary "/>
+                        @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()", @class = "form-control" })
+                        @Html.DropDownList("activ", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()", @class = "form-control" })
+                            @Html.ActionLink("Crear Usuario", "CreateP_Usuario", "Usuarios", null, new { @class = "modolo btn-primary btn-sm" })
+                            @Html.ActionLink("Mostrar todos", "Index_Usuarios")
+                        </div>
 
 
 

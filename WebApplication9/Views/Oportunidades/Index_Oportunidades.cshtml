@@ -12,26 +12,32 @@
     <div id="my-dialogOps"></div>
     <h2>Oportunidades</h2>
 
-    <p>
+    <div class="form-group form-inline">
         @Html.ActionLink("Crear", "Crear_OportunidadP", null, new { @class = "modolo btn btn-primary btn-sm m-1" })
-    </p>
+    </div>
     @using (Html.BeginForm("/Index_Oportunidades", "Oportunidades", FormMethod.Get))
-    {    <p>
-        @Html.TextBox("search") <input type="submit" value="Buscar" />
+    {    <div class="form-group form-inline">
+        @Html.TextBox("search", null, new { @class = "form-control" }) <input type="submit" value="Buscar" class="btn btn-secondary" />
 
 
-             @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()" })
-             @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()" })
+             @Html.DropDownList("estado", new SelectList(ViewBag.Estados, "Value", "Text"), new { @onchange = "this.form.submit()", @class="form-control" })
+             @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @onchange = "this.form.submit()", @class = "form-control" })
+             @Html.ActionLink("Mostrar todos", "Index_Empresa")
 
-    </p>
+
+
+
+            </div>
     }
 
     @using (Html.BeginForm("/Index_Oportunidades", "Oportunidades"))
     {
-        <input type="submit" class="btn btn-info btn-sm" value="Lograda" name="Lograda" />
-        <input type="submit" class="btn btn-info btn-sm" value="Perdida" name="Perdida" />
-        <input type="submit" class="btn btn-info btn-sm" value="Asignar a" name="Asignar" />
-        @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Usuario")
+        <div class="form-group form-inline">
+            <input type="submit" class="btn btn-info btn-sm mt-1" value="Lograda" name="Lograda" />
+            <input type="submit" class="btn btn-info btn-sm mt-1" value="Perdida" name="Perdida" />
+            <input type="submit" class="btn btn-info btn-sm mt-1" value="Asignar a" name="Asignar" />
+            @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Usuario", new { @class = "form-control" })
+        </div>
         <table class="table table-striped" id="myTable medetai">
 
             <thead class="thead-light">

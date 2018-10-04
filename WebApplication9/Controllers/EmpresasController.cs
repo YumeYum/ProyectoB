@@ -252,7 +252,7 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                dbModel.Entry(dbModel).State = System.Data.Entity.EntityState.Modified;
+                dbModel.Entry(empresaModel).State = System.Data.Entity.EntityState.Modified;
                 dbModel.SaveChanges();
 
             }

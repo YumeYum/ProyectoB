@@ -24,7 +24,6 @@ namespace WebApplication9.Models
         {
             throw new UnintentionalCodeFirstException();
         }
-    
         public virtual DbSet<actividad> actividad { get; set; }
         public virtual DbSet<contacto_empresa> contacto_empresa { get; set; }
         public virtual DbSet<contactos> contactos { get; set; }
