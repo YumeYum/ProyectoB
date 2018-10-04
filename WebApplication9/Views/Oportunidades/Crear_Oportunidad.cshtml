@@ -55,7 +55,7 @@
 
             <div class="form-horizontal">
                 <h4>Crear Oportunidad</h4>
-                <input id="clickMe" type="button" value="Agregar Contacto (Falta terminar)" onclick="Agregar_Contacto();" />
+                @*<input id="clickMe" type="button" value="Agregar Contacto (Falta terminar)" onclick="Agregar_Contacto();" />*@
                     <input type="hidden" id="id_empresa" name="id_empresa">
                     @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
                     @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })
@@ -129,7 +129,12 @@
                     width: 'auto',
                     height: 'auto',
                     resizable: false,
-                    modal: true
+                    modal: true,
+                    open: function () {
+                        jQuery('.ui-widget-overlay').bind('click', function () {
+                            jQuery('#my-dialogCO').dialog('close');
+                        })
+                    }
                 });
 
                 $('.modolo3').click(function () {

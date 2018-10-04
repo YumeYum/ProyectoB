@@ -122,7 +122,13 @@
             width: 'auto',
             height: 'auto',
             resizable: false,
-            modal: true
+            modal: true,
+            open: function () {
+                jQuery('.ui-widget-overlay').bind('click', function () {
+                    jQuery('#my-dialog2').dialog('close');
+                })
+            }
+
         });
 
         $('.modolo2').click(function () {

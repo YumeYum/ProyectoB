@@ -98,6 +98,11 @@
                     width: 'auto',
                     resizable: false,
                     modal: true,
+                    open: function () {
+                        jQuery('.ui-widget-overlay').bind('click', function () {
+                            jQuery('#my-dialogUsers').dialog('close');
+                        })
+                    }
                 });
 
                 $('.modolo').click(function () {

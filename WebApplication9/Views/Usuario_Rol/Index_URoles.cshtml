@@ -91,7 +91,12 @@
                     autoOpen: false,
                     width: 'auto',
                     resizable: false,
-                    modal: true
+                    modal: true,
+                    open: function () {
+                        jQuery('.ui-widget-overlay').bind('click', function () {
+                            jQuery('#my-dialogUrols').dialog('close');
+                        })
+                    }
                 });
 
                 $('.modolo').click(function () {

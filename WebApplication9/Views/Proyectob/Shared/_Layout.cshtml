@@ -144,6 +144,11 @@
             width: 'auto',
             resizable: false,
             modal: true,
+            open: function () {
+                jQuery('.ui-widget-overlay').bind('click', function () {
+                    jQuery('#my-dialogC').dialog('close');
+                })
+            }
         });
 
         $('.modoloC').click(function () {
