@@ -1,4 +1,9 @@
 ﻿@model WebApplication9.Models.usuario_rol
+@*Son TODOS necesarios?*@
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+<script src="~/Content/Scripts/jquery-ui.js"></script>
     <style>
     .ui-dialog-title {
         font-size: 120%;
@@ -7,13 +12,13 @@
         font-weight: bold;
     }
 </style>
-@using (Html.BeginForm())
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEditURol" }))
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(model => model.id, new { @id= "idUrol" })
 
         <div class="form-group">
             @Html.LabelFor(model => model.id_usuario, "Usuario", htmlAttributes: new { @class = "control-label col-md-6" })
@@ -55,21 +60,76 @@
     </div>
 }
 <script type="text/javascript">
+    $('#formEditURol').on("submit", function (e) {
+        e.preventDefault();
+        var u_rolesModel = {
+            id: $('#idUrol').val(),
+            id_usuario: $('#id_usuario').val(),
+            id_rol: $('#id_rol').val(),
+            fecha_inicio_rel: $('#fecha_inicio_rel').val(),
+            fecha_termino_rel: $('#fecha_termino_rel').val(),
+        };
+        var $form = $("#formEditURol");
+        $.validator.unobtrusive.parse($form);
+
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Usuario_Rol/Edit_Usuario_Rol",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogUsers').dialog('isOpen') == true) {
+                        var id_usuario2 = '@ViewBag.id_usuario2';
+                        $('#my-dialogUsers').load('/Usuarios/Details2_Usuario/' + id_usuario2, function () {
+                            $(this).dialog('open');
+                        });
+                    }
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
+  
+
+    $(document).ready(function () {
+        $('.Datepicker').datepicker({
+            dateFormat: "dd-mm-yy",
+            showStatus: true,
+            showWeeks: true,
+            currentText: 'Now',
+            autoSize: true,
+            gotoCurrent: true,
+            showAnim: 'blind',
+            highlightWeek: true
+        });
+    });
+
+
+    $(function () {
+        $.validator.methods.date = function (value, element) {
+            return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+        }
+    });
+
     $("#my-dialog2").dialog('option', 'title', 'Editar Rol de Usuario');
     $("#my-dialogUrols").dialog('option', 'title', 'Editar Rol de Usuario');
-
-        $(document).ready(function () {
-            $('.Datepicker').datepicker({
-                dateFormat: "dd-mm-yy",
-                showStatus: true,
-                showWeeks: true,
-                currentText: 'Now',
-                autoSize: true,
-                gotoCurrent: true,
-                showAnim: 'blind',
-                highlightWeek: true
-            });
-        });
 </script>
 
 <div>

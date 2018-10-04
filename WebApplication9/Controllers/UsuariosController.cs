@@ -66,22 +66,29 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
 
-                        if (search == String.Empty || search == null)
-                        {
+                if (search == String.Empty || search == null)
+                {
 
-                            listaContactos = dbModel.usuario.Include(x => x.contactos).ToList();
-                            
-                            //return Redirect("Index_Usuarios?nn="+ nn );
+                    listaContactos = dbModel.usuario.Include(x => x.contactos).ToList();
 
-                        }
-                        else
-                        {
-                            listaContactos = dbModel.usuario.Where(x => x.estado.Contains(search) || x.contactos.nombres.Contains(search) || x.contactos.apellidos.Contains(search)).Include(x => x.contactos).ToList();
-                           
+                    //return Redirect("Index_Usuarios?nn="+ nn );
 
-                        }
+                }
+                else
 
-                
+                {
+                    var strings = search.ToLower().Split(' ');
+                    listaContactos = dbModel.usuario.Include(x => x.contactos).ToList();
+                    foreach (var splitString in strings)
+                    {
+
+                        listaContactos = listaContactos.Where(x => x.estado.ToLower().Contains(splitString) || x.contactos.nombres.ToLower().Contains(splitString) || x.contactos.apellidos.ToLower().Contains(splitString)).ToList();
+
+                    }
+                    listaContactos = listaContactos.Distinct().ToList();
+                }
+
+
                 switch (activ)
                 {
                     case 1:
@@ -118,7 +125,7 @@ namespace WebApplication9.Controllers
                         listaContactos = listaContactos.OrderBy(x => x.fecha_termino_rel).ToList();
                         break;
                     default:
-                        listaContactos = listaContactos.OrderBy(x => x.contactos.nombres).ThenBy(x=>x.contactos.apellidos).ToList();
+                        listaContactos = listaContactos.OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).ToList();
                         break;
                 }
 
@@ -137,8 +144,8 @@ namespace WebApplication9.Controllers
 
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                User = dbModel.usuario.Where(x => x.id == id).Include(x => x.contactos).Include(x=>x.contactos.contacto_empresa.Select(z=>z.empresa)).FirstOrDefault();
-                User.uRolesM = dbModel.usuario_rol.Where(x => x.id_usuario == id).Include(x=>x.usuario.contactos).Include(x => x.usuario).Include(x => x.roles).ToList<usuario_rol>();
+                User = dbModel.usuario.Where(x => x.id == id).Include(x => x.contactos).Include(x => x.contactos.contacto_empresa.Select(z => z.empresa)).FirstOrDefault();
+                User.uRolesM = dbModel.usuario_rol.Where(x => x.id_usuario == id).Include(x => x.usuario.contactos).Include(x => x.usuario).Include(x => x.roles).ToList<usuario_rol>();
                 User.Ops = dbModel.oportunidades.Where(x => x.usuario.id == id).ToList();
                 User.Activs = dbModel.actividad.Where(x => x.id_contacto == id).ToList();
 
@@ -161,8 +168,8 @@ namespace WebApplication9.Controllers
             usuario model = new usuario();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.contactoList = db.contactos.OrderBy(x=>x.nombres).ToList();
-                model.rolesList = db.roles.OrderBy(x=>x.rol).ToList();
+                model.contactoList = db.contactos.OrderBy(x => x.nombres).ToList();
+                model.rolesList = db.roles.OrderBy(x => x.rol).ToList();
             }
             return View(model);
         }
@@ -178,7 +185,7 @@ namespace WebApplication9.Controllers
             usuario model = new usuario();
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
-                model.contactoList = db.contactos.OrderBy(x=>x.nombres).ThenBy(x=>x.apellidos).ToList();
+                model.contactoList = db.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
                 model.rolesList = db.roles.OrderBy(x => x.rol).ToList();
             }
             return PartialView(model);
@@ -231,7 +238,7 @@ namespace WebApplication9.Controllers
                     usuarioModel.contactoList = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
                     usuarioModel.rolesList = dbModel.roles.OrderBy(x => x.rol).ToList();
                     ViewBag.TheResult = true;
-                    return View("Create_Usuario",usuarioModel);
+                    return View("Create_Usuario", usuarioModel);
 
                 }
                 return View("Create_Usuario", usuarioModel);
@@ -250,10 +257,10 @@ namespace WebApplication9.Controllers
                   };
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                usuarioModel.contactoList = dbModel.contactos.OrderBy(x=>x.nombres).ThenBy(x=>x.apellidos).ToList();
+                usuarioModel.contactoList = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
 
                 if (ModelState.IsValid)
-         
+
                 {
 
                     if (EstadoL == "inactivo")
@@ -285,7 +292,7 @@ namespace WebApplication9.Controllers
                     return Redirect(Request.UrlReferrer.ToString());
 
                 }
-                usuarioModel.rolesList = dbModel.roles.OrderBy(x=>x.rol).ToList();
+                usuarioModel.rolesList = dbModel.roles.OrderBy(x => x.rol).ToList();
                 return View("Create_Usuario", usuarioModel);
 
             }
@@ -304,7 +311,7 @@ namespace WebApplication9.Controllers
                     Value = x.id.ToString()
 
 
-                }).OrderBy(x=>x.Text).ToList();
+                }).OrderBy(x => x.Text).ToList();
 
             }
 
@@ -320,7 +327,7 @@ namespace WebApplication9.Controllers
             {
                 dbModel.Entry(usuarioModel).State = System.Data.Entity.EntityState.Modified;
                 dbModel.SaveChanges();
-                if (usuarioModel.estado =="inactivo")
+                if (usuarioModel.estado == "inactivo")
                 {
                     List<usuario_rol> urol = new List<usuario_rol>();
                     urol = dbModel.usuario_rol.Where(x => x.id_usuario == usuarioModel.id).ToList();
@@ -377,13 +384,13 @@ namespace WebApplication9.Controllers
 
 
                 catch (Exception ex)
-            {
+                {
 
                     usuarioModel.id_contacto = test;
                     ModelState.AddModelError("error",
-                   ex.Message + " No se pudo eliminar el registro" );
-                return View(usuarioModel);
-            }
+                   ex.Message + " No se pudo eliminar el registro");
+                    return View(usuarioModel);
+                }
 
 
             }

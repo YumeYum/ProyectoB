@@ -3,6 +3,8 @@
 <h3>¿Está seguro que desea eliminar este registro?</h3>
 <div>
     <hr />
+    @Html.HiddenFor(model => model.id, new { @id = "idActividad" })
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.fecha_inicio)
@@ -80,7 +82,7 @@
     @Html.ValidationMessage("error", "", new { @class = "text-danger" })
 
 
-    @using (Html.BeginForm()) {
+    @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEliminarAct" })) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
@@ -90,6 +92,51 @@
     }
 </div>
 <script>
+    $('#formEliminarAct').on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/Actividades/Delete_Actividad/",
+            data: { id: $('#idActividad').val() },
+            success: function (result) {
+
+                if (result.success) {
+                    alert('Registro Eliminado con éxito');
+
+
+                    if ($('#my-dialogEmpresa').dialog('isOpen') == true) {
+                        var id_empresa = '@ViewBag.id_empresa';
+                            $('#my-dialogEmpresa').load('/Empresas/Details_Empresa/' + id_empresa, function () {
+                                $(this).dialog('open');
+                            });
+                    }
+
+                    else if ($('#my-dialogUsers').dialog('isOpen') == true) {
+                        var id_usuario = '@ViewBag.id_usuario';
+                        $('#my-dialogUsers').load('/Usuarios/Details2_Usuario/' + id_usuario, function () {
+                            $(this).dialog('open');
+                        });
+
+                    }
+
+
+                        if ($('#my-dialog2').dialog('isOpen') == true) {
+                            $('#my-dialog2').dialog('close');
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        alert('No se pudo eliminar el registro');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+        });
+
+        });
     $("#my-dialog2").dialog('option', 'title', 'Eliminar Actividad');
     $("#my-dialogActs").dialog('option', 'title', 'Eliminar Actividad');
 </script>

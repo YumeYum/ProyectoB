@@ -43,15 +43,21 @@ namespace WebApplication9.Controllers
 
                   };
 
-                    if (search != String.Empty && search != null)
-                    {
-                        ListaURol = dbModel.usuario_rol.Where(x=>x.roles.rol.Contains(search)|| x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)).Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
-                    }
-                    else
-                    {
-                        ListaURol = dbModel.usuario_rol.Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
+                if (search != String.Empty && search != null)
+                {
+                    var strings = search.ToLower().Split(' ');
+                    ListaURol = dbModel.usuario_rol.Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
 
+                    foreach (var splitString in strings)
+                    {
+                        ListaURol = ListaURol.Where(x => x.roles.rol.ToLower().Contains(splitString) || x.usuario.contactos.nombres.ToLower().Contains(splitString) || x.usuario.contactos.apellidos.ToLower().Contains(splitString)).ToList();
                     }
+                }
+                else
+                {
+                    ListaURol = dbModel.usuario_rol.Include(x => x.usuario.contactos).Include(x => x.roles).ToList();
+
+                }
                 ViewBag.SortName = string.IsNullOrEmpty(sortBy) ? "name_desc" : "";
                 ViewBag.SortRol = sortBy == "rol" ? "rol_desc" : "rol";
                 ViewBag.SortFechaI = sortBy == "fechaI" ? "fechaI_desc" : "fechaI";
@@ -60,7 +66,7 @@ namespace WebApplication9.Controllers
                 switch (sortBy)
                 {
                     case "name_desc":
-                        ListaURol = ListaURol.OrderByDescending(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        ListaURol = ListaURol.OrderByDescending(x => x.usuario.contactos.nombres).ThenBy(x => x.usuario.contactos.apellidos).ToList();
                         break;
                     case "rol_desc":
                         ListaURol = ListaURol.OrderByDescending(x => x.roles.rol).ToList();
@@ -81,7 +87,7 @@ namespace WebApplication9.Controllers
                         ListaURol = ListaURol.OrderBy(x => x.fecha_termino_rel).ToList();
                         break;
                     default:
-                        ListaURol = ListaURol.OrderBy(x => x.usuario.contactos.nombres).ThenBy(x=>x.usuario.contactos.apellidos).ToList();
+                        ListaURol = ListaURol.OrderBy(x => x.usuario.contactos.nombres).ThenBy(x => x.usuario.contactos.apellidos).ToList();
                         break;
 
                 }
@@ -97,8 +103,8 @@ namespace WebApplication9.Controllers
             using (proyectob_dbEntities db = new proyectob_dbEntities())
             {
 
-                model.rolesList = db.roles.OrderBy(x=>x.rol).ToList();
-                model.usuarioList = db.usuario.Include(x=>x.contactos).OrderBy(x=>x.contactos.nombres).ThenBy(x=>x.contactos.apellidos).ToList();
+                model.rolesList = db.roles.OrderBy(x => x.rol).ToList();
+                model.usuarioList = db.usuario.Include(x => x.contactos).OrderBy(x => x.contactos.nombres).ThenBy(x => x.contactos.apellidos).ToList();
 
 
                 //roles model2 = new roles();
@@ -134,7 +140,7 @@ namespace WebApplication9.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                usuario_rol usuario_Rol = db.usuario_rol.Include(x=>x.roles).Include(x=>x.usuario).Where(x=> x.id == id).FirstOrDefault();
+                usuario_rol usuario_Rol = db.usuario_rol.Include(x => x.roles).Include(x => x.usuario).Where(x => x.id == id).FirstOrDefault();
                 if (usuario_Rol == null)
                 {
                     return HttpNotFound();
@@ -143,12 +149,13 @@ namespace WebApplication9.Controllers
                 return PartialView(usuario_Rol);
             }
         }
-        public ActionResult Delete_URol(int id)
+        public ActionResult Delete_URol(int id, int? id_usuario)
         {
+            ViewBag.id_usuario = id_usuario;
             usuario_rol urolModel = new usuario_rol();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                urolModel = dbModel.usuario_rol.Include(x => x.roles).Include(x=>x.usuario).Where(x => x.id == id).FirstOrDefault();
+                urolModel = dbModel.usuario_rol.Include(x => x.roles).Include(x => x.usuario).Where(x => x.id == id).Include(x => x.usuario.contactos).FirstOrDefault();
 
             }
 
@@ -186,8 +193,9 @@ namespace WebApplication9.Controllers
             }
             return Redirect(Request.UrlReferrer.ToString());
         }
-        public ActionResult Edit_Usuario_Rol(int id)
+        public ActionResult Edit_Usuario_Rol(int id, int? id_usuario2)
         {
+            ViewBag.id_usuario2 = id_usuario2;
             usuario_rol u_rolesModel = new usuario_rol();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
@@ -219,7 +227,7 @@ namespace WebApplication9.Controllers
                 dbModel.SaveChanges();
 
             }
-            return RedirectToAction("/Index_URoles");
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -227,7 +235,7 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
-                usuario_rol urolModel = dbModel.usuario_rol.Where(x => x.id == id).FirstOrDefault();
+                usuario_rol urolModel = dbModel.usuario_rol.Where(x => x.id == id).Include(x => x.usuario.contactos).FirstOrDefault();
 
                 int test = urolModel.id_usuario;
                 int test2 = urolModel.id_rol;
@@ -238,18 +246,20 @@ namespace WebApplication9.Controllers
                     dbModel.usuario_rol.Remove(urolModel);
                     dbModel.SaveChanges();
 
-                    return RedirectToAction("/Index_URoles");
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
 
 
                 catch (Exception ex)
                 {
-
+                    //antiguo metodo de eliminar BORRAR?
                     urolModel.id_usuario = test;
                     urolModel.id_rol = test2;
                     ModelState.AddModelError("error",
                    ex.Message + " No se pudo eliminar el registro");
-                    return View(urolModel);
+
+
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
                 }
 
 

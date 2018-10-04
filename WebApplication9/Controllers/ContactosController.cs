@@ -14,6 +14,7 @@ namespace WebApplication9.Controllers
 {
     public class ContactosController : Controller
     {
+
         // GET: Contactos
         public ActionResult Index()
         {
@@ -50,7 +51,15 @@ namespace WebApplication9.Controllers
             {
                 if (search != String.Empty && search != null)
                 {
-                    listaContactos = dbModel.contactos.Where(x => x.apellidos.Contains(search) || x.comentario.Contains(search) || x.email.Contains(search) || x.nombres.Contains(search) || x.rut.Contains(search) || x.tcel.ToString().Contains(search)).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    listaContactos = dbModel.contactos.ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        listaContactos = listaContactos.Where(x => x.apellidos.ToLower().Contains(splitString) || x.nombres.ToLower().Contains(splitString) ||x.comentario!=null && x.comentario.ToLower().Contains(splitString) || x.email.ToLower().Contains(splitString)  || x.rut.ToLower().Contains(splitString) || x.tcel.ToString().Contains(splitString)).ToList();
+                    }
+
+
                 }
                 else
                 {
@@ -198,11 +207,12 @@ namespace WebApplication9.Controllers
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Edit_Contacto(int id)
+        public ActionResult Edit_Contacto(int id, int? id_empresa)
         {
             contactos contactoModel = new contactos();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+                ViewBag.id_empresa = id_empresa;
                 contactoModel = dbModel.contactos.Where(x => x.id == id).FirstOrDefault();
 
             }
@@ -219,11 +229,12 @@ namespace WebApplication9.Controllers
                 dbModel.SaveChanges();
 
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Delete_Contacto(int id)
+        public ActionResult Delete_Contacto(int id, int? id_empresa)
         {
             contactos contactoModel = new contactos();
+            ViewBag.id_empresa = id_empresa;
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 contactoModel = dbModel.contactos.Where(x => x.id == id).FirstOrDefault();
@@ -237,11 +248,31 @@ namespace WebApplication9.Controllers
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+                List<contacto_empresa> c_empresa = new List<contacto_empresa>();
+                c_empresa = dbModel.contacto_empresa.Where(x => x.id_contacto == id).ToList();
+                foreach (var item in c_empresa)
+                {
+                    dbModel.contacto_empresa.Remove(item);
+                }
+
+
                 contactos contactoModel = dbModel.contactos.Where(x => x.id == id).FirstOrDefault();
                 dbModel.contactos.Remove(contactoModel);
-                dbModel.SaveChanges();
+
+                try
+                {
+                    dbModel.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+
+                }
+
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+
             }
-            return Redirect(Request.UrlReferrer.ToString());
         }
 
     }

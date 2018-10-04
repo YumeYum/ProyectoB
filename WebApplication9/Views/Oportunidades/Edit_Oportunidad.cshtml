@@ -1,5 +1,9 @@
 ﻿@model WebApplication9.Models.oportunidades
-
+@*Son necesarios?*@
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+<script src="~/Content/Scripts/jquery-ui.js"></script>
 <div id="my-dialog"></div>
 <style>
     .ui-dialog-title {
@@ -11,7 +15,7 @@
     }
 </style>
 
-@using (Html.BeginForm())
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEditOp" }))
 {
     @Html.AntiForgeryToken()
     
@@ -91,6 +95,64 @@
     </div>
 }
 <script type="text/javascript">
+
+    $('#formEditOp').on("submit", function (e) {
+        e.preventDefault();
+        var oModel = {
+            id: $('#id').val(),
+            id_contacto_empresa: $('#id_contacto_empresa').val(),
+            id_contacto_asignado: $('#id_contacto_asignado').val(),
+            fecha_creacion: $('#apellidos').val(),
+            fecha_vencimiento: $('#tcel').val(),
+            cupos: $('#email').val(),
+            temas: $('#comentario').val(),
+            esado: $('#estado').val(),
+        };
+        var $form = $("#formEditOp");
+        $.validator.unobtrusive.parse($form);
+
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Oportunidades/Edit_Oportunidad",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogEmpresa').dialog('isOpen') == true) {
+                        var id_empresa = '@ViewBag.id_empresa';
+                        $('#my-dialogEmpresa').load('/Empresas/Details_Empresa/' + id_empresa, function () {
+                            $(this).dialog('open');
+                        });
+                    }
+
+                    else if ($('#my-dialogUsers').dialog('isOpen') == true) {
+                        var id_usuario = '@ViewBag.id_usuario';
+                        $('#my-dialogUsers').load('/Usuarios/Details2_Usuario/' + id_usuario, function () {
+                            $(this).dialog('open');
+                        });
+
+                    }
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
     $(document).ready(function () {
         $('.Datepicker').datepicker({
             dateFormat: "dd-mm-yy",
@@ -101,6 +163,11 @@
             gotoCurrent: true,
             showAnim: 'blind',
             highlightWeek: true
+        });
+        $(function () {
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+            }
         });
     });
 

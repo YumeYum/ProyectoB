@@ -64,7 +64,13 @@ namespace WebApplication9.Controllers
 
                 if (search != null && search != string.Empty)
                 {
-                    listaEmpresas = dbModel.empresa.Where(x => x.razon_social.Contains(search) || x.comuna.Contains(search) || x.convenio.Contains(search) || x.numero.ToString().Contains(search) || x.resto_direccion.Contains(search) || x.rubro.Contains(search) || x.rut.Contains(search) || x.zona.Contains(search)).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    listaEmpresas = dbModel.empresa.ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        listaEmpresas = listaEmpresas.Where(x => x.razon_social.ToLower().Contains(splitString) || x.comuna.ToLower().Contains(splitString) || x.convenio.ToLower().Contains(splitString) || x.numero.ToString().ToLower().Contains(splitString) || x.resto_direccion.ToLower().Contains(splitString) || x.rubro.ToLower().Contains(splitString) || x.rut.ToLower().Contains(splitString) || x.zona.ToLower().Contains(splitString)).ToList();
+                    }
                 }
 
                 else
@@ -236,7 +242,6 @@ namespace WebApplication9.Controllers
             {
                 empresaModel = dbModel.empresa.Where(x => x.id == id).FirstOrDefault();
 
-
             }
 
             return PartialView(empresaModel);
@@ -310,14 +315,12 @@ namespace WebApplication9.Controllers
                 //List<oportunidades> Ops = new List<oportunidades>();
                 using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
                 {
-
-
-
                     Empresa = dbModel.empresa.Where(x => x.id == id).FirstOrDefault();
                     Empresa.listaContactos = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
                     Empresa.contactosM = dbModel.contacto_empresa.Where(x => x.id_empresa == id).Include(x => x.contactos).Include(x => x.empresa).Include(x => x.oportunidades).ToList<contacto_empresa>();
                     Empresa.Opos = dbModel.oportunidades.Include(x => x.usuario.contactos).Where(x => x.contacto_empresa.empresa.id == id).ToList();
                     Empresa.Activs = dbModel.actividad.Include(x => x.usuario.contactos).Where(x => x.oportunidades.contacto_empresa.empresa.id == id).ToList();
+
 
                 }
 

@@ -64,7 +64,7 @@
                             Opciones
                         </button>
                         <div class="dropdown-menu">
-                            @Html.ActionLink("Editar", "Edit_usuario_rol", new { id = item.id }, new { @class = "modolo dropdown-item" })
+                            @Html.ActionLink("Editar", "Edit_usuario_rol", new { id = item.id, }, new { @class = "modolo dropdown-item" })
                             @Html.ActionLink("Detalles", "Details_Uroles", new { id = item.id }, new { @class = "modolo dropdown-item" })
                             @Html.ActionLink("Eliminar", "Delete_URol", new { id = item.id }, new { @class = "modolo dropdown-item" })
                         </div>

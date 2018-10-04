@@ -94,9 +94,9 @@
                 @Html.DisplayFor(modelItem => item.roles.rol)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit_Usuario_Rol","Usuario_Rol", new { id = item.id }, new { @class = "modolo2" }) |
+                @Html.ActionLink("Editar", "Edit_Usuario_Rol","Usuario_Rol", new { id = item.id, id_usuario2 = Model.id }, new { @class = "modolo2" }) |
                 @Html.ActionLink("Detalles", "Details_URoles", "Usuario_Rol", new { id = item.id }, new { @class = "modolo2" }) |
-                @Html.ActionLink("Eliminar", "Delete_URol", "Usuario_Rol", new { id = item.id }, new { @class = "modolo2" })
+                @Html.ActionLink("Eliminar", "Delete_URol", "Usuario_Rol", new { id = item.id , id_usuario = Model.id }, new { @class = "modolo2" })
             </td>
         </tr>
     }
@@ -159,9 +159,8 @@
                 <td></td>
 
                 <td>
-                    @Html.ActionLink("Editar", "Edit_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" }) |
-                    @Html.ActionLink("Detalles", "Detalle_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" }) |
-                    @Html.ActionLink("Eliminar", "Delete_Oportunidad", "Oportunidades", new { id = item.id }, new { @class = "modolo2" })
+                    @Html.ActionLink("Editar", "Edit_Oportunidad", "Oportunidades", new { id = item.id, id_usuario = Model.id }, new { @class = "modolo2" }) |
+                    @Html.ActionLink("Eliminar", "Delete_Oportunidad", "Oportunidades", new { id = item.id, id_usuario = Model.id }, new { @class = "modolo2" })
                 </td>
 
             </tr>
@@ -207,7 +206,7 @@
                     @Html.DisplayFor(modelItem => item.titulo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.id_contacto)
+                    @Html.DisplayFor(modelItem => item.usuario.contactos.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.creada_por)
@@ -216,9 +215,9 @@
                     @Html.DisplayFor(modelItem => item.estado)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" }) |
+                    @Html.ActionLink("Editar", "Edit_Actividad", "Actividades", new { id = item.id, id_usuario = Model.id }, new { @class = "modolo2" }) |
                     @Html.ActionLink("Detalles", "Details_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" }) |
-                    @Html.ActionLink("Eliminar", "Delete_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2" })
+                    @Html.ActionLink("Eliminar", "Delete_Actividad", "Actividades", new { id = item.id, id_usuario = Model.id }, new { @class = "modolo2" })
                 </td>
 
             </tr>

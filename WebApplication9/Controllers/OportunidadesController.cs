@@ -76,10 +76,17 @@ namespace WebApplication9.Controllers
                 }
                 else
                 {
-                    listaOps = dbModel.oportunidades.Where(x => x.contacto_empresa.empresa.razon_social.Contains(search) || x.contacto_empresa.contactos.nombres.Contains(search)
-                    || x.contacto_empresa.contactos.apellidos.Contains(search) || x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)
-                    || x.tema.Contains(search))
-                        .Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    listaOps = dbModel.oportunidades.Include(x => x.usuario.contactos).Include(x => x.contacto_empresa.empresa).Include(x => x.contacto_empresa.contactos).Include(x => x.usuario).ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        listaOps = listaOps.Where(x => x.contacto_empresa.empresa.razon_social.ToLower().Contains(splitString) || x.contacto_empresa.contactos.nombres.ToLower().Contains(splitString)
+                    || x.contacto_empresa.contactos.apellidos.ToLower().Contains(splitString) || x.usuario.contactos.nombres.ToLower().Contains(splitString) || x.usuario.contactos.apellidos.ToLower().Contains(splitString)
+                    || x.tema.ToLower().Contains(splitString)||x.estado.ToLower().Contains(splitString)||x.cupos.ToString().Contains(splitString)).ToList();
+                    }
+
+              
                 }
 
                 //filtro por estado
@@ -359,10 +366,11 @@ namespace WebApplication9.Controllers
             }
 
         }
-        public ActionResult Edit_Oportunidad(int id)
+        public ActionResult Edit_Oportunidad(int id, int? id_empresa, int? id_usuario)
         {
             oportunidades oModel = new oportunidades();
-
+            ViewBag.id_usuario = id_usuario;
+            ViewBag.id_empresa = id_empresa;
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 oModel = dbModel.oportunidades.Where(x => x.id == id).FirstOrDefault();
@@ -396,7 +404,7 @@ namespace WebApplication9.Controllers
                 dbModel.SaveChanges();
 
             }
-            return RedirectToAction("/Index_Oportunidades");
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult Delete_Oportunidad(int id, FormCollection collection)
@@ -414,7 +422,7 @@ namespace WebApplication9.Controllers
                     dbModel.oportunidades.Remove(opModel);
                     dbModel.SaveChanges();
 
-                    return RedirectToAction("/Index_Oportunidades");
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
 
 
@@ -425,15 +433,17 @@ namespace WebApplication9.Controllers
                     opModel.id_contacto_empresa = test2;
                     ModelState.AddModelError("error",
                    ex.Message + " No se pudo eliminar el registro");
-                    return View(opModel);
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
                 }
 
 
             }
 
         }
-        public ActionResult Delete_Oportunidad(int id)
+        public ActionResult Delete_Oportunidad(int id, int? id_empresa, int? id_usuario)
         {
+            ViewBag.id_usuario = id_usuario;
+            ViewBag.id_empresa = id_empresa;
             oportunidades oModel = new oportunidades();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {

@@ -1,4 +1,9 @@
 ﻿@model WebApplication9.Models.contactos
+   @*Son necesarios?*@
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+<script src="~/Content/Scripts/jquery-ui.js"></script>
 <style>
     .ui-dialog-title {
         font-size: 120%;
@@ -7,7 +12,7 @@
         font-weight: bold;
     }
 </style>
-@using (Html.BeginForm())
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formContacto" }))
 {
 
 
@@ -84,6 +89,57 @@
 }
 
 <script>
+
+    $('#formContacto').on("submit", function (e) {
+        e.preventDefault();
+        var contactoModel = {
+            id: $('#id').val(),
+            rut: $('#rut').val(),
+            nombres: $('#nombres').val(),
+            apellidos: $('#apellidos').val(),
+            tcel: $('#tcel').val(),
+            email: $('#email').val(),
+            comentario: $('#comentario').val(),
+        };
+        var $form = $("#formContacto");
+        $.validator.unobtrusive.parse($form);
+
+
+        if ($form.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Contactos/Edit_Contacto",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialogEmpresa').dialog('isOpen') == true) {
+                        var id_empresa = '@ViewBag.id_empresa';
+                        $('#my-dialogEmpresa').load('/Empresas/Details_Empresa/' + id_empresa, function () {
+                            $(this).dialog('open');
+                        });
+                    }
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+
+
+    });
+
+
         function checkRut(rut) {
     // Despejar Puntos
     var valor = rut.value.replace('.','');
@@ -130,7 +186,16 @@
 
     // Si todo sale bien, eliminar errores (decretar que es válido)
     rut.setCustomValidity('');
-}
+
+    }
+
+        $(function () {
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+            }
+        });
+
+
 
     $("#my-dialog2").dialog('option', 'title', 'Editar Contacto');
     $("#my-dialogContactos").dialog('option', 'title', 'Editar Contacto');

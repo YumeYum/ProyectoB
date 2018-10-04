@@ -22,6 +22,8 @@ namespace WebApplication9.Controllers
         public ActionResult Index_Empresa_Contacto(int? page, string search, int? nn, string sortBy)
 
         {
+            List<contacto_empresa> ListacEmpresa = new List<contacto_empresa>();
+
             ViewBag.NumeroR = new List<SelectListItem>()
 
 
@@ -40,12 +42,21 @@ namespace WebApplication9.Controllers
 
 
                   };
-            List<contacto_empresa> ListacEmpresa = new List<contacto_empresa>();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
+
                 if (search != String.Empty && search != null)
                 {
-                    ListacEmpresa = dbModel.contacto_empresa.Where(x => x.contactos.nombres.Contains(search) || x.contactos.apellidos.Contains(search) || x.empresa.razon_social.Contains(search) || x.cargo.Contains(search) || x.telefono_celular.ToString().Contains(search) || x.telefono_fijo.ToString().Contains(search)||x.contactos.rut.Contains(search)||x.empresa.rut.Contains(search)).Include(x => x.empresa).Include(x => x.contactos).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    ListacEmpresa = dbModel.contacto_empresa.Include(x => x.empresa).Include(x => x.contactos).ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        ListacEmpresa = ListacEmpresa.Where(x => x.contactos.nombres.ToLower().Contains(splitString) || x.contactos.apellidos.ToLower().Contains(splitString) || x.empresa.razon_social.ToLower().Contains(splitString) 
+                        || x.cargo != null && x.cargo.ToLower().Contains(splitString) || x.telefono_celular.ToString().Contains(splitString) 
+                        || x.telefono_fijo.ToString().Contains(splitString) || x.contactos.rut.ToLower().Contains(splitString) 
+                        || x.empresa.rut.ToLower().Contains(splitString)).ToList();
+                    }
                 }
                 else
                 {

@@ -43,11 +43,17 @@ namespace WebApplication9.Controllers
             {
                 if (search != String.Empty && search != null)
                 {
-                    listaRoles = dbModel.roles.Where(x => x.descripcion.Contains(search) || x.rol.Contains(search)).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    listaRoles = dbModel.roles.ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        listaRoles = listaRoles.Where(x =>x.descripcion!=null && x.descripcion.ToLower().Contains(splitString) || x.rol.ToLower().Contains(splitString)).ToList();
+                    }
                 }
                 else
                 {
-                    listaRoles = dbModel.roles.OrderBy(x => x.rol).ToList();
+                    listaRoles = dbModel.roles.ToList();
 
                 }
 

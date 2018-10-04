@@ -45,7 +45,13 @@ namespace WebApplication9.Controllers
 
                 if (search != null && search != string.Empty)
                 {
-                    listaActividad = dbModel.actividad.Where(x => x.creada_por.Contains(search) || x.descripcion.Contains(search) || x.estado.Contains(search) || x.titulo.ToString().Contains(search) || x.tipo_actividad.Contains(search) || x.oportunidades.tema.Contains(search) || x.usuario.contactos.nombres.Contains(search) || x.usuario.contactos.apellidos.Contains(search)).Include(x => x.oportunidades).Include(x => x.usuario.contactos).ToList();
+                    var strings = search.ToLower().Split(' ');
+                    listaActividad = dbModel.actividad.Include(x => x.oportunidades).Include(x => x.usuario.contactos).ToList();
+
+                    foreach (var splitString in strings)
+                    {
+                        listaActividad = listaActividad.Where(x => x.creada_por.ToLower().Contains(splitString) || x.descripcion!=null && x.descripcion.ToLower().Contains(splitString) || x.estado.ToLower().Contains(splitString) || x.titulo.ToLower().ToString().Contains(splitString) || x.tipo_actividad.ToLower().Contains(splitString) || x.oportunidades.tema.ToLower().Contains(splitString) || x.usuario.contactos.nombres.ToLower().Contains(splitString) || x.usuario.contactos.apellidos.ToLower().Contains(splitString)).ToList();
+                    }
                 }
 
                 else
@@ -62,7 +68,7 @@ namespace WebApplication9.Controllers
                 ViewBag.SortDescr = sortBy == "descripcion" ? "descripcion_descr" : "descripcion";
                 ViewBag.SortCreadaPor = sortBy == "creada_por" ? "creada_por_desc" : "creada_por";
                 ViewBag.SortEstado = sortBy == "estado" ? "estado_desc" : "estado";
-                ViewBag.SorTipoAct = sortBy == "tipo_actividad" ? "tipo_actividad_desc" : "tipo_actividad";
+                ViewBag.SortTipoAct = sortBy == "tipo_actividad" ? "tipo_actividad_desc" : "tipo_actividad";
                 ViewBag.SortTema = sortBy == "tema" ? "tema_desc"  : "tema";
                 ViewBag.SortContacto = sortBy == "contacto" ? "contacto_desc" : "contacto";
                 switch (sortBy)
@@ -299,8 +305,11 @@ namespace WebApplication9.Controllers
                 return PartialView(acti);
             }
         }
-        public ActionResult Edit_Actividad(int id)
+        public ActionResult Edit_Actividad(int id, int? id_empresa, int? id_usuario)
+
         {
+            ViewBag.id_usuario = id_usuario;
+            ViewBag.id_empresa = id_empresa;
             actividad aModel = new actividad();
 
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
@@ -337,7 +346,7 @@ namespace WebApplication9.Controllers
                 dbModel.SaveChanges();
 
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult Delete_Actividad(int id, FormCollection collection)
@@ -355,26 +364,30 @@ namespace WebApplication9.Controllers
                     dbModel.actividad.Remove(aModel);
                     dbModel.SaveChanges();
 
-                    return Redirect(Request.UrlReferrer.ToString());
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
 
 
                 catch (Exception ex)
                 {
-
+                    //antigua forma de mostrar error BORRAR
                     aModel.id_contacto = test;
                     aModel.id_oportunidad = test2;
                     ModelState.AddModelError("error",
                    ex.Message + " No se pudo eliminar el registro");
-                    return View(aModel);
+
+
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
                 }
 
 
             }
 
         }
-        public ActionResult Delete_Actividad(int id)
+        public ActionResult Delete_Actividad(int id, int? id_empresa, int? id_usuario)
         {
+            ViewBag.id_empresa = id_empresa;
+            ViewBag.id_usuario = id_usuario;
             actividad aModel = new actividad();
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
