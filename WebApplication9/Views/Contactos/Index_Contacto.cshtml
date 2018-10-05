@@ -19,7 +19,6 @@
             Response.Redirect("~/Proyectob/Index");
         }
     }
-
     <div id="my-dialogContactos"></div>
 <style>
 
@@ -171,7 +170,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().curriculum)
                 </th>
-                <th>@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
+                <th class="noExl">@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
                 {
                     <div class="form-group form-inline">
                         @Html.TextBox("search", "", new { @class = "form-control", @style = "width:150px;" })
@@ -211,7 +210,7 @@
                         @Html.DisplayFor(modelItem => item.curriculum)
                     </td>
 
-                    <td>
+                    <td class="noExl">
                         <div class="dropdown">
                             <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                                 Opciones
@@ -229,8 +228,11 @@
                 </tr>
             }
         </tbody>
+
     </table>
+
 <div class="col">
+    <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
     @Html.PagedListPager(Model, page => Url.Action("Index_Contacto", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
 
@@ -242,6 +244,15 @@
 </div>
     @section scripts {
         <script type="text/javascript">
+            $("#export").click(function () {
+                $("#medetai").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Contactos" //do not include extension
+                });
+            });
+
             $(function () {
                 $('#my-dialogContactos').dialog({
                     autoOpen: false,

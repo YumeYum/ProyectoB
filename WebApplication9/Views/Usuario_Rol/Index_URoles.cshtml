@@ -34,7 +34,7 @@
                 </th>
                     @using (Html.BeginForm("/index_uroles", "usuario_rol", FormMethod.Get))
                     {
-                    <th>
+                    <th class="noExl">
                         <div class="form-group form-inline">
                             @Html.TextBox("search", "", new { @style = "width:150px;", @class = "form-control" })
                             <input type="submit" value="Buscar" class="btn btn-secondary "  />
@@ -61,7 +61,7 @@
                     @Html.DisplayFor(modelItem => item.fecha_termino_rel)
                 </td>
 
-                <td>
+                <td class="noExl">
                     <div class="dropdown">
                         <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                             Opciones
@@ -78,6 +78,7 @@
 
     </table>
     <div class="col">
+        <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
         @Html.PagedListPager(Model, page => Url.Action("Index_URoles", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
 
@@ -89,6 +90,14 @@
     </div>
     @section scripts {
         <script type="text/javascript">
+            $("#export").click(function () {
+                $("#medetai").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Usuarios_Rol" //do not include extension
+                });
+            });
             $(function () {
                 $('#my-dialogUrols').dialog({
                     autoOpen: false,

@@ -29,7 +29,7 @@
     }
     <div class="col">
 
-        @using (Html.BeginForm())
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
@@ -115,7 +115,8 @@
                 </div>
             </div>
         }
-
+        @ViewBag.Message
+        
       @section scripts {
           <script>
               function checkRut(rut) {

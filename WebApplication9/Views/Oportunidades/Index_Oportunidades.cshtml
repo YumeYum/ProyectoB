@@ -38,11 +38,11 @@
             <input type="submit" class="btn btn-info btn-sm mt-1" value="Asignar a" name="Asignar" />
             @Html.DropDownList("lala", new SelectList(ViewBag.Hola, "Value", "Text"), "Elija Usuario", new { @class = "form-control" })
         </div>
-        <table class="table table-striped" id="myTable medetai">
+        <table class="table table-striped" id="medetai">
 
             <thead class="thead-light">
                 <tr>
-                    <th></th>
+                    <th class="noExl"></th>
                     <th>@Html.ActionLink("ID", "index_oportunidades", new { sortBy = ViewBag.SortId, search = Request.QueryString["search"], nn = Request.QueryString["nn"], estado = Request.QueryString["estado"], page = Request.QueryString["page"] })
 </th>
 
@@ -128,7 +128,7 @@
                                 @Html.DisplayFor(model => model[i].cupos)
                             </td>
                             <td></td>
-                            <td>
+                            <td class="noExl">
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                                         Opciones
@@ -151,6 +151,7 @@
 
         </table>
         <div class="col">
+            <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
             @Html.PagedListPager(Model, page => Url.Action("Index_Oportunidades", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], estado = Request.QueryString["estado"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"] }))
         </div>
         <div class="col">
@@ -164,6 +165,15 @@
 @section scripts {
 
     <script type="text/javascript">
+        $("#export").click(function () {
+            $("#medetai").table2excel({
+                // exclude CSS class
+                exclude: ".noExl",
+                name: "Worksheet Name",
+                filename: "Oportunidades" //do not include extension
+            });
+        });
+
         $(function () {
             $('#my-dialogOps').dialog({
                 autoOpen: false,

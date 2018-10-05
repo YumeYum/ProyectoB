@@ -31,7 +31,7 @@
                 </th>
                 @using (Html.BeginForm("/Index_usuarios", "Usuarios", FormMethod.Get))
                 {
-                    <th>
+                    <th class="noExl">
                         <div class="form-group form-inline">
                         @Html.TextBox("search", "", new { @class="form-control",@style = "width:150px;" })
                         <input type="submit" value="Buscar" class="btn btn-secondary "/>
@@ -63,7 +63,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.fecha_termino_rel)
                     </td>
-                    <td>
+                    <td class="noExl">
                         <div class="dropdown">
                             <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                                 Opciones
@@ -83,12 +83,22 @@
         </tbody>
 </table>
 <div class="col">
+    <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
     @Html.PagedListPager(Model, page => Url.Action("Index_usuarios", new { page, search = Request.QueryString["search"], search2 = Request.QueryString["search2"], nn = Request.QueryString["nn"], activ = Request.QueryString["activ"], sortBy = Request.QueryString["sortBy"] }))
 </div>
     @section scripts {
 
 
         <script type="text/javascript">
+            $("#export").click(function () {
+                $("#medetai").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Usuarios" //do not include extension
+                });
+            });
+
             $(document).ready(function () {
                 $("#medetai").freezeHeader({});
             })

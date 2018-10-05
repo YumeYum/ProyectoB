@@ -129,7 +129,7 @@
             <td></td>
             <td></td>
             <td>@Html.DisplayFor(modelItem => item.OposN)</td>
-            <td>
+            <td class="noExl">
                 <div class="dropdown">
                     <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                         Opciones
@@ -152,12 +152,20 @@
 </table>
 
         <div class="col">
+            <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
             @Html.PagedListPager(Model, page => Url.Action("Index_Empresa", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], sortBy = Request.QueryString["sortBy"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"] }))
         </div>
         @section scripts {
 
             <script type="text/javascript">
-
+                $("#export").click(function () {
+                    $("#medetai").table2excel({
+                        // exclude CSS class
+                        exclude: ".noExl",
+                        name: "Worksheet Name",
+                        filename: "Empresas" //do not include extension
+                    });
+                });
                 $(function () {
                     $('#my-dialogEmpresa').dialog({
                         autoOpen: false,

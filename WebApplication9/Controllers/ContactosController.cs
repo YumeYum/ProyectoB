@@ -10,6 +10,7 @@ using WebApplication9.Models;
 using System.Net;
 using System.IO;
 
+
 namespace WebApplication9.Controllers
 {
     public class ContactosController : Controller
@@ -162,17 +163,18 @@ namespace WebApplication9.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Create_Contacto(contactos contactosModel, HttpPostedFileBase file)
+        public ActionResult Create_Contacto(contactos contactosModel, HttpPostedFileBase file )
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 if (file != null && file.ContentLength > 0)
                     try
                     {
-                        string path = Path.Combine(Server.MapPath("~/Content/imagenes"),
+                        string path = Path.Combine(Server.MapPath("~/Content/imagenes/"),
                                                    Path.GetFileName(file.FileName));
-                        ViewBag.Message = "File uploaded successfully";
                         contactosModel.curriculum = path;
+                        file.SaveAs(path);
+                        ViewBag.Message = "File uploaded successfully";
                     }
                     catch (Exception ex)
                     {

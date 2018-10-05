@@ -10,9 +10,10 @@ namespace WebApplication9
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Content/Scripts/jquery-3.0.0.js",
                         "~/Content/Scripts/jquery.freezeheader.js",
-                        "~/Content/Scripts/umd/popper.min.js"));
+                        "~/Content/Scripts/umd/popper.min.js",
+                        "~/Content/Scripts/jquery.table2excel.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
             "~/Content/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

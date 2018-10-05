@@ -27,7 +27,7 @@
     </p>
     @using (Html.BeginForm("/index_actividades", "actividades", FormMethod.Get))
     {
-        <div class="form-group form-inline">
+        <div class="form-group form-inline noExl">
            
                 @Html.ActionLink("Crear Actividad", "Crear_Actividad", null, new { @class = "modolo btn-primary btn-sm" })
                 @Html.TextBox("search",null, new { @class="form-control"}) <input type="submit" value="Buscar" class="btn btn-secondary" />
@@ -101,7 +101,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.usuario.contactos.FullName)
                 </td>
-                <td>
+                <td class="noExl">
                     <div class="dropdown">
                         <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
                             Opciones
@@ -119,6 +119,15 @@
     </table>
     @section scripts {
         <script type="text/javascript">
+            $("#export").click(function () {
+                $("#medetai").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Actividades" //do not include extension
+                });
+            });
+
             $(function () {
                 $('#my-dialogActs').dialog({
                     autoOpen: false,
@@ -145,7 +154,7 @@
         </script>
     }
 
-
+    <button id="export" class="btn btn-sm btn-secondary">Exportar</button>
     @Html.PagedListPager(Model, page => Url.Action("index_actividades", new { page, search = Request.QueryString["search"], nn = Request.QueryString["nn"], sortBy = Request.QueryString["sortBy"] }))
 
 
