@@ -12,3 +12,10 @@ select option {
 [hidden] {
     display: none;
 }
+
+#hdmedetai{
+    position:relative;
+    z-index: 9001;
+
+
+}

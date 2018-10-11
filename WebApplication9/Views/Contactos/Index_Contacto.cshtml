@@ -140,10 +140,11 @@
                 color: #000;
                 text-decoration: underline;
             }
-   
+
+
 
 </style>
-@*Medetai is the id for the headerfreeze*@
+@*Medetai is the id for the headerfreeze que esta en el Layout*@
     <table class="table table-striped" id="medetai">
         <thead class="thead-light">
 
@@ -170,7 +171,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().curriculum)
                 </th>
-                <th class="noExl">@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
+                <th class="noExl" >@using (Html.BeginForm("/Index_Contacto", "Contactos", FormMethod.Get))
                 {
                     <div class="form-group form-inline">
                         @Html.TextBox("search", "", new { @class = "form-control", @style = "width:150px;" })
