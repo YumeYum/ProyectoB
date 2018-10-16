@@ -77,6 +77,12 @@ namespace WebApplication9.Models
         //Lista de convenio
         public List<string> convenioL = new List<string> { "Sí", "No" };
 
+        public string DireccionCompleta
+        {
+            get { 
+            return calle + " " + numero + " " + resto_direccion;
 
+            }
+        }
     }
 }

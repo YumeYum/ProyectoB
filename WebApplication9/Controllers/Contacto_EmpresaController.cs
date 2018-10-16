@@ -167,8 +167,8 @@ namespace WebApplication9.Controllers
             }
             return View(model);
         }
-
         [HttpPost]
+        [ValidateAjax]
         public ActionResult Crear_contacto_empresa(contacto_empresa contactoEmpresa)
         {
 
@@ -191,8 +191,10 @@ namespace WebApplication9.Controllers
                 dbModel.contacto_empresa.Add(contactoEmpresa);
 
                 dbModel.SaveChanges();
+
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+
             }
-            return Redirect(Request.UrlReferrer.ToString());
         }
         [HttpPost]
         public ActionResult Crear_contacto_empresaF(contacto_empresa contactoEmpresa)
@@ -230,7 +232,9 @@ namespace WebApplication9.Controllers
                 }
                 else
                 {
-
+                    contactoEmpresa = new contacto_empresa();
+                    contactoEmpresa.empresaListI = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
+                    contactoEmpresa.contactoListI = dbModel.contactos.OrderBy(x => x.nombres).ThenBy(x => x.apellidos).ToList();
                     return View("Crear_contacto_empresaF", contactoEmpresa);
                 }
 

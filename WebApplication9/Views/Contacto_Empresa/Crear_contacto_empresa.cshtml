@@ -18,7 +18,11 @@
         padding: 5px 10px;
     }
 </style>
-@using (Html.BeginForm())
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+
+@using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formCempresa" }))
 {
     @Html.AntiForgeryToken()
 
@@ -75,13 +79,69 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </div>
     </div>
 }
 <script type="text/javascript">
+    $('#formCempresa').on("submit", function (e) {
+        e.preventDefault();
+
+        var contactoEmpresa = {
+            id_empresa: $('#id_empresa').val(),
+            id_contacto: $('#id_contacto').val(),
+            fecha_inicio_rel: $('#fecha_inicio_rel').val(),
+            cargo: $('#cargo').val(),
+            telefono_fijo: $('#telefono_fijo').val(),
+            telefono_celular: $('#telefono_celular').val()
+        };
+
+        var $form = $("#formCempresa");
+        $.validator.unobtrusive.parse($form);
+
+        if ($form.valid()) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Contacto_Empresa/Crear_Contacto_Empresa",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialog2').dialog('isOpen') == true) {
+                        $('#my-dialog2').dialog('close');
+                        if ($('#my-dialogOps').dialog('isOpen') == true) {
+                            $('#my-dialogOps').load('/Oportunidades/Crear_OportunidadP/', function () {
+                                $(this).dialog('open');
+                                var empresaSelect = document.getElementById('ddlstate');
+                                var selectedEmpresa = Cookies.get('empresa');
+                                empresaSelect.value = selectedEmpresa;
+
+                                //Actualiza los contactos de la empresa en OportunidadP
+                                GetCEmpresa(selectedEmpresa);
+
+                            })
+                        }
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert("Complete todos los campos");
+                }
+            });
+        }
+
+
+    });
+
     $(document).ready(function () {
+
+
         $('.Datepicker').datepicker({
             dateFormat: "dd-mm-yy",
             showStatus: true,
@@ -93,6 +153,7 @@
             highlightWeek: true
         });
     });
+
     $(function () {
         $.widget("custom.combobox", {
             _create: function () {
@@ -236,6 +297,12 @@
 
     });
 
+    //Para que no aparezca el error de que debe ser una fecha
+    $(function () {
+        $.validator.methods.date = function (value, element) {
+            return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+        }
+    });
     $("#my-dialogCO").dialog('option', 'title', 'Crear Contacto-Empresa');
     $("#my-dialog2").dialog('option', 'title', 'Crear Contacto-Empresa');
 

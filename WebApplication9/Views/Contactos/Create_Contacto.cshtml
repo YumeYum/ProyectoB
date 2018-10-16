@@ -1,6 +1,7 @@
 ﻿@model WebApplication9.Models.contactos
 
 @{
+    ViewBag.Title = "Contacto";
     Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
 
 }
@@ -29,7 +30,7 @@
     }
     <div class="col">
 
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { onsubmit="return checkRut(rut)" } @*, new { enctype = "multipart/form-data" } *@))
         {
             @Html.AntiForgeryToken()
 
@@ -42,7 +43,7 @@
                     <div class="row col-md-6">
                         <div class="col">
                             @Html.LabelFor(model => model.rut, htmlAttributes: new { @class = "control-label col-md-2" })
-                            @Html.EditorFor(model => model.rut, new { htmlAttributes = new { @class = "form-control", required = "required", onchange = "checkRut(this)" } })
+                            @Html.EditorFor(model => model.rut, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.rut, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -165,7 +166,8 @@
 
     // Si todo sale bien, eliminar errores (decretar que es válido)
     rut.setCustomValidity('');
-}
+              }
+
 
           </script>
        

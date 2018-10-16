@@ -28,10 +28,11 @@ namespace WebApplication9.Models
         public int id { get; set; }
 
         [Display(Name = "ID Contacto Empresa")]
-        [Required(ErrorMessage = "Debe seleccionar Contacto de Empresa")]
+        [Required(ErrorMessage = "Seleccione Empresa")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccione Contacto")]
         public int id_contacto_empresa { get; set; }
         [Display(Name = "ID Usuario")]
-        [Required(ErrorMessage = "Debe seleccionar Contacto Asignado")]
+        [Required(ErrorMessage = "Seleccione Usuario")]
         public int id_contacto_asignado { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

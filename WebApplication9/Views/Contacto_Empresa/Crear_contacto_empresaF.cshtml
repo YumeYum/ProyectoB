@@ -29,6 +29,7 @@
 </style>
 <script src="~/Content/Scripts/jquery.validate.js"></script>
 <script src="~/Content/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
 @if (ViewBag.TheResult == true)
 {
     <div class="alert alert-success">
@@ -48,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.id_empresa, "Empresa", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
-                @Html.DropDownListFor(model => model.id_empresa, new SelectList(Model.empresaListI, "id", "razon_social"), "Seleccione Empresa", new { required = "required", style="width:300px;" })
+                @Html.DropDownListFor(model => model.id_empresa, new SelectList(Model.empresaListI, "id", "razon_social"), "Seleccione Empresa", new { required = "required", style="width:300px;" })<br />
                 @Html.ValidationMessageFor(model => model.id_empresa, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -56,7 +57,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.id_contacto, "Contacto", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
-                @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.contactoListI, "id", "FullName"), "Seleccione Usuario", new { required = "required", style = "width:300px;" })
+                @Html.DropDownListFor(model => model.id_contacto, new SelectList(Model.contactoListI, "id", "FullName"), "Seleccione Usuario", new { required = "required", style = "width:300px;" })<br />
                 @Html.ValidationMessageFor(model => model.id_contacto, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -107,6 +108,7 @@
             highlightWeek: true
         });
         });
+
         $(function () {
             $.widget("custom.combobox", {
                 _create: function () {
@@ -258,6 +260,8 @@
             });
 
         });
+
+
     </script>
 }
 <div class="col">

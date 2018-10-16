@@ -3,22 +3,23 @@
 
 <script src="~/Content/Scripts/jquery.validate.min.js"></script>
 <script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+
 @using (Ajax.BeginForm(null,null, new AjaxOptions {  HttpMethod = "POST" },new { id = "formEmpresa"}))
 {
     @Html.AntiForgeryToken()
 
 
-
-
-    <style>
-        .ui-dialog-title {
-            font-size: 120%;
-        }
-
-        .control-label {
-            font-weight: bold;
-        }
-    </style>
     <div class="form-horizontal" >
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -95,8 +96,8 @@
                 <b>@Html.Label("Convenio")</b>
                 <div class="form-group">
                     <select class="form-control" id="sel1" name="convenio">
+                        <option selected="selected">No</option>
                         <option>Sí</option>
-                        <option>No</option>
 
                     </select>
                 </div> 
@@ -155,6 +156,19 @@
 
                     if ($('#my-dialog2').dialog('isOpen')==true) {
                         $('#my-dialog2').dialog('close');
+                        if ($('#my-dialogOps').dialog('isOpen') == true) {
+                            $('#my-dialogOps').load('/Oportunidades/Crear_OportunidadP/', function () {
+                                $(this).dialog('open');
+
+                                //Recuerda el DDL
+                                var empresaSelect = document.getElementById('ddlstate');
+                                var selectedEmpresa = Cookies.get('empresa');
+                                empresaSelect.value = selectedEmpresa;
+
+                                //Actualiza los contactos de la empresa en OportunidadP
+                                GetCEmpresa(selectedEmpresa);
+                            })
+                        }
                     }
                     else {
                         location.reload();

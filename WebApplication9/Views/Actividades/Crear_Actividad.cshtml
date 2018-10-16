@@ -136,6 +136,7 @@
 
     });
 
+    //Para que no aparezca el error de que debe ser una fecha
     $(function () {
         $.validator.methods.date = function (value, element) {
             return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();

@@ -26,10 +26,10 @@ namespace WebApplication9.Models
 
         public int id { get; set; }
         [Display(Name = "Empresa")]
-        [Required(ErrorMessage = "Debe seleccionar Empresa")]
+        [Required(ErrorMessage = "Seleccione Empresa")]
         public int id_empresa { get; set; }
         [Display(Name = "Contacto")]
-        [Required(ErrorMessage = "Debe seleccionar Contacto")]
+        [Required(ErrorMessage = "Seleccione Contacto")]
         public int id_contacto { get; set; }
         [Display(Name = "Fecha de Inicio")]
         [Required(ErrorMessage = "Debe seleccionar Fecha")]
@@ -41,11 +41,11 @@ namespace WebApplication9.Models
         [Display(Name = "Cargo")]
         public string cargo { get; set; }
         [Display(Name = "Teléfono Fijo")]
-        [Required(ErrorMessage = "Debe seleccionar Teléfono Fijo")]
+        [Required(ErrorMessage = "Seleccione Teléfono Fijo")]
         [DataType(DataType.Text)]
         public int telefono_fijo { get; set; }
         [Display(Name = "Teléfono Celular")]
-        [Required(ErrorMessage = "Debe seleccionar Teléfono Celular")]
+        [Required(ErrorMessage = "Seleccione Teléfono Celular")]
         [DataType(DataType.Text)]
         public int telefono_celular { get; set; }
 

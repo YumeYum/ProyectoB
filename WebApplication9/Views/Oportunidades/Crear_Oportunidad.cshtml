@@ -40,6 +40,8 @@
 </head>
 
 <body>
+    <script src="~/Content/Scripts/jquery.validate.js"></script>
+    <script src="~/Content/Scripts/jquery.validate.unobtrusive.js"></script>
     <div id="my-dialogCO"></div>
 
     @if (ViewBag.TheResult == true)
@@ -57,16 +59,23 @@
                 <h4>Crear Oportunidad</h4>
                 @*<input id="clickMe" type="button" value="Agregar Contacto (Falta terminar)" onclick="Agregar_Contacto();" />*@
                     <input type="hidden" id="id_empresa" name="id_empresa">
-                    @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary btn-sm" })
-                    @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary btn-sm" })
-                    @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary btn-sm" })
+                <div class="dropdown">
+                    <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                        Crear Otros
+                    </button>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                        @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                        @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                    </div>
+                </div>
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-row">
                         <div class="form-group">
                             <div class="col">
                                 <b>@Html.Label("Empresa")</b><br />
-                                @Html.DropDownList("Empresas", new SelectList(Model.EmpresaModel, "id", "razon_social"), "Seleccione Contacto de Empresa", new { @id = "ddlstate", style = "width:250px;", @onchange = "javascript:GetCEmpresa(this.value);", required = "required" })
+                                @Html.DropDownList("Empresas", new SelectList(Model.EmpresaModel, "id", "razon_social"), "Seleccione Contacto de Empresa", new { @id = "ddlstate", style = "width:250px;", @onchange = "javascript:GetCEmpresa(this.value);"})
                             </div>
                         </div>
 
@@ -74,7 +83,7 @@
                             @Html.Label("Contacto Empresa", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
                             <div class="col-md-10">
                                 @*Html.DropDownListFor(model => model.id_contacto_empresa, new SelectList(Model.contacto_empresaList, "id", "FullName"), "Seleccione Contacto de Empresa", new { @id = "ddlCEmpresa", @class = "ddlCEmpresa", required = "required" })*@
-                                <select id="ddlCEmpresa" name="id_contacto_empresa" required></select>
+                                <select id="ddlCEmpresa" name="id_contacto_empresa"  required></select><br />
                                 @Html.ValidationMessageFor(model => model.id_contacto_empresa, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -83,7 +92,7 @@
                         <div class="form-group">
                             @Html.Label("Usuario Asignado", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
                             <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.id_contacto_asignado, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:250px;" })
+                                @Html.DropDownListFor(model => model.id_contacto_asignado, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:250px;" })<br />
                                 @Html.ValidationMessageFor(model => model.id_contacto_asignado, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -91,9 +100,11 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.tema, htmlAttributes: new { @class = "control-label col-sm-6" })
                             <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.tema, new SelectList(Model.Temas, "Value", "Text"), "Seleccione Tema", new { @class = "form-control", required = "required", style = "width:218px;" })
+                                @Html.DropDownListFor(model => model.tema, new SelectList(Model.Temas, "Value", "Text"), "Seleccione Tema", new { @class = "form-control", required = "required", style = "width:218px;", onchange = "if (this.value=='otro'){this.form['other'].style.visibility='visible'}else {this.form['other'].style.visibility='hidden'};" })
                                 @Html.ValidationMessageFor(model => model.tema, "", new { @class = "text-danger" })
+                                <input type="text" name="other" class="form-control" placeholder="Ingrese Tema" style="visibility:hidden;" />
                             </div>
+
                         </div>
 
                     </div>
@@ -101,8 +112,8 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
                             <div class="col-md-10">
-                                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
                                 @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker form-control", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:200px;" })
+                                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group">
@@ -337,7 +348,12 @@
                 });
 
             });
-
+            //Para que no aparezca el error de que debe ser una fecha
+            $(function () {
+                $.validator.methods.date = function (value, element) {
+                    return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+                }
+            });
            @* function Agregar_Contacto(){
                 $('#my-dialogCO').dialog({
                     autoOpen: false,
@@ -385,6 +401,7 @@
             return false;
         });
     });
+
                         *@
         <div>
             @Html.ActionLink("Volver al Índice", "Index_Oportunidades")

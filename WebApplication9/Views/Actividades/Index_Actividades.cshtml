@@ -32,7 +32,7 @@
                 @Html.ActionLink("Crear Actividad", "Crear_Actividad", null, new { @class = "modolo btn-primary btn-sm" })
                 @Html.TextBox("search",null, new { @class="form-control"}) <input type="submit" value="Buscar" class="btn btn-secondary" />
                 @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @class = "form-control", @onchange = "this.form.submit()" })
-                @Html.ActionLink("Mostrar todos", "Index_Actividades")
+                @Html.ActionLink("Mostrar todas", "Index_Actividades")
 
         </div>
 

@@ -143,6 +143,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Scripts\jquery.freezeheader.js" />
     <Content Include="Content\Scripts\jquery.table2excel.js" />
+    <Content Include="Content\Scripts\js.cookie.js" />
     <Content Include="Content\Scripts\moment.js" />
     <Content Include="Content\Scripts\umd\popper.min.js" />
     <Content Include="Content\scss\_custom.css">
@@ -222,6 +223,7 @@
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Controllers\Usuario_RolController.cs" />
+    <Compile Include="Controllers\ValidateAjaxAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

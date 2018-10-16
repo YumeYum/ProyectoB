@@ -135,10 +135,10 @@ namespace WebApplication9.Controllers
                         listaEmpresas = listaEmpresas.OrderBy(x => x.rubro).ToList();
                         break;
                     case "calle_desc":
-                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.calle).ToList();
+                        listaEmpresas = listaEmpresas.OrderByDescending(x => x.calle).ThenBy(x => x.numero).ThenBy(x => x.resto_direccion).ToList();
                         break;
                     case "calle":
-                        listaEmpresas = listaEmpresas.OrderBy(x => x.calle).ToList();
+                        listaEmpresas = listaEmpresas.OrderBy(x => x.calle).ThenBy(x=>x.numero).ThenBy(x=>x.resto_direccion).ToList();
                         break;
                     case "numero":
                         listaEmpresas = listaEmpresas.OrderBy(x => x.numero).ToList();

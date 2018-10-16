@@ -206,7 +206,7 @@ namespace WebApplication9.Controllers
             {
                 model.EmpresaModel = new List<empresa>();
                 model.EmpresaModel = db.empresa.OrderBy(x=>x.razon_social).ToList();
-                model.usuarioList = db.usuario.Include(x=>x.contactos).ToList();
+                model.usuarioList = db.usuario.Where(x=>x.estado =="activo").Include(x=>x.contactos).ToList();
                 model.contacto_empresaList = db.contacto_empresa.Include(x=>x.contactos).Include(x=>x.empresa).ToList();
                 //model.fecha_creacion = DateTime.Now;
                 return View(model);
@@ -224,7 +224,7 @@ namespace WebApplication9.Controllers
 
                 // model.usuarioList = db.usuario.Where(x => db.contacto_empresa.Select(b => b.id_contacto.ToString()).Contains(x.id.ToString())).ToList();
                 model.contacto_empresaList = db.contacto_empresa.Include(x => x.contactos).Include(x => x.empresa).ToList();
-                model.usuarioList = db.usuario.Include(x => x.contactos).OrderBy(x=>x.contactos.nombres).ToList();
+                model.usuarioList = db.usuario.Where(x => x.estado == "activo").Include(x => x.contactos).OrderBy(x=>x.contactos.nombres).ToList();
 
                 return PartialView(model);
             }
@@ -302,15 +302,21 @@ namespace WebApplication9.Controllers
 
 
         [HttpPost]
-        public ActionResult Crear_Oportunidad(oportunidades oModel)
+        public ActionResult Crear_Oportunidad(oportunidades oModel, string other)
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
 
-
                 if (ModelState.IsValid)
                 {
                     oModel.estado = "activa";
+
+                    //definiendo si se elige Otro en temas
+                    if (oModel.tema == "otro" && other != null && other != string.Empty)
+                    {
+                        oModel.tema = other;
+
+                    }
                     dbModel.oportunidades.Add(oModel);
                     dbModel.SaveChanges();
                     ModelState.Clear();
@@ -319,12 +325,17 @@ namespace WebApplication9.Controllers
                     oModel.EmpresaModel = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
                     oModel.usuarioList = dbModel.usuario.Include(x => x.contactos).OrderBy(x => x.contactos.nombres).ToList();
                     oModel.contacto_empresaList = dbModel.contacto_empresa.Include(x => x.contactos).Include(x => x.empresa).ToList();
+
                     ViewBag.TheResult = true;
 
                     return View("Crear_Oportunidad", oModel);
                 }
                 else
                 {
+                    oModel = new oportunidades();
+                    oModel.EmpresaModel = dbModel.empresa.OrderBy(x => x.razon_social).ToList();
+                    oModel.usuarioList = dbModel.usuario.Include(x => x.contactos).OrderBy(x => x.contactos.nombres).ToList();
+                    oModel.contacto_empresaList = dbModel.contacto_empresa.Include(x => x.contactos).Include(x => x.empresa).ToList();
                     return View("Crear_Oportunidad", oModel);
 
                 }
@@ -345,23 +356,33 @@ namespace WebApplication9.Controllers
         }
 
         [HttpPost]
-        public ActionResult Crear_OportunidadP(oportunidades oModel, int? id_empresa)
+        [ValidateAjax]
+        public ActionResult Crear_OportunidadP(oportunidades oModel, int? id_empresa, string other)
         {
             using (proyectob_dbEntities dbModel = new proyectob_dbEntities())
             {
                 if (ModelState.IsValid)
                 {
+                    if (oModel.tema == "otro" && other != null && other != string.Empty)
+                    {
+                        oModel.tema = other;
+
+                    }
                     oModel.estado = "Activa";
                     dbModel.oportunidades.Add(oModel);
                     dbModel.SaveChanges();
-                    return Redirect(Request.UrlReferrer.ToString());
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 
+                }
+                else
+                {
+                    oModel.contacto_empresaList = dbModel.contacto_empresa.ToList();
+                    oModel.usuarioList = dbModel.usuario.ToList();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
 
                 //oModel.usuarioList = dbModel.usuario.Where(x => dbModel.usuario.Select(b => b.id_contacto.ToString()).Contains(x.id)).ToList();
-                oModel.contacto_empresaList = dbModel.contacto_empresa.ToList();
-                oModel.usuarioList = dbModel.usuario.ToList();
-                return PartialView("Crear_OportunidadP", oModel);
+
 
             }
 

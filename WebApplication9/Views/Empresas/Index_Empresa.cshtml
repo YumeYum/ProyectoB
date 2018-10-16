@@ -30,14 +30,14 @@
 
 @using (Html.BeginForm("/Index_Empresa", "Empresas", FormMethod.Get))
 {
-    <div class="form-group row float-right form-inline">
+    <div class="form-group  float-right form-inline">
         <div class="col-md-12">
             @Html.ActionLink("Crear", "Crear_Empresa", null, new { @class = "form-control modolo btn btn-primary btn-md m-1" })
             @Html.TextBox("search",null, new { @class="form-control" }) <input type="submit" value="Buscar" class="btn btn-secondary " />
             @Html.DropDownList("nn", new SelectList(ViewBag.NumeroR, "Value", "Text"), new { @class = "form-control",@onchange = "this.form.submit()" })
             @Html.DropDownList("convenio", new SelectList(ViewBag.Convenio, "Value", "Text"), new {@class="form-control", @onchange = "this.form.submit()" })
             <input type="number" class="form-control" id="on" placeholder="Número de Oportunidades" name="opsn" min="0">
-            @Html.ActionLink("Mostrar todos", "Index_Empresa")
+            @Html.ActionLink("Mostrar todas", "Index_Empresa")
         </div>
 
 
@@ -49,22 +49,13 @@
     <thead class="thead-light">
         <tr>
             <th>
-                @Html.ActionLink("Rut", "index_empresa", new { sortBy = ViewBag.SortRut, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
-            </th>
-            <th>
-                @Html.ActionLink("Razón Social", "index_empresa", new { sortBy = ViewBag.SortRSocial, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
+                @Html.ActionLink("Nombre", "index_empresa", new { sortBy = ViewBag.SortRSocial, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
                 @Html.ActionLink("Rubro", "index_empresa", new { sortBy = ViewBag.SortRubro, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
-                @Html.ActionLink("Calle", "index_empresa", new { sortBy = ViewBag.SortCalle, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
-            </th>
-            <th>
-                @Html.ActionLink("Número", "index_empresa", new { sortBy = ViewBag.SortNumero, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
-            </th>
-            <th>
-                @Html.ActionLink("Resto Dirección", "index_empresa", new { sortBy = ViewBag.SortRDireccion, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
+                @Html.ActionLink("Direción", "index_empresa", new { sortBy = ViewBag.SortCalle, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
             </th>
             <th>
                 @Html.ActionLink("Comuna", "index_empresa", new { sortBy = ViewBag.SortComuna, search = Request.QueryString["search"], nn = Request.QueryString["nn"], convenio = Request.QueryString["convenio"], opsn = Request.QueryString["opsn"] })
@@ -96,9 +87,6 @@
     @foreach (var item in Model)
             {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.rut)
-            </td>
             <td class="descr">
                 @Html.DisplayFor(modelItem => item.razon_social)
             </td>
@@ -106,13 +94,7 @@
                 @Html.DisplayFor(modelItem => item.rubro)
             </td>
             <td class="descr">
-                @Html.DisplayFor(modelItem => item.calle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.numero)
-            </td>
-            <td class="descr">
-                @Html.DisplayFor(modelItem => item.resto_direccion)
+                @Html.DisplayFor(modelItem => item.DireccionCompleta)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.comuna)
