@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/css")
+
+
+    <title>@ViewBag.Title - Proyecto B</title>
+
+   
+</head>
+<body>
+    <div id="my-dialogC"></div>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="/ProyectoB/Home">Proyecto B</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/ProyectoB/Home">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Usuarios
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Usuarios/Create_Usuario">Crear Usuario</a>
+                    <a class="dropdown-item" href="/Usuarios/Index_usuarios">Lista de Usuarios</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Contactos
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Contactos/Create_Contacto">Crear Contacto</a>
+                    <a class="dropdown-item" href="/Contactos/Index_Contacto">Lista de Contactos</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Roles
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Roles/Create_Roles">Crear Rol</a>
+                    <a class="dropdown-item" href="/Roles/Index_Roles">Lista de Roles</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Usuarios Roles
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Usuario_Rol/Create_Usuario_rol">Crear Usuario Rol</a>
+                    <a class="dropdown-item" href="/Usuario_Rol/Index_URoles">Listar Usuarios Roles</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Empresa
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Empresas/Crear_EmpresaF">Crear  Empresa</a>
+                    <a class="dropdown-item" href="/Empresas/Index_Empresa   ">Lista de Empresas</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Contacto Empresa
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Contacto_Empresa/Crear_contacto_empresaf">Crear Contacto Empresa</a>
+                    <a class="dropdown-item" href="/Contacto_Empresa/Index_empresa_contacto">Listar Contacto Empresa</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Oportunidades
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Oportunidades/Crear_Oportunidad">Crear Oportunidad</a>
+                    <a class="dropdown-item" href="/Oportunidades/Index_Oportunidades">Listar de Oportunidades</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Actividades
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Actividades/Crear_ActividadF">Crear Actividad</a>
+                    <a class="dropdown-item" href="/Actividades/Index_Actividades">Lista de Actividades</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Crear
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item modoloC" href="/Actividades/Crear_Actividad">Crear Actividad</a>
+                    <a class="dropdown-item modoloC" href="/Usuarios/CreateP_Usuario">Crear Usuario</a>
+                    <a class="dropdown-item modoloC" href="/Contactos/CreateP_Contacto">Crear Contacto</a>
+                    <a class="dropdown-item modoloC" href="/Roles/Create_RolesP">Crear Roles</a>
+                    <a class="dropdown-item modoloC" href="/Usuario_Rol/Create_Usuario_RolP">Crear Usuario Rol</a>
+                    <a class="dropdown-item modoloC" href="/Empresas/Crear_Empresa">Crear Empresa</a>
+                    <a class="dropdown-item modoloC" href="/Contacto_Empresa/Crear_contacto_empresa">Crear Contacto Empresa</a>
+                    <a class="dropdown-item modoloC" href="/Oportunidades/Crear_OportunidadP">Crear Oportunidades</a>
+
+
+
+
+
+
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ProyectoB/LogOut">Desconectarse</a>
+            </li>
+        </ul>
+    </nav> 
+        @RenderBody()
+
+        <hr />
+        <div class="footer">
+            &copy; 2018 Proyecto B.
+        </div>
+
+
+
+    @RenderSection("scripts", required: false)
+    <script>
+        $(".dropdown-menu a").click(function () {
+            $(this).closest(".dropdown-menu").prev().dropdown("toggle");
+        });
+
+        $(document).ready(function () {
+            $("#medetai").freezeHeader({
+                
+            });
+        })
+        $('#my-dialogC').dialog({
+            autoOpen: false,
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            open: function () {
+                jQuery('.ui-widget-overlay').bind('click', function () {
+                    jQuery('#my-dialogC').dialog('close');
+                })
+            }
+        });
+
+        $('.modoloC').click(function () {
+            $('#my-dialogC').load(this.href, function () {
+                $(this).dialog('open');
+            });
+            return false;
+        });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿select,
+select option {
+    color: #000000;
+}
+
+    select:invalid,
+    select option[value=""] {
+        color: #999999;
+    }
+
+/*Added for browser compatibility*/
+[hidden] {
+    display: none;
+}
+
+#hdmedetai{
+    position:relative;
+    z-index: 9001;
+
+
+}

@@ -1,0 +1,130 @@
+﻿@model WebApplication9.Models.oportunidades
+
+<h3>¿Está seguro de eliminar este registro?</h3>
+<div>
+    <hr />
+    @Html.HiddenFor(model => model.id, new { @id = "idOp" })
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_creacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_creacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_vencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_vencimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cupos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cupos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tema)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tema)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contacto_empresa.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contacto_empresa.id_contacto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario.id_contacto)
+        </dd>
+
+    </dl>
+    @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+
+
+    @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEliminarOp" })) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+            @Html.ActionLink("Volver al índice", "Index_Oportunidades")
+        </div>
+    }
+
+</div>
+<script>
+
+    $('#formEliminarOp').on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/Oportunidades/Delete_Oportunidad/",
+            data: { id: $('#idOp').val() },
+            success: function (result) {
+
+                if (result.success) {
+                    alert('Registro Eliminado con éxito');
+
+                    if ($('#my-dialogEmpresa').dialog('isOpen') == true) {
+                        var id_empresa = '@ViewBag.id_empresa';
+                            $('#my-dialogEmpresa').load('/Empresas/Details_Empresa/' + id_empresa, function () {
+                                $(this).dialog('open');
+                            });
+                    }
+
+
+                    else if ($('#my-dialogUsers').dialog('isOpen') == true) {
+                        var id_usuario = '@ViewBag.id_usuario';
+                        $('#my-dialogUsers').load('/Usuarios/Details2_Usuario/' + id_usuario, function () {
+                            $(this).dialog('open');
+                        });
+
+                            }
+
+                        if ($('#my-dialog2').dialog('isOpen') == true) {
+                            $('#my-dialog2').dialog('close');
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        alert('No se pudo eliminar el registro');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+        });
+
+        });
+    $("#my-dialog2").dialog('option', 'title', 'Eliminar Oportunidad');
+    $("#my-dialogOps").dialog('option', 'title', 'Eliminar Oportunidad');
+
+</script>

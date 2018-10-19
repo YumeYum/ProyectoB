@@ -1,0 +1,104 @@
+﻿@model WebApplication9.Models.contactos
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <style>
+        #login-div{
+            position:absolute;
+            left: 40%;
+            top:40%;
+            border: 1px solid #ccc;
+            padding: 10px 10px;
+        }
+        .field-validation-error{
+
+            color:red;
+
+        }
+
+    </style>
+</head>
+<body>
+  <div id="login-div">
+     @using (Html.BeginForm("Authorize", "ProyectoB",FormMethod.Post))
+     {
+
+         <table>
+             <tr>
+                 <td></td>
+                 <td style="text-decoration:underline">Proyecto B</td>
+
+             </tr>
+             <tr>
+                 <td>
+                     @Html.LabelFor(model => model.rut)
+                 </td>
+                 <td>
+                     @Html.EditorFor(model => model.rut)
+                 </td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td>@Html.ValidationMessageFor(model => model.rut) </td>
+             </tr>
+
+
+
+
+
+             <tr>
+                 <td>
+                     @Html.LabelFor(model => model.password)
+                 </td>
+                 <td>
+                     @Html.EditorFor(model => model.password)
+                 </td>
+             </tr>
+             <tr>
+             <tr>
+                 <td></td>
+                 <td>@Html.ValidationMessageFor(model => model.password) </td>
+             </tr>
+
+             <tr>
+                 <td colspan="2">
+                     <label class="field-validation-error">@Html.DisplayFor(model => model.LoginError)</label>
+                 </td>
+
+             </tr>
+
+
+
+
+             <tr>
+
+                 <td></td>
+                 <td>
+                     <input type="submit" name="name" value="Login" />
+                     <input type="reset" name="name" value="Clear" />
+                 </td>
+             </tr>
+
+         </table>
+
+
+     }
+
+
+  </div>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

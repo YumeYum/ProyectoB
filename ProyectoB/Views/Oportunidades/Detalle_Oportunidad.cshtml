@@ -1,0 +1,171 @@
+﻿@model IEnumerable<WebApplication9.Models.actividad>
+<div class="partial">
+
+    <div id="my-dialog2"></div>
+
+    <p>
+        @Html.ActionLink("Tarea", "Crear_Actividad", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Llamada", "Crear_Llamada", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Mail", "Crear_Mail", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.ActionLink("Reunión", "Crear_Reunion", "Actividades", new { id_op = @ViewBag.idOp }, new { @class = "modolo2 btn btn-primary btn-large" })
+        @Html.DropDownList("listaL", new SelectList(ViewBag.ListaL, "Value", "Text"), "Seleccione Estado", new { @id = "ddlEstado", @style = "width:200px;", @onchange = "javascript:GetEstados(this.value);" })
+
+        @Html.Hidden("id_oportunidad",(string)@ViewBag.idOp, new {@id= "id_oportunidad"})
+        <h1>Actividades de Oportunidad @ViewBag.idOp</h1>
+
+    </p>
+    <style>
+        .descr {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+            .descr:hover {
+                text-overflow: clip;
+                white-space: normal;
+                word-break: normal;
+            }
+        .ui-dialog-title {
+            font-size: 120%;
+        }
+
+        .control-label {
+            font-weight: bold;
+        }
+    </style>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("ID de Oportunidad")
+            </th>
+            <th>
+                @Html.DisplayName("Contacto Asignado")
+            </th>
+            <th>
+                @Html.DisplayName("Fecha de Inicio")
+            </th>
+            <th>
+                @Html.DisplayName("Fecha de Vencimiento")
+            </th>
+
+            <th>
+                @Html.DisplayName("Título")
+            </th>
+            <th>
+                @Html.DisplayName("Descripción")
+            </th>
+            <th>
+                @Html.DisplayName("Creada Por")
+            </th>
+
+            <th>
+                @Html.DisplayName("Tipo de Actividad")
+            </th>
+
+            <th>
+                @Html.DisplayName("Estado")
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.oportunidades.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.usuario.contactos.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_inicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_vencimiento)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.titulo)
+                </td>
+                <td class="descr">
+                    @Html.DisplayFor(modelItem => item.descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creada_por)
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.tipo_actividad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.estado)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { id=item.id }, new { @class = "modolo2 btn btn-primary btn-large" }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.id }, new { @class = "modolo2 btn btn-primary btn-large" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.id }, new { @class = "modolo2 btn btn-primary btn-large" })*@
+                    @Html.ActionLink("Finalizar", "Finalizar_Actividad", "Actividades", new { id = item.id }, new { @class = "modolo2 btn btn-primary btn-large" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div id="results"></div>
+
+<script type="text/javascript">
+
+
+    $(function () {
+        $('#my-dialog2').dialog({
+            autoOpen: false,
+            width: 'auto',
+            height: 'auto',
+            resizable: false,
+            modal: true,
+            open: function () {
+                jQuery('.ui-widget-overlay').bind('click', function () {
+                    jQuery('#my-dialog2').dialog('close');
+                })
+            }
+
+        });
+
+        $('.modolo2').click(function () {
+            $('#my-dialog2').load(this.href, function () {
+                $(this).dialog('open');
+            });
+            return false;
+        });
+    });
+    //function GetEstados(_id) {
+      //  var url = "/Actividades/GetActsbyEstado/";
+        //var url = "Url.Action(GetContactobyEmpresa)";
+
+
+
+    function GetEstados(_id) {
+        var url = "/Oportunidades/Detalle_Oportunidad/";
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Oportunidades/Detalle_Oportunidad/",
+            data: JSON.stringify({ id_ops: $("#id_oportunidad").val(), estado:_id }),
+            dataType: "html",
+            success: function (data) {
+                var newHTML = data;
+                //$("#ddlEstado").val(estado);
+                $("#my-dialogOps").html(newHTML);            },
+            error: function (reponse) {
+                alert("error : " + reponse.responseText);
+            }
+
+        });
+
+    }
+
+    $("#my-dialog2").dialog('option', 'title', 'Detalle Oportunidad');
+    $("#my-dialogOps").dialog('option', 'title', 'Detalle Oportunidad');
+    $("#my-dialog").dialog('option', 'title', 'Detalle Oportunidad');
+
+</script>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3ecaee339ae64c1c9ec326c8cade7848" Name="Diagram1">
+        <EntityTypeShape EntityType="proyectob_dbModel.actividad" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.contacto_empresa" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.contactos" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.empresa" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.oportunidades" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.roles" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.usuario" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectob_dbModel.usuario_rol" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="proyectob_dbModel.actividad_ibfk_4" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.actividad_ibfk_5" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.contacto_empresa_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.contacto_empresa_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.oportunidades_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.usuario_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.oportunidades_ibfk_4" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.usuario_rol_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectob_dbModel.usuario_rol_ibfk_2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

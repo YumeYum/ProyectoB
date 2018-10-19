@@ -1,0 +1,139 @@
+﻿@model WebApplication9.Models.contactos
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+     .control-label {
+        font-weight: bold;
+    }
+    </style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <h3>¿Está seguro que quiere eliminar este registro?</h3>
+    <div>
+        <hr />
+        @Html.HiddenFor(model => model.id,new {@id = "idContacto" })
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.rut)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.rut)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.nombres)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.nombres)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.apellidos)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.apellidos)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.tcel)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.tcel)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.comentario)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.comentario)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.curriculum)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.curriculum)
+            </dd>
+
+
+        </dl>
+        @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+        @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEliminarC" })) {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+                @Html.ActionLink("Ir al índice", "/Index_Contacto")
+            </div>
+        }
+    </div>
+    <script>
+         $('#formEliminarC').on("submit", function (e) {
+        e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/Contactos/Delete_Contacto/",
+                data: { id: $('#idContacto').val() },
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('Registro Eliminado con éxito');
+
+                    if ($('#my-dialogEmpresa').dialog('isOpen') == true) {
+                        var id_empresa = '@ViewBag.id_empresa';
+                            $('#my-dialogEmpresa').load('/Empresas/Details_Empresa/' + id_empresa, function () {
+                                $(this).dialog('open');
+                            });
+                        }
+
+                        if ($('#my-dialog2').dialog('isOpen') == true) {
+                            $('#my-dialog2').dialog('close');
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        alert('Registro no se pudo eliminar');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+        });
+
+        });
+
+
+        $("#my-dialog2").dialog('option', 'title', 'Eliminar Contacto');
+        $("#my-dialogContactos").dialog('option', 'title', 'Eliminar Contacto');
+
+    </script>
+</body>
+</html>

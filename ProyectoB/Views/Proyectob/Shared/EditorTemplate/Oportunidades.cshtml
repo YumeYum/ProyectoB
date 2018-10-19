@@ -1,0 +1,12 @@
+﻿@model WebApplication9.Models.oportunidades
+
+@{
+    ViewBag.Title = "Oportunidades";
+}
+
+@Html.HiddenFor(x => x.id)
+@Html.HiddenFor(x => x.tema)
+
+@Html.CheckBoxFor(x => x.isSelected)
+
+@Html.DisplayFor(x => x.tema)

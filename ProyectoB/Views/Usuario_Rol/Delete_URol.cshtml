@@ -1,0 +1,103 @@
+﻿@model WebApplication9.Models.usuario_rol
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+<h3>¿Está seguro que quiere eliminar este registro?</h3>
+<div>
+    @Html.HiddenFor(model => model.id, new { @id = "idUrol" })
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_inicio_rel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_inicio_rel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_termino_rel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_termino_rel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.roles.rol)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.roles.rol)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuario.id_contacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuario.FullName)
+        </dd>
+
+    </dl>
+    @Html.ValidationMessage("error", "", new { @class = "text-danger" })
+
+
+    @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST" }, new { id = "formEliminarUrol" })) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-primary" /> |
+            @Html.ActionLink("Ir al índice", "Index_URoles")
+        </div>
+
+    }
+</div>
+<script>
+    $('#formEliminarUrol').on("submit", function (e) {
+        e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/Usuario_Rol/Delete_URol/",
+                data: { id: $('#idUrol').val() },
+                success: function (result) {
+
+                    if (result.success) {
+                        alert('Registro Eliminado con éxito');
+
+                    if ($('#my-dialogUsers').dialog('isOpen') == true) {
+                        var id_usuario = '@ViewBag.id_usuario';
+                        $('#my-dialogUsers').load('/Usuarios/Details2_Usuario/' + id_usuario, function () {
+                                $(this).dialog('open');
+                            });
+                        }
+
+                        if ($('#my-dialog2').dialog('isOpen') == true) {
+                            $('#my-dialog2').dialog('close');
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        alert('No se pudo eliminar el registro');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+        });
+
+        });
+
+    $("#my-dialog2").dialog('option', 'title', 'Eliminar Usuario-Rol');
+    $("#my-dialogUrols").dialog('option', 'title', 'Eliminar Usuario-Rol');
+
+</script>

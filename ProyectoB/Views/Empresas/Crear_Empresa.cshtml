@@ -1,0 +1,195 @@
+﻿@model WebApplication9.Models.empresa
+
+
+<script src="~/Content/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/Scripts/moment.js"></script>
+
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+
+@using (Ajax.BeginForm(null,null, new AjaxOptions {  HttpMethod = "POST" },new { id = "formEmpresa"}))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal" >
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.rut, htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col">
+                    @Html.EditorFor(model => model.rut, new { htmlAttributes = new { @id="rut", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.rut, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.razon_social, htmlAttributes: new { @class = "control-label col-sm-8" })
+
+
+                <div class="col">
+                    @Html.EditorFor(model => model.razon_social, new { htmlAttributes = new { @id = "rut", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.razon_social, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.rubro, htmlAttributes: new { @class = "control-label col-sm-6" })
+                <div class="col">
+                    @Html.EditorFor(model => model.rubro, new { htmlAttributes = new { @id = "rubro", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.rubro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.calle, htmlAttributes: new { @class = "control-label col-sm-6" })
+                <div class="col">
+                    @Html.EditorFor(model => model.calle, new { htmlAttributes = new { @id = "calle", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.calle, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.numero, htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col">
+                    @Html.EditorFor(model => model.numero, new { htmlAttributes = new { @id = "numero", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.numero, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.resto_direccion, htmlAttributes: new { @class = "control-label col-sm-12" })
+                <div class="col">
+                    @Html.EditorFor(model => model.resto_direccion, new { htmlAttributes = new { @id = "resto_direccion", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.resto_direccion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.comuna, htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col-sm">
+                    @Html.EditorFor(model => model.comuna, new { htmlAttributes = new { @id = "comuna", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.comuna, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.ctg_empleados, htmlAttributes: new { @class = "control-label col-sm-6" })
+                <div class="col">
+                    @Html.EditorFor(model => model.ctg_empleados, new { htmlAttributes = new { @id = "ctg_empleados", @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.ctg_empleados, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                <b>@Html.Label("Convenio")</b>
+                <div class="form-group">
+                    <select class="form-control" id="sel1" name="convenio">
+                        <option selected="selected">No</option>
+                        <option>Sí</option>
+
+                    </select>
+                </div> 
+                <div class="col">
+                    @Html.ValidationMessageFor(model => model.convenio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                @Html.LabelFor(model => model.zona, htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col">
+                    @Html.EditorFor(model => model.zona, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.zona, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Crear" class="btn btn-primary" id="botonPrueba" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+
+
+    // Evento que envía una petición Ajax al servidor
+    $('#formEmpresa').on("submit", function (e) {
+        e.preventDefault();
+        var empresaModel = {
+            rut: $('#rut').val().trim(),
+            razon_social: $('#razon_social').val(),
+            rubro: $('#rubro').val(),
+            calle: $('#calle').val(),
+            numero: $('#numero').val(),
+            resto_direccion: $('#resto_direccion').val(),
+            comuna: $('#comuna').val(),
+            ctg_empleados: $('#ctg_empleados').val()
+        };
+        var $form = $("#formEmpresa");
+        $.validator.unobtrusive.parse($form);
+
+        if ($form.valid()) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Empresas/Crear_Empresa",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: $form.serialize(),
+                success: function (response) {
+                    alert('Registro ingresado con éxito');
+
+                    if ($('#my-dialog2').dialog('isOpen')==true) {
+                        $('#my-dialog2').dialog('close');
+                        if ($('#my-dialogOps').dialog('isOpen') == true) {
+                            $('#my-dialogOps').load('/Oportunidades/Crear_OportunidadP/', function () {
+                                $(this).dialog('open');
+
+                                //Recuerda el DDL
+                                var empresaSelect = document.getElementById('ddlstate');
+                                var selectedEmpresa = Cookies.get('empresa');
+                                empresaSelect.value = selectedEmpresa;
+
+                                //Actualiza los contactos de la empresa en OportunidadP
+                                GetCEmpresa(selectedEmpresa);
+                            })
+                        }
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                }
+            });
+        }
+        
+
+        });
+    
+
+
+    $("#my-dialogEmpresa").dialog('option', 'title', 'Crear Empresa');
+    $("#my-dialog2").dialog('option', 'title', 'Crear Empresa');
+    $("#my-dialogCO").dialog('option', 'title', 'Crear Empresa');
+
+</script>
+<div>
+    @Html.ActionLink("Volver al índice", "Index_empresa")
+</div>

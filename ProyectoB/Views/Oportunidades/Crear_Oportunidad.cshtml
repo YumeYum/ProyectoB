@@ -1,0 +1,411 @@
+﻿@model WebApplication9.Models.oportunidades
+
+@{
+    ViewBag.Title = "Crear Oportunidad";
+    Layout = "~/Views/Proyectob/Shared/_Layout.cshtml";
+}
+<style>
+    .ui-dialog-title {
+        font-size: 120%;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+    .custom-combobox {
+        position: relative;
+        display: inline-block;
+    }
+
+    .custom-combobox-toggle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin-left: -1px;
+        padding: 0;
+    }
+
+    .custom-combobox-input {
+        margin: 0;
+        padding: 5px 10px;
+    }
+</style>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+
+<body>
+    <script src="~/Content/Scripts/jquery.validate.js"></script>
+    <script src="~/Content/Scripts/jquery.validate.unobtrusive.js"></script>
+    <div id="my-dialogCO"></div>
+
+    @if (ViewBag.TheResult == true)
+    {
+        <div class="alert alert-success">
+            <strong>Registro guardado con éxito.</strong>
+        </div>
+    }
+    <div class="col">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Crear Oportunidad</h4>
+                @*<input id="clickMe" type="button" value="Agregar Contacto (Falta terminar)" onclick="Agregar_Contacto();" />*@
+                    <input type="hidden" id="id_empresa" name="id_empresa">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-info dropdown-toggle btn-sm" id="dlDropDown" data-toggle="dropdown">
+                        Crear Otros
+                    </button>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("Crear Contacto", "CreateP_Contacto", "Contactos", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                        @Html.ActionLink("Crear empresa", "Crear_Empresa", "Empresas", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                        @Html.ActionLink("Crear Contacto Empresa", "Crear_Contacto_Empresa", "Contacto_Empresa", null, new { @class = "modolo3 btn-primary dropdown-item" })
+                    </div>
+                </div>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="col">
+                                <b>@Html.Label("Empresa")</b><br />
+                                @Html.DropDownList("Empresas", new SelectList(Model.EmpresaModel, "id", "razon_social"), "Seleccione Contacto de Empresa", new { @id = "ddlstate", style = "width:250px;", @onchange = "javascript:GetCEmpresa(this.value);"})
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Contacto Empresa", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
+                            <div class="col-md-10">
+                                @*Html.DropDownListFor(model => model.id_contacto_empresa, new SelectList(Model.contacto_empresaList, "id", "FullName"), "Seleccione Contacto de Empresa", new { @id = "ddlCEmpresa", @class = "ddlCEmpresa", required = "required" })*@
+                                <select id="ddlCEmpresa" name="id_contacto_empresa"  required></select><br />
+                                @Html.ValidationMessageFor(model => model.id_contacto_empresa, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            @Html.Label("Usuario Asignado", htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.id_contacto_asignado, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione Contacto", new { required = "required", style = "width:250px;" })<br />
+                                @Html.ValidationMessageFor(model => model.id_contacto_asignado, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.tema, htmlAttributes: new { @class = "control-label col-sm-6" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.tema, new SelectList(Model.Temas, "Value", "Text"), "Seleccione Tema", new { @class = "form-control", required = "required", style = "width:218px;", onchange = "if (this.value=='otro'){this.form['other'].style.visibility='visible'}else {this.form['other'].style.visibility='hidden'};" })
+                                @Html.ValidationMessageFor(model => model.tema, "", new { @class = "text-danger" })
+                                <input type="text" name="other" class="form-control" placeholder="Ingrese Tema" style="visibility:hidden;" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fecha_vencimiento, htmlAttributes: new { @class = "control-label col-sm-6 text-nowrap" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.fecha_vencimiento, new { @class = "Datepicker form-control", @Value = Model.fecha_vencimiento.ToString("dd-MM-yyyy"), required = "required", style = "width:200px;" })
+                                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.cupos, htmlAttributes: new { @class = "control-label col-sm-6" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.cupos, new { htmlAttributes = new { @class = "form-control", required = "required", min = "0", max = "100" } })
+                                @Html.ValidationMessageFor(model => model.cupos, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Crear" class="btn btn-primary" />
+                        </div>
+                    </div>
+</div>
+        }
+        @section scripts{
+        <script type="text/javascript">
+            $(function () {
+                $('#my-dialogCO').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    height: 'auto',
+                    resizable: false,
+                    modal: true,
+                    open: function () {
+                        jQuery('.ui-widget-overlay').bind('click', function () {
+                            jQuery('#my-dialogCO').dialog('close');
+                        })
+                    }
+                });
+
+                $('.modolo3').click(function () {
+                    $('#my-dialogCO').load(this.href, function () {
+                        $(this).dialog('open');
+                    });
+                    return false;
+                });
+            });
+
+            function GetCEmpresa(_id_empresa) {
+                var procemessage = "<option value='0' disabled> Please wait...</option>";
+                $("#ddlCEmpresa").html(procemessage).show();
+                var url = "/Oportunidades/GetContactobyEmpresa/";
+                //var url = "Url.Action(GetContactobyEmpresa)";
+
+
+                $.ajax({
+                    url: url,
+                    data: { id: _id_empresa },
+                    cache: false,
+                    type: "POST",
+                    success: function (data) {
+                        var markup = "<option value='0' disabled>Seleccione Contacto</option>";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
+                        }
+                        $("#ddlCEmpresa").html(markup).show();
+                        $("#ddlCEmpresa").hide();
+
+                    },
+                    error: function (reponse) {
+                        alert("error : " + reponse);
+                    }
+                });
+
+            }
+
+            $(document).ready(function () {
+                $('.Datepicker').datepicker({
+                    dateFormat: "dd-mm-yy",
+                    showStatus: true,
+                    showWeeks: true,
+                    currentText: 'Now',
+                    autoSize: true,
+                    gotoCurrent: true,
+                    showAnim: 'blind',
+                    highlightWeek: true
+                });
+            });
+            $(function () {
+                $.widget("custom.combobox", {
+                    _create: function () {
+                        this.wrapper = $("<span>")
+                            .addClass("custom-combobox")
+                            .insertAfter(this.element);
+
+                        this.element.hide();
+                        this._createAutocomplete();
+                        this._createShowAllButton();
+                    },
+
+                    _createAutocomplete: function () {
+                        var selected = this.element.children(":selected"),
+                            value = selected.val() ? selected.text() : "";
+
+                        this.input = $("<input>")
+                            .appendTo(this.wrapper)
+                            .val(value)
+                            .attr("title", "")
+                            .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+                            .autocomplete({
+                                delay: 0,
+                                minLength: 0,
+                                source: $.proxy(this, "_source")
+                            })
+                            .tooltip({
+                                classes: {
+                                    "ui-tooltip": "ui-state-highlight"
+                                }
+                            });
+
+                        this._on(this.input, {
+                            autocompleteselect: function (event, ui) {
+                                ui.item.option.selected = true;
+                                this._trigger("select", event, {
+                                    item: ui.item.option
+                                });
+                                this._trigger("change");
+                            },
+
+                            autocompletechange: "_removeIfInvalid"
+                        });
+                    },
+
+                    _createShowAllButton: function () {
+                        var input = this.input,
+                            wasOpen = false;
+
+                        $("<a>")
+                            .attr("tabIndex", -1)
+                            .attr("title", "Mostrar Todos")
+                            .tooltip()
+                            .appendTo(this.wrapper)
+                            .button({
+                                icons: {
+                                    primary: "ui-icon-triangle-1-s"
+                                },
+                                text: false
+                            })
+                            .removeClass("ui-corner-all")
+                            .addClass("custom-combobox-toggle ui-corner-right")
+                            .on("mousedown", function () {
+                                wasOpen = input.autocomplete("widget").is(":visible");
+                            })
+                            .on("click", function () {
+                                input.trigger("focus");
+
+                                // Close if already visible
+                                if (wasOpen) {
+                                    return;
+                                }
+
+                                // Pass empty string as value to search for, displaying all results
+                                input.autocomplete("search", "");
+                            });
+                    },
+
+                    _source: function (request, response) {
+                        var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                        response(this.element.children("option").map(function () {
+                            var text = $(this).text();
+                            if (this.value && (!request.term || matcher.test(text)))
+                                return {
+                                    label: text,
+                                    value: text,
+                                    option: this
+                                };
+                        }));
+                    },
+
+                    _removeIfInvalid: function (event, ui) {
+
+                        // Selected an item, nothing to do
+                        if (ui.item) {
+                            return;
+                        }
+
+                        // Search for a match (case-insensitive)
+                        var value = this.input.val(),
+                            valueLowerCase = value.toLowerCase(),
+                            valid = false;
+                        this.element.children("option").each(function () {
+                            if ($(this).text().toLowerCase() === valueLowerCase) {
+                                this.selected = valid = true;
+                                return false;
+                            }
+                        });
+
+                        // Found a match, nothing to do
+                        if (valid) {
+                            return;
+                        }
+
+                        // Remove invalid value
+                        this.input
+                            .val("")
+                            .attr("title", value + " no se encontró ningun registro")
+                            .tooltip("open");
+                        this.element.val("");
+                        this._delay(function () {
+                            this.input.tooltip("close").attr("title", "");
+                        }, 2500);
+                        this.input.autocomplete("instance").term = "";
+                    },
+
+                    _destroy: function () {
+                        this.wrapper.remove();
+                        this.element.show();
+                    }
+                });
+
+
+                $("#id_contacto_asignado").combobox();
+                $("#ddlCEmpresa").combobox();
+                $("#ddlstate").combobox({
+                    select: function (event, ui) {
+                        GetCEmpresa(this.value);
+                        selectedValue = this.value;
+                        $("#id_empresa").val(this.value);
+
+                    }
+                });
+
+                $("#toggle").on("click", function () {
+                    $("#id_contacto_asignado").toggle();
+                    $("#ddlCEmpresa").toggle();
+                    $("#ddlstate").toggle();
+
+                });
+
+            });
+            //Para que no aparezca el error de que debe ser una fecha
+            $(function () {
+                $.validator.methods.date = function (value, element) {
+                    return this.optional(element) || moment(value, "DD-MM-YYYY", true).isValid();
+                }
+            });
+           @* function Agregar_Contacto(){
+                $('#my-dialogCO').dialog({
+                    autoOpen: false,
+                    width: 'auto',
+                    height: 'auto',
+                    resizable: false,
+                    modal: true
+                });
+                var url = "/oportunidades/agregar_contacto?id_empresa=" + selectedValue;
+
+                $('#my-dialogCO').load(url, function () {
+
+                    $(this).dialog('open');
+                }
+                );
+                return false;
+
+            };*@
+
+
+            $("#my-dialogCO").dialog('option', 'title', 'Editar Usuario');
+
+
+
+        </script>
+
+        }
+
+    @*    $(function bindForm(dialog) {
+        $('form', dialog).submit(function () {
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        alert('thanks for submitting');
+                        $('#dialog').dialog('close');
+                    } else {
+                        $('#dialog').html(result);
+                        bindForm();
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+                        *@
+        <div>
+            @Html.ActionLink("Volver al Índice", "Index_Oportunidades")
+        </div>
+    </div>
+</body>
+</html>

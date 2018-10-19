@@ -1,0 +1,72 @@
+﻿@model WebApplication9.Models.usuario_rol
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Crear Usuario Rol</title>
+</head>
+<body>
+
+   
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Usuario rol</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.id_rol, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(model => model.id_rol, new SelectList(Model.rolesList, "id", "rol"),"Seleccione Rol", new { required = "required" })
+                    @Html.ValidationMessageFor(model => model.id_rol, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.id_usuario, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(model => model.id_usuario, new SelectList(Model.usuarioList, "id", "FullName"), "Seleccione ID de Usuario", new { required = "required" })
+                    @Html.ValidationMessageFor(model => model.id_usuario, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Crear Usuario Rol" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+            </div>
+    }
+
+    <div>
+        @Html.ActionLink("Volver al índice", "Index_URoles")
+    </div>
+        <script type="text/javascript">
+    $(document).ready(function () {
+        $('.Datepicker').datepicker({
+            dateFormat: "dd-mm-yy",
+            showStatus: true,
+            showWeeks: true,
+            currentText: 'Now',
+            autoSize: true,
+            gotoCurrent: true,
+            showAnim: 'blind',
+            highlightWeek: true
+        });
+    });
+    </script>
+</body>
+</html>
